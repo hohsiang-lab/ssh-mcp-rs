@@ -220,11 +220,15 @@ pub async fn download_file(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::os::unix::fs::PermissionsExt;
+
     #[test]
     fn local_names_cannot_escape_transfer_root() {
         let mut d = Defaults::default();
         let root = tempfile::Builder::new()
             .prefix("ssh-mcp-test-")
+            // Tempdirs otherwise use 0777 masked by the runner's umask.
+            .permissions(std::fs::Permissions::from_mode(0o700))
             .tempdir_in(if unsafe { libc::geteuid() } == 0 {
                 std::path::PathBuf::from("/root")
             } else {
@@ -232,9 +236,17 @@ mod tests {
             })
             .unwrap();
         d.transfer_root = Some(root.path().to_owned());
+        let destination = local_destination(&d, "artifact.tar.gz")
+            .expect("private transfer root must accept a plain filename");
+        assert_eq!(destination, root.path().join("artifact.tar.gz"));
         for name in ["../x", "/tmp/x", "a/b", "a\\b", "..", ".", "\nsecret"] {
             assert!(local_destination(&d, name).is_err(), "{name}");
         }
-        assert!(local_destination(&d, "artifact.tar.gz").is_ok());
+        // Keep the production permission guard strict; do not fix CI by relaxing it.
+        std::fs::set_permissions(root.path(), std::fs::Permissions::from_mode(0o755)).unwrap();
+        let error = local_destination(&d, "artifact.tar.gz").unwrap_err();
+        assert!(error.to_string().contains("0700"), "{error:#}");
+        std::fs::set_permissions(root.path(), std::fs::Permissions::from_mode(0o700)).unwrap();
+        local_destination(&d, "artifact.tar.gz").unwrap();
     }
 }
