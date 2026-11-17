@@ -307,6 +307,14 @@ impl SshMcp {
                 "read_session_output" => {
                     let args: SessionArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        "session:read-output",
+                        CommandClass::ReadOnly,
+                        None,
+                        false,
+                    )?;
                     self.sessions.output(&args.name, profile, args.lines).await
                 }
                 "privileged_command" => {
