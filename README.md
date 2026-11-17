@@ -122,7 +122,7 @@ This is a generic MCP subprocess example, **not** a claim that every tunnel uses
   --transport http --bind 127.0.0.1:8080
 ```
 
-`/mcp` requires `Authorization: Bearer ...` on every request. `/health` returns only `ok`. Binding to a non-loopback address is refused. HTTP body size is bounded; browser Origin headers are refused; the SDK validates Host against its loopback allowlist. Do not disable those controls to make a public proxy work.
+`/mcp` requires `Authorization: Bearer ...` on every request. `/health` returns only `ok`. Binding to a non-loopback address is refused. HTTP body size is bounded; browser Origin headers are refused; the SDK validates Host against its loopback allowlist. A tunnel/reverse proxy must preserve authentication and send a loopback upstream Host. Do not disable those controls to make a public proxy work.
 
 Native OAuth/DCR is **not implemented**. ChatGPT HTTP connection therefore needs an existing authenticated gateway capable of injecting the backend bearer header; the recommended current deployment is stdio through the existing authenticated MCP tunnel. Possession of the HTTP token grants access to all profiles configured in that process: it is a single-principal deployment, not a multi-tenant authorization system.
 
