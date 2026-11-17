@@ -225,7 +225,11 @@ mod tests {
         let mut d = Defaults::default();
         let root = tempfile::Builder::new()
             .prefix("ssh-mcp-test-")
-            .tempdir_in(std::env::var_os("HOME").unwrap())
+            .tempdir_in(if unsafe { libc::geteuid() } == 0 {
+                std::path::PathBuf::from("/root")
+            } else {
+                std::path::PathBuf::from(std::env::var_os("HOME").unwrap())
+            })
             .unwrap();
         d.transfer_root = Some(root.path().to_owned());
         for name in ["../x", "/tmp/x", "a/b", "a\\b", "..", ".", "\nsecret"] {
