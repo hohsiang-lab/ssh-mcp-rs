@@ -1,0 +1,9 @@
+/target/
+/config.toml
+*.key
+*.pem
+.env
+*.log
+*.jsonl
+__pycache__/
+*.bak.*
