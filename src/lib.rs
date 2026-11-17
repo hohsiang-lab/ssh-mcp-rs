@@ -5,6 +5,7 @@ compile_error!(
 pub mod audit;
 pub mod config;
 pub mod policy;
+pub mod policy_engine;
 pub mod server;
 pub mod session;
 pub mod ssh;
