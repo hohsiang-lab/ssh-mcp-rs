@@ -157,7 +157,7 @@ impl Connection {
         })
     }
 
-    async fn sftp(&self) -> Result<SftpSession> {
+    pub(crate) async fn sftp(&self) -> Result<SftpSession> {
         let channel = self.handle.channel_open_session().await?;
         channel.request_subsystem(true, "sftp").await?;
         Ok(SftpSession::new(channel.into_stream()).await?)

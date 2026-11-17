@@ -147,11 +147,16 @@ def main():
             "AllowTcpForwarding no\nX11Forwarding no\nPermitTunnel no\n"
             f"AllowUsers {pwd.getpwuid(os.getuid()).pw_name}\nSubsystem sftp internal-sftp\n")
         config = root / "config.toml"
+        transfer_root = root / "transfers"
+        transfer_root.mkdir(mode=0o700)
         text = f'''[defaults]
 defaultProfile = "read"
 commandTimeoutMs = 1000
 commandMaxOutputBytes = 128
 transferMaxBytes = 1024
+transferRoot = "{transfer_root}"
+transferFileMaxBytes = 1048576
+transferTimeoutMs = 30000
 auditPath = "{root}/audit.jsonl"
 '''
         for name, readonly, policy, fingerprint in (
@@ -178,9 +183,9 @@ approvalPolicy = "{policy}"
                 wait_port(port, sshd)
                 client = Client(binary, config, server_log)
                 tools = client.request("tools/list", {})["tools"]
-                assert len(tools) == 10
+                assert len(tools) == 13
                 for tool in tools:
-                    write = tool["name"] in ("run_command", "sftp_upload", "open_session", "close_session", "signal_process")
+                    write = tool["name"] in ("run_command", "sftp_upload", "sftp_upload_file", "sftp_download_file", "open_session", "close_session", "signal_process")
                     assert tool["annotations"]["readOnlyHint"] is not write
                     assert tool["annotations"]["destructiveHint"] is write
                 checks.append("MCP initialize/tools and truthful write annotations")
@@ -211,6 +216,27 @@ approvalPolicy = "{policy}"
                 data(client.call("sftp_upload", {"profile": "dev", "remotePath": str(destination), "content": "second", "overwrite": True}))
                 assert data(client.call("sftp_download", {"remotePath": str(destination)}))["content"] == "second"
                 checks.append("SFTP 0600 create/download and explicit overwrite")
+                # Binary SFTP flows: bytes never pass through MCP arguments or responses.
+                payload_bytes = bytes(range(256)) * 512
+                (transfer_root / "source.bin").write_bytes(payload_bytes)
+                remote_binary = root / "binary-remote.bin"
+                rejected(client.call("sftp_upload_file", {"profile":"read", "localName":"source.bin", "remotePath":str(remote_binary)}), "POLICY_DENIED")
+                rejected(client.call("sftp_download_file", {"profile":"read", "localName":"blocked.bin", "remotePath":str(destination)}), "POLICY_DENIED")
+                assert not remote_binary.exists() and not (transfer_root / "blocked.bin").exists()
+                result = data(client.call("sftp_upload_file", {"profile":"dev", "localName":"source.bin", "remotePath":str(remote_binary)}))
+                assert result["bytes"] == len(payload_bytes) and remote_binary.read_bytes() == payload_bytes
+                assert "binary-remote.bin" in str(data(client.call("sftp_list", {"profile":"read", "remotePath":str(root)})))
+                rejected(client.call("sftp_upload_file", {"profile":"dev", "localName":"source.bin", "remotePath":str(remote_binary)}), "")
+                result = data(client.call("sftp_download_file", {"profile":"dev", "remotePath":str(remote_binary), "localName":"downloaded.bin"}))
+                assert result["bytes"] == len(payload_bytes) and (transfer_root / "downloaded.bin").read_bytes() == payload_bytes
+                assert (transfer_root / "downloaded.bin").stat().st_mode & 0o777 == 0o600
+                rejected(client.call("sftp_download_file", {"profile":"dev", "remotePath":str(remote_binary), "localName":"downloaded.bin"}), "destination exists")
+                data(client.call("sftp_download_file", {"profile":"dev", "remotePath":str(remote_binary), "localName":"downloaded.bin", "overwrite":True}))
+                rejected(client.call("sftp_download_file", {"profile":"dev", "remotePath":str(remote_binary), "localName":"../escape.bin"}), "localName")
+                (transfer_root / "source-link.bin").symlink_to(transfer_root / "source.bin")
+                rejected(client.call("sftp_upload_file", {"profile":"dev", "localName":"source-link.bin", "remotePath":str(root / "bad.bin")}), "")
+                assert not (root / "bad.bin").exists()
+                checks.append("binary SFTP streaming, private transfer root, directory list, no-clobber and symlink guards")
                 rejected(client.call("sftp_upload", {"profile": "dev", "remotePath": str(root / "large"), "content": "x" * 1025}), "TRANSFER_TOO_LARGE")
                 (root / "large").write_text("x" * 1025)
                 rejected(client.call("sftp_download", {"remotePath": str(root / "large")}), "TRANSFER_TOO_LARGE")
@@ -275,7 +301,7 @@ approvalPolicy = "{policy}"
                 status, body = http(http_port, request, token)
                 assert status == 200 and "result" in json.loads(body), (status, body)
                 status, body = http(http_port, {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}, token)
-                assert status == 200 and len(json.loads(body)["result"]["tools"]) == 10, (status, body)
+                assert status == 200 and len(json.loads(body)["result"]["tools"]) == 13, (status, body)
                 status, body = http(http_port, {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {
                     "name": "run_command", "arguments": {"profile": "dev", "command": "printf http-ok"}}}, token)
                 assert status == 200 and data(json.loads(body)["result"])["stdout"] == "http-ok", (status, body)

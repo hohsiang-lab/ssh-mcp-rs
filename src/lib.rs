@@ -8,3 +8,4 @@ pub mod policy;
 pub mod server;
 pub mod session;
 pub mod ssh;
+pub mod transfers;

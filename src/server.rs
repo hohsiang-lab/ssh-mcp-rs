@@ -4,6 +4,7 @@ use crate::{
     policy,
     session::Sessions,
     ssh::Connection,
+    transfers,
 };
 use anyhow::{Context, Result, bail, ensure};
 use rmcp::{ErrorData, RoleServer, ServerHandler, model::*, service::RequestContext};
@@ -67,6 +68,22 @@ struct SignalArgs {
     pid: u32,
     signal: String,
 }
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct ListArgs {
+    profile: Option<String>,
+    remote_path: String,
+    max_entries: Option<usize>,
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct FileArgs {
+    profile: Option<String>,
+    remote_path: String,
+    local_name: String,
+    #[serde(default)]
+    overwrite: bool,
+}
 impl SshMcp {
     pub fn new(config: Config) -> Result<Self> {
         let audit = Audit::open(config.defaults.audit_path.as_deref())?;
@@ -109,6 +126,9 @@ impl SshMcp {
                 "run_command",
                 "sftp_download",
                 "sftp_upload",
+                "sftp_list",
+                "sftp_upload_file",
+                "sftp_download_file",
                 "open_session",
                 "close_session",
                 "read_session_output",
@@ -127,7 +147,13 @@ impl SshMcp {
         let result = async {
             if matches!(
                 name,
-                "run_command" | "sftp_upload" | "open_session" | "close_session" | "signal_process"
+                "run_command"
+                    | "sftp_upload"
+                    | "sftp_upload_file"
+                    | "sftp_download_file"
+                    | "open_session"
+                    | "close_session"
+                    | "signal_process"
             ) {
                 policy::authorize_write(profile)?;
             }
@@ -205,6 +231,45 @@ impl SshMcp {
                     self.with_connection(profile, Operation::Command(command))
                         .await
                 }
+                "sftp_list" => {
+                    let args: ListArgs = serde_json::from_value(arguments)?;
+                    let _ = args.profile;
+                    policy::path(&args.remote_path)?;
+                    let max = args.max_entries.unwrap_or(100);
+                    ensure!(
+                        (1..=1000).contains(&max),
+                        "maxEntries must be between 1 and 1000"
+                    );
+                    self.with_connection(profile, Operation::List(args.remote_path, max))
+                        .await
+                }
+                "sftp_upload_file" | "sftp_download_file" => {
+                    let args: FileArgs = serde_json::from_value(arguments)?;
+                    let _ = args.profile;
+                    policy::path(&args.remote_path)?;
+                    transfers::local_destination(&self.config.defaults, &args.local_name)?;
+                    if name == "sftp_upload_file" {
+                        self.with_connection(
+                            profile,
+                            Operation::UploadFile(
+                                args.remote_path,
+                                args.local_name,
+                                args.overwrite,
+                            ),
+                        )
+                        .await
+                    } else {
+                        self.with_connection(
+                            profile,
+                            Operation::DownloadFile(
+                                args.remote_path,
+                                args.local_name,
+                                args.overwrite,
+                            ),
+                        )
+                        .await
+                    }
+                }
                 "sftp_download" => {
                     let args: DownloadArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
@@ -246,9 +311,17 @@ impl SshMcp {
         profile: &crate::config::Profile,
         operation: Operation,
     ) -> Result<Value> {
+        let timeout_ms = if matches!(
+            &operation,
+            Operation::UploadFile(..) | Operation::DownloadFile(..)
+        ) {
+            self.config.defaults.transfer_timeout_ms
+        } else {
+            self.config.defaults.command_timeout_ms
+        };
         let connection = Connection::connect(profile, &self.config.defaults).await?;
         let result = tokio::time::timeout(
-            Duration::from_millis(self.config.defaults.command_timeout_ms + 3000),
+            Duration::from_millis(timeout_ms + 3000),
             async {
                 match operation {
                     Operation::Command(command) => Ok(serde_json::to_value(connection.command(&command, &self.config.defaults).await?)?),
@@ -260,6 +333,9 @@ impl SshMcp {
                         connection.upload(&path, content.as_bytes(), overwrite).await?;
                         Ok(json!({"remotePath": path, "bytes": content.len(), "sha256": digest(content.as_bytes()), "overwrite": overwrite, "atomic": false}))
                     }
+                    Operation::List(path, max) => transfers::list(&connection, &path, max).await,
+                    Operation::UploadFile(path, name, overwrite) => transfers::upload_file(&connection, &self.config.defaults, &name, &path, overwrite).await,
+                    Operation::DownloadFile(path, name, overwrite) => transfers::download_file(&connection, &self.config.defaults, &path, &name, overwrite).await,
                 }
             }
         ).await;
@@ -273,6 +349,9 @@ enum Operation {
     Command(String),
     Download(String),
     Upload(String, String, bool),
+    List(String, usize),
+    UploadFile(String, String, bool),
+    DownloadFile(String, String, bool),
 }
 
 pub fn tools() -> Vec<Tool> {
@@ -365,6 +444,14 @@ pub fn tools() -> Vec<Tool> {
             json!(["remotePath", "content"]),
         ),
     ];
+    entries.extend([
+        tool("sftp_list", "List remote directory entries with a bounded response; read-only.", true, true,
+            json!({"profile":profile,"remotePath":{"type":"string"},"maxEntries":{"type":"integer","minimum":1,"maximum":1000}}), json!(["remotePath"])),
+        tool("sftp_upload_file", "Stream a binary file from the private server-side transferRoot to the remote SSH host; content never enters model context. Requires write confirmation.", false, true,
+            json!({"profile":profile,"remotePath":{"type":"string"},"localName":{"type":"string","description":"A single filename inside the private transferRoot; not a path."},"overwrite":{"type":"boolean","default":false}}), json!(["remotePath","localName"])),
+        tool("sftp_download_file", "Stream a remote binary file into private server-side transferRoot, atomically publishing the local destination; requires write confirmation.", false, true,
+            json!({"profile":profile,"remotePath":{"type":"string"},"localName":{"type":"string","description":"Single filename inside the private transferRoot."},"overwrite":{"type":"boolean","default":false}}), json!(["remotePath","localName"])),
+    ]);
     entries.shrink_to_fit();
     entries
 }
@@ -425,11 +512,17 @@ mod tests {
     #[test]
     fn tools_have_truthful_annotations_and_fixed_schemas() {
         let definitions = serde_json::to_value(tools()).unwrap();
-        assert_eq!(definitions.as_array().unwrap().len(), 10);
+        assert_eq!(definitions.as_array().unwrap().len(), 13);
         for tool in definitions.as_array().unwrap() {
             let write = matches!(
                 tool["name"].as_str().unwrap(),
-                "run_command" | "sftp_upload" | "open_session" | "close_session" | "signal_process"
+                "run_command"
+                    | "sftp_upload"
+                    | "sftp_upload_file"
+                    | "sftp_download_file"
+                    | "open_session"
+                    | "close_session"
+                    | "signal_process"
             );
             assert_eq!(tool["annotations"]["readOnlyHint"], !write);
             assert_eq!(tool["annotations"]["destructiveHint"], write);
