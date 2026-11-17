@@ -1,0 +1,5 @@
+ssh-mcp-rs is inspired by tufantunc/ssh-mcp (MIT).
+Upstream reference: e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f
+Upstream: https://github.com/tufantunc/ssh-mcp
+Copyright (c) 2025 Tufan Tunç (see docs/LICENSE.upstream).
+Native Rust implementation: Copyright (c) 2026 Hohsiang Lab.
