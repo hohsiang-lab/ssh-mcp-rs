@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**This is a focused implementation, not yet a full upstream port or a drop-in configuration replacement.** Stateless commands, bounded UTF-8 SFTP transfers, persistent POSIX-shell interactive sessions, background command sessions, and process signals are implemented. SSH agent/password authentication, privilege escalation helpers, binary streaming, config reload, role/host-group rules, quotas, and output-secret redaction are not implemented. See [scope and migration](docs/migration.md).
+**This is a focused implementation, not yet a full upstream port or a drop-in configuration replacement.** Stateless commands, bounded UTF-8 SFTP transfers, persistent POSIX-shell interactive sessions, background command sessions, and process signals are implemented. SSH agent/password authentication, privilege escalation helpers, config reload, role/host-group rules, quotas, and output-secret redaction are not implemented. Optional private transferRoot supports streaming binary files without passing contents through model context. See [scope and migration](docs/migration.md).
 
 ## Approval model: what changes, and what does not
 
@@ -42,6 +42,9 @@ Official references, checked 2026-11-17:
 | `close_session` | Close a session; background termination is best-effort | No | Yes |
 | `read_session_output` | Read bounded recent background stdout/stderr and completion status | Yes | No |
 | `signal_process` | Send INT/TERM/KILL to a validated remote PID, excluding PID 1 | No | Yes |
+| `sftp_list` | List up to 1,000 remote directory entries | Yes | No |
+| `sftp_upload_file` | Stream a local binary artifact from private transferRoot to remote | No | Yes |
+| `sftp_download_file` | Stream a remote file into private transferRoot with atomic local publication | No | Yes |
 
 The read grammar accepts basic `uname`, `id`, `pwd`, `whoami`, `uptime`, `ls`, `cat`, and `df` forms, plus `git --version` and `gh --version`. Shell operators, substitutions, interpreters, mutable Git subcommands, and arbitrary `gh` operations are rejected. Unsupported reads can use `run_command` on an explicitly write-enabled profile, with the same client confirmation as other arbitrary commands. This conservatism avoids falsely labelling complex shell commands read-only.
 
@@ -114,6 +117,21 @@ This is a generic MCP subprocess example, **not** a claim that every tunnel uses
 `/mcp` requires `Authorization: Bearer ...` on every request. `/health` returns only `ok`. Binding to a non-loopback address is refused. HTTP body size is bounded; browser Origin headers are refused; the SDK validates Host against its loopback allowlist. A tunnel/reverse proxy must preserve authentication and send a loopback upstream Host. Do not disable those controls to make a public proxy work.
 
 Native OAuth/DCR is **not implemented**. ChatGPT HTTP connection therefore needs an existing authenticated gateway capable of injecting the backend bearer header; the recommended current deployment is stdio through the existing authenticated MCP tunnel. Possession of the HTTP token grants access to all profiles configured in that process: it is a single-principal deployment, not a multi-tenant authorization system.
+
+## Binary file transfers (optional)
+
+Create a **dedicated private directory** on the MCP server host (owned by the service user, mode 0700, no symlink or writable ancestors), separate from credentials, configs and audit logs. Configure:
+
+```toml
+[defaults]
+transferRoot = "/srv/mcp-transfers"
+transferFileMaxBytes = 268435456
+transferTimeoutMs = 300000
+```
+
+Use `sftp_upload_file({"profile":"dev","localName":"artifact.tar.gz","remotePath":"/srv/app/artifact.tar.gz"})` to stream local artifact bytes to the SSH destination. Use `sftp_download_file` for the reverse direction. `localName` is a **single filename**, never an absolute/local path, and the server checks for symlink/hardlink escape. Both tools are write-classified because they can modify files. By default existing destinations are refused; set `overwrite=true` deliberately. Local downloads use a temporary 0600 file and an atomic publish; remote uploads are not atomic. Transfers have an **overall** timeout, with failed local download staging files removed even on cancellation.
+
+**The local directory belongs to the MCP server process, not the ChatGPT device or model context.** `sftp_list` does not require transferRoot and is read-only. Directory responses are capped at 1,000 entries (the underlying SFTP library may buffer the directory listing before truncation).
 
 ## Timeouts, transfers, and auditing
 

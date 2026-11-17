@@ -6,6 +6,10 @@ connectTimeoutMs = 10000
 commandTimeoutMs = 60000
 commandMaxOutputBytes = 65536
 transferMaxBytes = 1048576
+# Optional: required only for binary file transfer tools. Create private 0700 directory.
+# transferRoot = "/srv/mcp-transfers"
+transferFileMaxBytes = 268435456
+transferTimeoutMs = 300000
 maxConcurrentCalls = 4
 # Optional existing private directory; stderr is used when omitted.
 # auditPath = "/home/developer/.local/state/ssh-mcp-rs/audit.jsonl"

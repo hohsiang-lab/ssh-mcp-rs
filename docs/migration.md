@@ -19,7 +19,8 @@ This is a native Rust implementation of a focused subset, not a line-by-line por
 | SSH agent/password/certificate authentication | Not implemented |
 | Sudo helper | Not implemented; arbitrary-command privileges follow the SSH account |
 | Signal-process tool | `signal_process` with explicit INT/TERM/KILL, validated PID, and write-profile confirmation |
-| Binary streaming/local transferRoot | Not implemented |
+| Binary streaming/local transferRoot | `sftp_upload_file` and `sftp_download_file` (private 0700 transferRoot, basename-only, 256 MiB default limit, local atomic publish) |
+| Remote SFTP directory listing | `sftp_list` with bounded entries |
 | Config hot reload | Not implemented; restart required |
 | Role/host-group matrix, denylist, quotas | Not implemented; profile-level read-only/deny + concurrency limits only |
 | Output redaction | Not implemented; audit avoids raw arguments, tool output can contain secrets |

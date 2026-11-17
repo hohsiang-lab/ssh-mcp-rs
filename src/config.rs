@@ -47,6 +47,10 @@ pub struct Defaults {
     pub command_timeout_ms: u64,
     pub command_max_output_bytes: usize,
     pub transfer_max_bytes: usize,
+    /// Optional private server-side directory for streaming binary transfers.
+    pub transfer_root: Option<PathBuf>,
+    pub transfer_file_max_bytes: u64,
+    pub transfer_timeout_ms: u64,
     pub max_concurrent_calls: usize,
     pub audit_path: Option<PathBuf>,
 }
@@ -58,6 +62,9 @@ impl Default for Defaults {
             command_timeout_ms: 60_000,
             command_max_output_bytes: 65_536,
             transfer_max_bytes: 1_048_576,
+            transfer_root: None,
+            transfer_file_max_bytes: 268_435_456,
+            transfer_timeout_ms: 300_000,
             max_concurrent_calls: 4,
             audit_path: None,
         }
@@ -77,6 +84,31 @@ impl Config {
         let config: Self = toml::from_str(&fs::read_to_string(path)?)
             .context("invalid configuration; this is not a drop-in upstream config")?;
         config.validate()?;
+        if let Some(root) = &config.defaults.transfer_root {
+            private_directory(root)?;
+            ensure!(
+                !path.starts_with(root),
+                "transferRoot must not contain the MCP config file"
+            );
+            if let Some(audit) = &config.defaults.audit_path {
+                ensure!(
+                    !audit.starts_with(root),
+                    "transferRoot must not contain audit logs"
+                );
+            }
+            for p in &config.profiles {
+                ensure!(
+                    !p.key_ref.starts_with(root),
+                    "transferRoot must not contain private keys"
+                );
+                if let Some(key_dir) = p.key_ref.parent() {
+                    ensure!(
+                        root != key_dir && !root.components().any(|c| c.as_os_str() == ".ssh"),
+                        "transferRoot must not be the SSH-key directory or inside .ssh"
+                    );
+                }
+            }
+        }
         for profile in &config.profiles {
             private_file(&profile.key_ref)
                 .with_context(|| format!("private key permissions for profile {}", profile.name))?;
@@ -113,6 +145,23 @@ impl Config {
             (1..=16_777_216).contains(&self.defaults.transfer_max_bytes),
             "invalid transfer limit"
         );
+        ensure!(
+            (1..=1_073_741_824).contains(&self.defaults.transfer_file_max_bytes),
+            "invalid binary transfer size limit"
+        );
+        ensure!(
+            (1000..=3_600_000).contains(&self.defaults.transfer_timeout_ms),
+            "invalid binary transfer timeout"
+        );
+        if let Some(root) = &self.defaults.transfer_root {
+            ensure!(root.is_absolute(), "transferRoot must be absolute");
+            ensure!(
+                !root
+                    .components()
+                    .any(|c| matches!(c, std::path::Component::ParentDir)),
+                "transferRoot cannot contain .."
+            );
+        }
         let mut names = HashSet::new();
         for p in &self.profiles {
             ensure!(
@@ -175,7 +224,37 @@ impl Config {
     }
 }
 
-/// Unix-only v0.1: avoid silently degrading the config/key permission checks.
+/// Local binary-transfer staging root must be owned by this process and private.
+#[cfg(unix)]
+pub fn private_directory(path: &Path) -> Result<()> {
+    use std::os::unix::fs::MetadataExt;
+    ensure!(path.is_absolute(), "transferRoot must be absolute");
+    for ancestor in path.ancestors() {
+        let metadata = fs::symlink_metadata(ancestor)?;
+        ensure!(
+            metadata.is_dir() && !metadata.file_type().is_symlink(),
+            "transferRoot and its ancestors must be real directories"
+        );
+        if ancestor == path {
+            ensure!(
+                metadata.uid() == unsafe { libc::geteuid() },
+                "transferRoot must belong to the service account"
+            );
+            ensure!(
+                metadata.mode() & 0o077 == 0,
+                "transferRoot must have permissions 0700"
+            );
+        } else {
+            ensure!(
+                metadata.mode() & 0o022 == 0,
+                "transferRoot ancestor is group/world writable"
+            );
+        }
+    }
+    Ok(())
+}
+
+/// Unix-only: avoid silently degrading the config/key permission checks.
 #[cfg(unix)]
 pub fn private_file(path: &Path) -> Result<()> {
     use std::os::unix::fs::MetadataExt;
