@@ -178,9 +178,9 @@ approvalPolicy = "{policy}"
                 wait_port(port, sshd)
                 client = Client(binary, config, server_log)
                 tools = client.request("tools/list", {})["tools"]
-                assert len(tools) == 5
+                assert len(tools) == 10
                 for tool in tools:
-                    write = tool["name"] in ("run_command", "sftp_upload")
+                    write = tool["name"] in ("run_command", "sftp_upload", "open_session", "close_session", "signal_process")
                     assert tool["annotations"]["readOnlyHint"] is not write
                     assert tool["annotations"]["destructiveHint"] is write
                 checks.append("MCP initialize/tools and truthful write annotations")
@@ -219,6 +219,36 @@ approvalPolicy = "{policy}"
                 assert data(client.call("run_command", {"profile": "dev", "cwd": str(root), "command": command}))["ok"]
                 assert subprocess.check_output(["git", "--git-dir", str(root / "remote.git"), "show", "main:README"], text=True) == "test"
                 checks.append("real Git init/add/commit/push to isolated bare repository")
+                # Persistent shell, background streaming and controlled process termination.
+                rejected(client.call("open_session", {"profile":"read", "name":"blocked", "type":"interactive"}), "POLICY_DENIED")
+                rejected(client.call("signal_process", {"profile":"read", "pid":23456, "signal":"TERM"}), "POLICY_DENIED")
+                data(client.call("open_session", {"profile":"dev", "name":"interactive-test", "type":"interactive"}))
+                assert data(client.call("run_command", {"profile":"dev", "session":"interactive-test", "command":"cd " + str(root)}))["ok"]
+                assert data(client.call("run_command", {"profile":"dev", "session":"interactive-test", "command":"export MCP_SAVED=kept"}))["ok"]
+                result = data(client.call("run_command", {"profile":"dev", "session":"interactive-test", "command":"pwd; printf ':%s' \"$MCP_SAVED\""}))
+                assert str(root) in result["stdout"] and ":kept" in result["stdout"], result
+                assert "interactive-test" in str(data(client.call("list_sessions", {})))
+                rejected(client.call("read_session_output", {"profile":"dev", "name":"interactive-test"}), "background")
+                data(client.call("close_session", {"profile":"dev", "name":"interactive-test"}))
+                data(client.call("open_session", {"profile":"dev", "name":"background-test", "type":"background", "command":"printf 'before\\n'; sleep 1; printf 'after\\n'"}))
+                response = None
+                for _ in range(30):
+                    response = data(client.call("read_session_output", {"profile":"dev", "name":"background-test"}))
+                    if not response["running"]:
+                        break
+                    time.sleep(0.1)
+                assert response is not None and "before" in response["stdout"] and "after" in response["stdout"], response
+                assert response["exitStatus"] == 0, response
+                data(client.call("close_session", {"profile":"dev", "name":"background-test"}))
+                child = subprocess.Popen(["sleep", "30"])
+                try:
+                    result = data(client.call("signal_process", {"profile":"dev", "pid": child.pid, "signal":"TERM"}))
+                    assert result["ok"], result
+                    assert child.wait(timeout=5) != 0
+                finally:
+                    stop(child)
+                rejected(client.call("signal_process", {"profile":"dev", "pid":1, "signal":"KILL"}), "invalid pid")
+                checks.append("persistent interactive shell, background lifecycle, signal and read-only guards")
                 nonzero = client.call("run_command", {"profile": "dev", "command": "printf error >&2; exit 7"})
                 assert nonzero["isError"] and nonzero["structuredContent"]["exitStatus"] == 7
                 checks.append("nonzero exit is an MCP tool error")
@@ -245,7 +275,7 @@ approvalPolicy = "{policy}"
                 status, body = http(http_port, request, token)
                 assert status == 200 and "result" in json.loads(body), (status, body)
                 status, body = http(http_port, {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}, token)
-                assert status == 200 and len(json.loads(body)["result"]["tools"]) == 5, (status, body)
+                assert status == 200 and len(json.loads(body)["result"]["tools"]) == 10, (status, body)
                 status, body = http(http_port, {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {
                     "name": "run_command", "arguments": {"profile": "dev", "command": "printf http-ok"}}}, token)
                 assert status == 200 and data(json.loads(body)["result"])["stdout"] == "http-ok", (status, body)

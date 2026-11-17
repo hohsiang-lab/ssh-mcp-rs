@@ -12,7 +12,7 @@ Automated tests use an MCP client that advertises no elicitation capability. The
 
 ## Read and reject tests
 
-- Discover exactly the five v0.1 tools and verify the reported server name/version.
+- Discover the currently documented tools and verify the reported server name/version.
 - `read_command`: `uname -a`, `id`, `git --version`, `gh --version` should work if installed on the host.
 - An arbitrary `run_command` and `sftp_upload` must return `POLICY_DENIED` on the read-only profile, even when called from a client that manages confirmation.
 - Shell injection through `read_command` must be rejected.

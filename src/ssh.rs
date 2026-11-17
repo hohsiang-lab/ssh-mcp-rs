@@ -98,6 +98,20 @@ impl Connection {
         .await;
     }
 
+    pub async fn open_shell(&self) -> Result<russh::Channel<client::Msg>> {
+        let channel = self.handle.channel_open_session().await?;
+        // Start an explicit POSIX shell: users may have fish or another non-POSIX login shell.
+        channel.exec(true, "exec /bin/sh -s").await?;
+        Ok(channel)
+    }
+
+    pub async fn open_exec(&self, command: &str) -> Result<russh::Channel<client::Msg>> {
+        let channel = self.handle.channel_open_session().await?;
+        channel.exec(true, command).await?;
+        channel.eof().await?;
+        Ok(channel)
+    }
+
     pub async fn command(&self, command: &str, defaults: &Defaults) -> Result<CommandOutput> {
         let mut channel = self.handle.channel_open_session().await?;
         channel.exec(true, command).await?;
