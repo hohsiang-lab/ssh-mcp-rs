@@ -33,4 +33,4 @@ Record the app identity, commit SHA, transport, client settings, date, actual ap
 
 ## Deployment decision
 
-This checklist must pass before replacing the existing Monster MCP. v0.1 has no interactive/background sessions, binary streaming, config reload, or sudo helper; retain the original service for any required unsupported use case. Migrating the service, tunnel or production SSH permissions is a separate operator action.
+This checklist must pass before replacing the existing Monster MCP. For v0.2 additionally verify all 15 advertised tools, background/session lifecycle, binary transferRoot confinement, default-denied sudo, and successful/failed config reloads. Independent server-side approval, SSH agent/password auth and output-secret redaction are not provided. Migrating the service, tunnel or production SSH permissions is a separate operator action.

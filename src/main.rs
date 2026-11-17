@@ -67,12 +67,12 @@ async fn authenticate(
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
-    let config = Config::load(&args.config)?;
     if args.check_config {
+        Config::load(&args.config)?;
         eprintln!("Configuration and private-key permissions: PASS");
         return Ok(());
     }
-    let service = SshMcp::new(config)?;
+    let service = SshMcp::new(args.config.clone())?;
     match args.transport {
         Transport::Stdio => {
             service.serve(stdio()).await?.waiting().await?;

@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**This is a focused implementation, not yet a full upstream port or a drop-in configuration replacement.** Stateless commands, bounded UTF-8 SFTP transfers, persistent POSIX-shell interactive sessions, background command sessions, and process signals are implemented. SSH agent/password authentication, privilege escalation helpers, config reload, role/host-group rules, quotas, and output-secret redaction are not implemented. Optional private transferRoot supports streaming binary files without passing contents through model context. See [scope and migration](docs/migration.md).
+**v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, role/host-group rules, quotas, and output-secret redaction remain outside this implementation. See [scope and migration](docs/migration.md).
 
 ## Approval model: what changes, and what does not
 
@@ -16,7 +16,7 @@ Instead, read and write operations have separate tools. Every tool explicitly de
 
 Server-side policy remains separate:
 
-- `readOnly = true` (default): both write tools are denied, regardless of client behavior.
+- `readOnly = true` (default): all write operations are denied, regardless of client behavior.
 - `readOnly = false` alone: writes are still denied by the default `approvalPolicy = "deny"`.
 - `readOnly = false` **and** `approvalPolicy = "client-confirmation"`: the operator explicitly delegates per-call confirmation to a trusted authenticated client. Calls reaching this endpoint can write without any additional server prompt. Do not expose it to an untrusted client or assume the name provides an independent approval gate.
 
@@ -45,6 +45,8 @@ Official references, checked 2026-11-17:
 | `sftp_list` | List up to 1,000 remote directory entries | Yes | No |
 | `sftp_upload_file` | Stream a local binary artifact from private transferRoot to remote | No | Yes |
 | `sftp_download_file` | Stream a remote file into private transferRoot with atomic local publication | No | Yes |
+| `privileged_command` | Explicitly enabled sudo -n helper; remote sudoers still applies | No | Yes |
+| `reload_config` | Report loaded-file status or validate and reload settings while idle | No | Yes |
 
 The read grammar accepts basic `uname`, `id`, `pwd`, `whoami`, `uptime`, `ls`, `cat`, and `df` forms, plus `git --version` and `gh --version`. Shell operators, substitutions, interpreters, mutable Git subcommands, and arbitrary `gh` operations are rejected. Unsupported reads can use `run_command` on an explicitly write-enabled profile, with the same client confirmation as other arbitrary commands. This conservatism avoids falsely labelling complex shell commands read-only.
 
@@ -118,6 +120,34 @@ This is a generic MCP subprocess example, **not** a claim that every tunnel uses
 
 Native OAuth/DCR is **not implemented**. ChatGPT HTTP connection therefore needs an existing authenticated gateway capable of injecting the backend bearer header; the recommended current deployment is stdio through the existing authenticated MCP tunnel. Possession of the HTTP token grants access to all profiles configured in that process: it is a single-principal deployment, not a multi-tenant authorization system.
 
+## Privileged commands and config reload
+
+`privileged_command` requires both the normal write policy and profile-level
+`allowPrivileged = true` (default false). It executes `sudo -n -- sh -c ...`,
+never requests or accepts a sudo password, and refuses existing sessions.
+The remote sudoers policy must allow the exact elevated invocation. `cwd` is
+applied inside the elevated shell. A failed sudo or nonzero command is a tool error.
+
+**This helper flag is not an OS security boundary:** arbitrary `run_command`
+already has all permissions of the SSH account and could invoke sudo directly.
+Use a non-root account and OS sudoers for real privilege restrictions; no tool
+annotation or `allowPrivileged=false` makes a root account unprivileged.
+
+`reload_config` takes `action: "status"` or `action: "reload"`. Status reports
+loaded/on-disk SHA256 and managed session count, never config contents.
+The single tool is conservatively write-classified even for status calls.
+Reload accepts no caller-supplied path: it uses the original startup config file.
+It authorizes against the currently loaded profile, takes exclusive command
+admission, validates the new file and key permissions, and applies one snapshot.
+Failures preserve the previous settings; parsing errors never echo config text.
+A newly revoked profile is denied on its next call, even if the disk file is later
+edited to allow it again: a still-authorized profile must perform that reload.
+
+Reload refuses with `BUSY` while commands/transfers or managed sessions are active.
+Close sessions first; changing `auditPath` or `maxConcurrentCalls` requires a service
+restart. Reload does not terminate or roll back detached remote processes. Session
+TTL governs persistent SSH channels rather than the shorter per-command timeout.
+
 ## Binary file transfers (optional)
 
 Create a **dedicated private directory** on the MCP server host (owned by the service user, mode 0700, no symlink or writable ancestors), separate from credentials, configs and audit logs. Configure:
@@ -137,7 +167,7 @@ Use `sftp_upload_file({"profile":"dev","localName":"artifact.tar.gz","remotePath
 
 Commands have bounded connection time, execution time, concurrency and combined stdout/stderr bytes. Over-limit output is drained but not retained. A timeout attempts TERM and channel closure; the remote process may continue, and the result says so. Cancellation or a lost connection is not a rollback. Never automatically retry a write after an uncertain result.
 
-Uploads are **not atomic**. `overwrite=true` truncates the destination and may follow a symlink; a failure can leave a partial file. New files use mode 0600; existing permissions are not rewritten by the client. Prefer writing a new staging file and explicitly publishing it after validation when atomicity is required. Text transfer byte limits do not imply binary streaming support.
+Uploads are **not atomic**. `overwrite=true` truncates the destination and may follow a symlink; a failure can leave a partial file. New files use mode 0600; existing permissions are not rewritten by the client. Prefer writing a new staging file and explicitly publishing it after validation when atomicity is required. Text-transfer limits are separate from the optional binary-file limits.
 
 Audit entries contain request IDs, profile/tool names, timestamps, argument SHA256 and attempt/result phases; they omit raw commands and payloads. This is a correlation log, not independently durable or tamper-proof human-approval evidence. Command/file **results are not automatically redacted**: avoid fetching secrets, and apply least-privilege file access on the SSH host.
 
@@ -151,9 +181,9 @@ cargo build --locked
 python3 tests/integration.py
 ```
 
-The integration script uses a temporary, high-port loopback `sshd`, fresh keys, temporary config/files and a local bare Git remote. It does not alter the system sshd configuration, production MCP settings, GitHub credentials or repositories. Prerequisites: Python 3, OpenSSH client/server, Git and `gh`. On Debian CI the ephemeral container also needs `/run/sshd`. Test fixtures live under the current user's home to satisfy OpenSSH StrictModes and are removed on exit. The user must be allowed to run that isolated sshd.
+The integration script uses a temporary, high-port loopback `sshd`, fresh keys, temporary config/files and a local bare Git remote. It does not alter the system sshd configuration, production MCP settings, GitHub credentials or repositories. Prerequisites: Python 3, OpenSSH client/server, Git, `gh`, and noninteractive sudo permitted for the isolated test account (CI runs as root). On Debian CI the ephemeral container also needs `/run/sshd`. Test fixtures live under the current user's home to satisfy OpenSSH StrictModes and are removed on exit. The user must be allowed to run that isolated sshd.
 
-Covered: MCP discovery without elicitation capabilities, tool annotations, SSH authentication and host-key rejection, command reads/writes, read-only/deny enforcement, Git add/commit/push, `gh --version`, SFTP create/download/overwrite and limits, exit status, truncation/timeouts, HTTP authentication/Host/Origin checks, and audit hygiene.
+Covered: MCP discovery without elicitation capabilities, tool annotations, SSH authentication and host-key rejection, command reads/writes, read-only/deny enforcement, Git add/commit/push, `gh --version`, SFTP create/download/overwrite and limits, exit status, truncation/timeouts, HTTP authentication/Host/Origin checks, sudo opt-in, rejected/accepted reloads, immediate permission revocation, exclusive reload admission, quiet background sessions, and audit hygiene.
 
 **The real ChatGPT approval UI is a separate manual acceptance test, not proven by these automated tests.** See [ChatGPT acceptance checklist](docs/chatgpt-acceptance.md).
 

@@ -4,6 +4,8 @@ Requires Unix, python3, ssh-keygen, sshd, git and gh. No GitHub token is used.
 Run as a user supported by the local sshd (CI runs inside an ephemeral container).
 """
 import argparse
+import concurrent.futures
+import hashlib
 import pwd
 import json
 import os
@@ -60,7 +62,7 @@ class Client:
             "clientInfo": {"name": "integration-no-elicitation", "version": "1"}})
         assert "tools" in result["capabilities"]
         assert result["serverInfo"]["name"] == "ssh-mcp-rs"
-        assert result["serverInfo"]["version"] == "0.1.0"
+        assert result["serverInfo"]["version"] == "0.2.0"
         self.process.stdin.write(json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}) + "\n")
         self.process.stdin.flush()
 
@@ -128,7 +130,7 @@ def main():
     parser.add_argument("--binary", default="target/debug/ssh-mcp-rs")
     args = parser.parse_args()
     binary = Path(args.binary).resolve()
-    for executable in ("ssh-keygen", "sshd", "git", "gh"):
+    for executable in ("ssh-keygen", "sshd", "git", "gh", "sudo"):
         assert shutil.which(executable), f"missing test prerequisite: {executable}"
     assert binary.is_file(), "build the binary before running integration tests"
     checks = []
@@ -161,7 +163,8 @@ auditPath = "{root}/audit.jsonl"
 '''
         for name, readonly, policy, fingerprint in (
             ("read", True, "deny", pin), ("dev", False, "client-confirmation", pin),
-            ("denied", False, "deny", pin), ("badhost", False, "client-confirmation", "SHA256:" + "A" * 43)):
+            ("denied", False, "deny", pin), ("badhost", False, "client-confirmation", "SHA256:" + "A" * 43),
+            ("privileged", False, "client-confirmation", pin)):
             text += f'''\n[[profiles]]
 name = "{name}"
 host = "127.0.0.1"
@@ -171,6 +174,7 @@ keyRef = "{root}/client"
 hostKeySha256 = "{fingerprint}"
 readOnly = {str(readonly).lower()}
 approvalPolicy = "{policy}"
+allowPrivileged = {str(name == "privileged").lower()}
 '''
         config.write_text(text)
         config.chmod(0o600)
@@ -183,13 +187,13 @@ approvalPolicy = "{policy}"
                 wait_port(port, sshd)
                 client = Client(binary, config, server_log)
                 tools = client.request("tools/list", {})["tools"]
-                assert len(tools) == 13
+                assert len(tools) == 15
                 for tool in tools:
-                    write = tool["name"] in ("run_command", "sftp_upload", "sftp_upload_file", "sftp_download_file", "open_session", "close_session", "signal_process")
+                    write = tool["name"] in ("privileged_command", "reload_config", "run_command", "sftp_upload", "sftp_upload_file", "sftp_download_file", "open_session", "close_session", "signal_process")
                     assert tool["annotations"]["readOnlyHint"] is not write
                     assert tool["annotations"]["destructiveHint"] is write
                 checks.append("MCP initialize/tools and truthful write annotations")
-                assert len(data(client.call("list_connections", {}))["profiles"]) == 4
+                assert len(data(client.call("list_connections", {}))["profiles"]) == 5
                 for command in ("uname -a", "id", "git --version", "gh --version"):
                     output = data(client.call("read_command", {"command": command}))
                     assert output["exitStatus"] == 0, output
@@ -275,6 +279,79 @@ approvalPolicy = "{policy}"
                     stop(child)
                 rejected(client.call("signal_process", {"profile":"dev", "pid":1, "signal":"KILL"}), "invalid pid")
                 checks.append("persistent interactive shell, background lifecycle, signal and read-only guards")
+                # The 1-second per-command limit must not disconnect quiet long-lived sessions.
+                data(client.call("open_session", {"profile":"dev", "name":"quiet-long", "type":"background",
+                    "command":"sleep 7; printf survived", "ttlMs":15000}))
+                quiet = None
+                for _ in range(100):
+                    quiet = data(client.call("read_session_output", {"profile":"dev", "name":"quiet-long"}))
+                    if not quiet["running"]:
+                        break
+                    time.sleep(0.1)
+                assert quiet is not None and quiet["exitStatus"] == 0 and "survived" in quiet["stdout"], quiet
+                data(client.call("close_session", {"profile":"dev", "name":"quiet-long"}))
+                checks.append("quiet background session survives the per-command connection timeout")
+                # Sudo helper has an explicit opt-in in addition to the existing write gate.
+                for profile in ("read", "denied"):
+                    rejected(client.call("privileged_command", {"profile":profile, "command":"id -u"}), "POLICY_DENIED")
+                rejected(client.call("privileged_command", {"profile":"dev", "command":"id -u"}), "PRIVILEGED_DENIED")
+                elevated = data(client.call("privileged_command", {"profile":"privileged", "command":"id -u"}))
+                assert elevated["stdout"].strip() == "0", elevated
+                result = data(client.call("privileged_command", {"profile":"privileged", "cwd":str(root), "command":"pwd"}))
+                assert result["stdout"].strip() == str(root), result
+                nonzero = client.call("privileged_command", {"profile":"privileged", "command":"exit 7"})
+                assert nonzero["isError"] and nonzero["structuredContent"]["exitStatus"] == 7
+                checks.append("noninteractive sudo opt-in, read-only/deny enforcement, cwd and nonzero exit")
+
+                # All config changes in this test are confined to the temporary fixture.
+                original_digest = hashlib.sha256(text.encode()).hexdigest()
+                status = data(client.call("reload_config", {"action":"status"}))
+                assert status["loadedSha256"] == original_digest and not status["fileChanged"], status
+                rejected(client.call("reload_config", {"profile":"read", "action":"reload"}), "POLICY_DENIED")
+                rejected(client.call("reload_config", {"profile":"denied", "action":"reload"}), "POLICY_DENIED")
+                config.write_text("[do-not-leak-test-sentinel\n")
+                invalid = client.call("reload_config", {"profile":"dev", "action":"reload"})
+                rejected(invalid, "invalid configuration")
+                assert "do-not-leak-test-sentinel" not in str(invalid), invalid
+                status = data(client.call("reload_config", {"action":"status"}))
+                assert status["loadedSha256"] == original_digest and status["fileChanged"], status
+                assert data(client.call("read_command", {"command":"id"}))["ok"]
+                config.write_text(text)
+                config.chmod(0o644)
+                rejected(client.call("reload_config", {"profile":"dev", "action":"reload"}), "chmod 600")
+                config.chmod(0o600)
+                for changed, expected in (
+                    (text.replace('defaultProfile = "read"', 'maxConcurrentCalls = 5\ndefaultProfile = "read"'), "maxConcurrentCalls"),
+                    (text.replace("audit.jsonl", "new-audit.jsonl"), "auditPath"),
+                ):
+                    config.write_text(changed)
+                    rejected(client.call("reload_config", {"profile":"dev", "action":"reload"}), expected)
+                    assert data(client.call("reload_config", {"action":"status"}))["loadedSha256"] == original_digest
+                config.write_text(text)
+                data(client.call("open_session", {"profile":"dev", "name":"reload-busy", "type":"interactive"}))
+                rejected(client.call("reload_config", {"profile":"dev", "action":"reload"}), "close active sessions")
+                assert data(client.call("reload_config", {"action":"status"}))["activeSessions"] == 1
+                data(client.call("close_session", {"profile":"dev", "name":"reload-busy"}))
+                changed = text.replace("commandMaxOutputBytes = 128", "commandMaxOutputBytes = 256")
+                config.write_text(changed)
+                result = data(client.call("reload_config", {"profile":"dev", "action":"reload"}))
+                assert result["loadedSha256"] == hashlib.sha256(changed.encode()).hexdigest(), result
+                output = data(client.call("run_command", {"profile":"dev", "command":"printf '%200s' x"}))
+                assert not output["truncated"] and len(output["stdout"]) == 200, output
+                # Revoking the invoking profile takes effect on its very next call.
+                before = 'readOnly = false\napprovalPolicy = "client-confirmation"\nallowPrivileged = false'
+                after = 'readOnly = true\napprovalPolicy = "deny"\nallowPrivileged = false'
+                revoked = text.replace(before, after, 1)
+                assert revoked != text
+                config.write_text(revoked)
+                data(client.call("reload_config", {"profile":"dev", "action":"reload"}))
+                rejected(client.call("run_command", {"profile":"dev", "command":"id"}), "POLICY_DENIED")
+                config.write_text(text)
+                # Restoring the disk file alone must not re-authorize the denied profile.
+                rejected(client.call("reload_config", {"profile":"dev", "action":"reload"}), "POLICY_DENIED")
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+                assert data(client.call("run_command", {"profile":"dev", "command":"id"}))["ok"]
+                checks.append("config reload: atomic validation, permissions, active-session refusal and immediate revocation")
                 nonzero = client.call("run_command", {"profile": "dev", "command": "printf error >&2; exit 7"})
                 assert nonzero["isError"] and nonzero["structuredContent"]["exitStatus"] == 7
                 checks.append("nonzero exit is an MCP tool error")
@@ -301,12 +378,32 @@ approvalPolicy = "{policy}"
                 status, body = http(http_port, request, token)
                 assert status == 200 and "result" in json.loads(body), (status, body)
                 status, body = http(http_port, {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}, token)
-                assert status == 200 and len(json.loads(body)["result"]["tools"]) == 13, (status, body)
+                assert status == 200 and len(json.loads(body)["result"]["tools"]) == 15, (status, body)
                 status, body = http(http_port, {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {
                     "name": "run_command", "arguments": {"profile": "dev", "command": "printf http-ok"}}}, token)
                 assert status == 200 and data(json.loads(body)["result"])["stdout"] == "http-ok", (status, body)
                 assert http(http_port, request, token, host="untrusted.invalid")[0] in (400, 403)
                 checks.append("Streamable HTTP handshake/tools/call, bearer auth, Origin and Host rejection")
+                # Wait for an observable command effect before testing exclusive reload admission.
+                busy_marker = root / "reload-inflight"
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                    future = pool.submit(http, http_port, {"jsonrpc":"2.0", "id":20,
+                        "method":"tools/call", "params":{"name":"run_command", "arguments":{
+                            "profile":"dev", "command":"touch " + str(busy_marker) + "; sleep 0.7"}}}, token)
+                    deadline = time.monotonic() + 3
+                    while not busy_marker.exists() and not future.done() and time.monotonic() < deadline:
+                        time.sleep(0.01)
+                    assert busy_marker.exists(), "command never started"
+                    status, body = http(http_port, {"jsonrpc":"2.0", "id":21, "method":"tools/call",
+                        "params":{"name":"reload_config", "arguments":{"profile":"dev", "action":"reload"}}}, token)
+                    assert status == 200, (status, body)
+                    rejected(json.loads(body)["result"], "BUSY")
+                    status, body = future.result(timeout=10)
+                    assert status == 200 and data(json.loads(body)["result"])["ok"], (status, body)
+                status, body = http(http_port, {"jsonrpc":"2.0", "id":22, "method":"tools/call",
+                    "params":{"name":"reload_config", "arguments":{"profile":"dev", "action":"reload"}}}, token)
+                assert status == 200 and data(json.loads(body)["result"])["reloaded"], (status, body)
+                checks.append("reload admission excludes in-flight commands across HTTP calls")
                 stop(server)
                 server = None
                 audit = (root / "audit.jsonl").read_text()

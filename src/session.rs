@@ -144,7 +144,10 @@ impl Sessions {
                 "SESSION_LIMIT: maximum active sessions reached"
             );
         }
-        let connection = Arc::new(Connection::connect(profile, defaults).await?);
+        // Persistent channels must not inherit the shorter per-command inactivity limit.
+        let mut session_defaults = defaults.clone();
+        session_defaults.command_timeout_ms = ttl;
+        let connection = Arc::new(Connection::connect(profile, &session_defaults).await?);
         let entry = if kind == "interactive" {
             let channel = connection.open_shell().await?;
             let (reader, writer) = channel.split();
@@ -293,7 +296,7 @@ impl Sessions {
             entries.remove(name).context("session disappeared")?
         };
         let may_continue = match &removed.state {
-            State::Interactive(_) => false,
+            State::Interactive(_) => true,
             State::Background { output, .. } => !output.lock().await.done,
         };
         Self::stop(removed).await;

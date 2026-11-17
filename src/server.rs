@@ -10,14 +10,21 @@ use anyhow::{Context, Result, bail, ensure};
 use rmcp::{ErrorData, RoleServer, ServerHandler, model::*, service::RequestContext};
 use serde::Deserialize;
 use serde_json::{Value, json};
-use std::{sync::Arc, time::Duration};
+use std::{
+    path::PathBuf,
+    sync::{Arc, RwLock},
+    time::Duration,
+};
 use tokio::sync::Semaphore;
 
 #[derive(Clone)]
 pub struct SshMcp {
-    config: Arc<Config>,
+    config: Arc<RwLock<Arc<Config>>>,
+    config_path: Arc<PathBuf>,
+    loaded_sha256: Arc<RwLock<String>>,
     audit: Arc<Audit>,
     semaphore: Arc<Semaphore>,
+    max_concurrent_calls: u32,
     sessions: Arc<Sessions>,
 }
 
@@ -84,34 +91,122 @@ struct FileArgs {
     #[serde(default)]
     overwrite: bool,
 }
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct ReloadArgs {
+    profile: Option<String>,
+    action: String,
+}
 impl SshMcp {
-    pub fn new(config: Config) -> Result<Self> {
+    pub fn new(config_path: PathBuf) -> Result<Self> {
+        let (config, bytes) = Config::load_snapshot(&config_path)?;
+        let file_sha = digest(&bytes);
         let audit = Audit::open(config.defaults.audit_path.as_deref())?;
         let limit = config.defaults.max_concurrent_calls;
         Ok(Self {
-            config: Arc::new(config),
+            config: Arc::new(RwLock::new(Arc::new(config))),
+            config_path: Arc::new(config_path),
+            loaded_sha256: Arc::new(RwLock::new(file_sha)),
             audit: Arc::new(audit),
             semaphore: Arc::new(Semaphore::new(limit)),
+            max_concurrent_calls: limit as u32,
             sessions: Arc::new(Sessions::new()),
         })
     }
 
+    fn current(&self) -> Result<Arc<Config>> {
+        Ok(self
+            .config
+            .read()
+            .map_err(|_| anyhow::anyhow!("config lock poisoned"))?
+            .clone())
+    }
+
+    async fn reload_config(&self, arguments: Value) -> Result<Value> {
+        let args: ReloadArgs = serde_json::from_value(arguments.clone())?;
+        ensure!(
+            matches!(args.action.as_str(), "status" | "reload"),
+            "action must be status or reload"
+        );
+        // Lock admission BEFORE taking any authorization snapshot. A concurrent
+        // reload must never leave a later call using previously revoked permissions.
+        let permits = if args.action == "reload" {
+            self.max_concurrent_calls
+        } else {
+            1
+        };
+        let _permit = self
+            .semaphore
+            .try_acquire_many(permits)
+            .context("BUSY: reload requires an idle server; retry after active commands finish")?;
+        let old = self.current()?;
+        let loaded = self
+            .loaded_sha256
+            .read()
+            .map_err(|_| anyhow::anyhow!("config hash lock poisoned"))?
+            .clone();
+        if args.action == "status" {
+            let disk = crate::config::private_file(&self.config_path)
+                .and_then(|()| Ok(digest(&std::fs::read(&*self.config_path)?)))
+                .ok();
+            return Ok(json!({"configured":true,"profiles":old.profiles.len(),
+                "loadedSha256":loaded,"fileSha256":disk,"fileChanged":disk.as_ref().is_some_and(|hash| hash != &loaded),
+                "activeSessions":self.sessions.count().await}));
+        }
+        // The *previous* configuration authorizes the reload. A new file cannot approve itself.
+        let profile = old.profile(args.profile.as_deref())?;
+        policy::authorize_write(profile)?;
+        let id = uuid::Uuid::new_v4().to_string();
+        let hash = digest(&serde_json::to_vec(&arguments)?);
+        self.audit
+            .record(&id, "reload_config", &profile.name, &hash, "attempt")?;
+        let result = async {
+            ensure!(self.sessions.count().await == 0, "BUSY: close active sessions before config reload");
+            let (next, before) = Config::load_snapshot(&self.config_path)?;
+            ensure!(next.defaults.audit_path == old.defaults.audit_path, "auditPath change requires service restart");
+            ensure!(next.defaults.max_concurrent_calls == old.defaults.max_concurrent_calls, "maxConcurrentCalls change requires service restart");
+            ensure!(std::fs::read(&*self.config_path)? == before, "config changed during reload; retry after settling");
+            let count = next.profiles.len();
+            *self.config.write().map_err(|_| anyhow::anyhow!("config lock poisoned"))? = Arc::new(next);
+            *self.loaded_sha256.write().map_err(|_| anyhow::anyhow!("config hash lock poisoned"))? = digest(&before);
+            Ok(json!({"reloaded":true,"profiles":count,"loadedSha256":digest(&before),"activeSessions":0}))
+        }.await;
+        self.audit.record(
+            &id,
+            "reload_config",
+            &profile.name,
+            &hash,
+            if result.is_ok() {
+                "succeeded"
+            } else {
+                "failed"
+            },
+        )?;
+        result
+    }
+
     async fn execute(&self, name: &str, arguments: Value) -> Result<Value> {
+        if name == "reload_config" {
+            return self.reload_config(arguments).await;
+        }
+        let _permit = self
+            .semaphore
+            .try_acquire()
+            .context("BUSY: concurrency limit reached; no operation started")?;
+        let config = self.current()?;
         if name == "list_connections" {
             ensure!(
                 arguments.as_object().is_some_and(|a| a.is_empty()),
                 "list_connections takes no arguments"
             );
-            return Ok(
-                json!({"profiles": self.config.profiles.iter().map(|p| json!({
+            return Ok(json!({"profiles": config.profiles.iter().map(|p| json!({
                 "name": p.name, "host": p.host, "port": p.port, "user": p.user,
-                "readOnly": p.read_only, "approvalPolicy": match p.approval_policy {
+                "readOnly": p.read_only, "allowPrivileged": p.allow_privileged, "approvalPolicy": match p.approval_policy {
                     crate::config::ApprovalPolicy::Deny => "deny",
                     crate::config::ApprovalPolicy::ClientConfirmation => "client-confirmation",
                 },
                 "connectionMode": "per-call; sessions supported"
-            })).collect::<Vec<_>>() }),
-            );
+            })).collect::<Vec<_>>() }));
         }
         if name == "list_sessions" {
             ensure!(
@@ -124,6 +219,7 @@ impl SshMcp {
             [
                 "read_command",
                 "run_command",
+                "privileged_command",
                 "sftp_download",
                 "sftp_upload",
                 "sftp_list",
@@ -137,9 +233,7 @@ impl SshMcp {
             .contains(&name),
             "unknown tool"
         );
-        let profile = self
-            .config
-            .profile(arguments.get("profile").and_then(Value::as_str))?;
+        let profile = config.profile(arguments.get("profile").and_then(Value::as_str))?;
         let id = uuid::Uuid::new_v4().to_string();
         let hash = digest(&serde_json::to_vec(&arguments)?);
         self.audit
@@ -148,6 +242,8 @@ impl SshMcp {
             if matches!(
                 name,
                 "run_command"
+                    | "privileged_command"
+                    | "reload_config"
                     | "sftp_upload"
                     | "sftp_upload_file"
                     | "sftp_download_file"
@@ -157,10 +253,6 @@ impl SshMcp {
             ) {
                 policy::authorize_write(profile)?;
             }
-            let _permit = self
-                .semaphore
-                .try_acquire()
-                .context("BUSY: concurrency limit reached; no operation started")?;
             match name {
                 "open_session" => {
                     let args: OpenSessionArgs = serde_json::from_value(arguments)?;
@@ -170,7 +262,7 @@ impl SshMcp {
                             &args.name,
                             &args.kind,
                             profile,
-                            &self.config.defaults,
+                            &config.defaults,
                             args.command.as_deref(),
                             args.ttl_ms,
                         )
@@ -187,6 +279,22 @@ impl SshMcp {
                     let _ = args.profile;
                     self.sessions.output(&args.name, profile, args.lines).await
                 }
+                "privileged_command" => {
+                    ensure!(
+                        profile.allow_privileged,
+                        "PRIVILEGED_DENIED: allowPrivileged must be enabled for this profile"
+                    );
+                    let args: CommandArgs = serde_json::from_value(arguments)?;
+                    let _ = args.profile;
+                    ensure!(
+                        args.session.is_none(),
+                        "privileged_command cannot attach to an existing session"
+                    );
+                    let shell = policy::shell_command(&args.command, args.cwd.as_deref())?;
+                    // sudo -n never prompts for a password; OS sudoers is a second, independent gate.
+                    self.with_connection(profile, Operation::Command(format!("sudo -n -- {shell}")))
+                        .await
+                }
                 "read_command" | "run_command" => {
                     let args: CommandArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
@@ -200,7 +308,7 @@ impl SshMcp {
                         ensure!(args.cwd.is_none(), "session controls its own cwd");
                         let output = self
                             .sessions
-                            .run(&session, profile, &args.command, &self.config.defaults)
+                            .run(&session, profile, &args.command, &config.defaults)
                             .await?;
                         return Ok(serde_json::to_value(output)?);
                     }
@@ -247,7 +355,7 @@ impl SshMcp {
                     let args: FileArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
                     policy::path(&args.remote_path)?;
-                    transfers::local_destination(&self.config.defaults, &args.local_name)?;
+                    transfers::local_destination(&config.defaults, &args.local_name)?;
                     if name == "sftp_upload_file" {
                         self.with_connection(
                             profile,
@@ -282,7 +390,7 @@ impl SshMcp {
                     let _ = args.profile;
                     policy::path(&args.remote_path)?;
                     ensure!(
-                        args.content.len() <= self.config.defaults.transfer_max_bytes,
+                        args.content.len() <= config.defaults.transfer_max_bytes,
                         "TRANSFER_TOO_LARGE"
                     );
                     self.with_connection(
@@ -311,22 +419,23 @@ impl SshMcp {
         profile: &crate::config::Profile,
         operation: Operation,
     ) -> Result<Value> {
+        let config = self.current()?;
         let timeout_ms = if matches!(
             &operation,
             Operation::UploadFile(..) | Operation::DownloadFile(..)
         ) {
-            self.config.defaults.transfer_timeout_ms
+            config.defaults.transfer_timeout_ms
         } else {
-            self.config.defaults.command_timeout_ms
+            config.defaults.command_timeout_ms
         };
-        let connection = Connection::connect(profile, &self.config.defaults).await?;
+        let connection = Connection::connect(profile, &config.defaults).await?;
         let result = tokio::time::timeout(
             Duration::from_millis(timeout_ms + 3000),
             async {
                 match operation {
-                    Operation::Command(command) => Ok(serde_json::to_value(connection.command(&command, &self.config.defaults).await?)?),
+                    Operation::Command(command) => Ok(serde_json::to_value(connection.command(&command, &config.defaults).await?)?),
                     Operation::Download(path) => {
-                        let content = connection.download(&path, self.config.defaults.transfer_max_bytes).await?;
+                        let content = connection.download(&path, config.defaults.transfer_max_bytes).await?;
                         Ok(json!({"remotePath": path, "bytes": content.len(), "content": content}))
                     }
                     Operation::Upload(path, content, overwrite) => {
@@ -334,8 +443,8 @@ impl SshMcp {
                         Ok(json!({"remotePath": path, "bytes": content.len(), "sha256": digest(content.as_bytes()), "overwrite": overwrite, "atomic": false}))
                     }
                     Operation::List(path, max) => transfers::list(&connection, &path, max).await,
-                    Operation::UploadFile(path, name, overwrite) => transfers::upload_file(&connection, &self.config.defaults, &name, &path, overwrite).await,
-                    Operation::DownloadFile(path, name, overwrite) => transfers::download_file(&connection, &self.config.defaults, &path, &name, overwrite).await,
+                    Operation::UploadFile(path, name, overwrite) => transfers::upload_file(&connection, &config.defaults, &name, &path, overwrite).await,
+                    Operation::DownloadFile(path, name, overwrite) => transfers::download_file(&connection, &config.defaults, &path, &name, overwrite).await,
                 }
             }
         ).await;
@@ -362,6 +471,11 @@ pub fn tools() -> Vec<Tool> {
         "cwd":{"type":"string", "description":"Optional absolute working directory. Not a filesystem sandbox."},
         "session":{"type":"string", "description":"Optional existing interactive session name; preserves cwd and shell environment."}
     });
+    let mut stateless_properties = command_properties.clone();
+    stateless_properties
+        .as_object_mut()
+        .expect("command schema")
+        .remove("session");
     let mut entries = vec![
         tool(
             "list_connections",
@@ -384,7 +498,7 @@ pub fn tools() -> Vec<Tool> {
             "Execute narrow allowlisted read-only commands. No shells or mutation.",
             true,
             true,
-            command_properties.clone(),
+            stateless_properties.clone(),
             json!(["command"]),
         ),
         tool(
@@ -392,7 +506,7 @@ pub fn tools() -> Vec<Tool> {
             "Execute arbitrary shell command or send a command to an interactive session. Writes may persist after timeout; requires client-managed confirmation.",
             false,
             true,
-            command_properties,
+            command_properties.clone(),
             json!(["command"]),
         ),
         tool(
@@ -451,6 +565,12 @@ pub fn tools() -> Vec<Tool> {
             json!({"profile":profile,"remotePath":{"type":"string"},"localName":{"type":"string","description":"A single filename inside the private transferRoot; not a path."},"overwrite":{"type":"boolean","default":false}}), json!(["remotePath","localName"])),
         tool("sftp_download_file", "Stream a remote binary file into private server-side transferRoot, atomically publishing the local destination; requires write confirmation.", false, true,
             json!({"profile":profile,"remotePath":{"type":"string"},"localName":{"type":"string","description":"Single filename inside the private transferRoot."},"overwrite":{"type":"boolean","default":false}}), json!(["remotePath","localName"])),
+    ]);
+    entries.extend([
+        tool("privileged_command", "Run the exact command using noninteractive sudo -n; only when allowPrivileged=true and the remote sudoers policy grants it. Always write-classified.", false, true,
+            stateless_properties, json!(["command"])),
+        tool("reload_config", "Inspect configuration status or atomically reload private config. Reload requires a write-enabled profile, no active sessions, and an idle server; audit/concurrency changes require restart.", false, false,
+            json!({"profile":profile,"action":{"type":"string","enum":["status","reload"]}}), json!(["action"])),
     ]);
     entries.shrink_to_fit();
     entries
@@ -512,11 +632,13 @@ mod tests {
     #[test]
     fn tools_have_truthful_annotations_and_fixed_schemas() {
         let definitions = serde_json::to_value(tools()).unwrap();
-        assert_eq!(definitions.as_array().unwrap().len(), 13);
+        assert_eq!(definitions.as_array().unwrap().len(), 15);
         for tool in definitions.as_array().unwrap() {
             let write = matches!(
                 tool["name"].as_str().unwrap(),
                 "run_command"
+                    | "privileged_command"
+                    | "reload_config"
                     | "sftp_upload"
                     | "sftp_upload_file"
                     | "sftp_download_file"
