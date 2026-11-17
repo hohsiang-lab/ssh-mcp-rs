@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**v0.1 is a focused implementation, not a full upstream port or a drop-in configuration replacement.** It implements stateless commands and bounded UTF-8 SFTP transfers. Stateful/background sessions, SSH agent/password authentication, privilege escalation helpers, binary streaming, config reload, role/host-group rules, quotas, and output-secret redaction are not implemented. See [scope and migration](docs/migration.md).
+**This is a focused implementation, not yet a full upstream port or a drop-in configuration replacement.** Stateless commands, bounded UTF-8 SFTP transfers, persistent POSIX-shell interactive sessions, background command sessions, and process signals are implemented. SSH agent/password authentication, privilege escalation helpers, binary streaming, config reload, role/host-group rules, quotas, and output-secret redaction are not implemented. See [scope and migration](docs/migration.md).
 
 ## Approval model: what changes, and what does not
 
@@ -37,6 +37,11 @@ Official references, checked 2026-11-17:
 | `run_command` | Exact arbitrary shell command, optional absolute `cwd` | No | Yes |
 | `sftp_download` | Read bounded UTF-8 content; does not create a local file | Yes | No |
 | `sftp_upload` | Write UTF-8 content; existing destination refused unless `overwrite=true` | No | Yes |
+| `list_sessions` | List named active sessions and expiry | Yes | No |
+| `open_session` | Start persistent POSIX-shell interactive or background SSH command (TTL 1s–1h) | No | Yes |
+| `close_session` | Close a session; background termination is best-effort | No | Yes |
+| `read_session_output` | Read bounded recent background stdout/stderr and completion status | Yes | No |
+| `signal_process` | Send INT/TERM/KILL to a validated remote PID, excluding PID 1 | No | Yes |
 
 The read grammar accepts basic `uname`, `id`, `pwd`, `whoami`, `uptime`, `ls`, `cat`, and `df` forms, plus `git --version` and `gh --version`. Shell operators, substitutions, interpreters, mutable Git subcommands, and arbitrary `gh` operations are rejected. Unsupported reads can use `run_command` on an explicitly write-enabled profile, with the same client confirmation as other arbitrary commands. This conservatism avoids falsely labelling complex shell commands read-only.
 
@@ -54,7 +59,7 @@ Examples of `run_command` arguments:
 {"profile":"dev","cwd":"/srv/work/project","command":"git push -u origin fix/timeout && gh pr create --fill"}
 ```
 
-`cwd` is a convenience, **not** a sandbox. Commands can access everything available to the SSH account. SSH connects separately for each call; shell environment and working directory do not persist. POSIX-shell remote hosts only in v0.1.
+`cwd` is a convenience, **not** a sandbox. Stateless calls connect separately; named interactive sessions keep a persistent POSIX `/bin/sh -s` channel (even when the login shell is fish), preserving cwd and exported variables. For a session use `open_session` with `type=interactive`, then `run_command` with `session=<name>` and no `cwd`. Use `type=background` with `command` for long jobs and `read_session_output` to poll. Sessions expire automatically (default 10 minutes, maximum 1 hour), with a cap of eight. `close_session` and `signal_process` are write-gated and cannot guarantee remote process termination; check the remote PID after sending a signal.
 
 ## Build and configure
 

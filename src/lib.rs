@@ -6,4 +6,5 @@ pub mod audit;
 pub mod config;
 pub mod policy;
 pub mod server;
+pub mod session;
 pub mod ssh;

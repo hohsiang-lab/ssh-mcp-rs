@@ -15,9 +15,10 @@ This is a native Rust implementation of a focused subset, not a line-by-line por
 | SSH key authentication | Implemented; encrypted private keys via passphrase environment reference |
 | Host verification | Required pinned SHA256 public-key fingerprint; no accept-any or TOFU fallback |
 | stdio / Streamable HTTP | Implemented; HTTP is loopback + mandatory backend bearer auth |
-| Interactive/background sessions | Not implemented; tools are not advertised |
+| Interactive/background sessions | Implemented: `open_session`, `list_sessions`, `close_session`, `read_session_output`, plus persistent POSIX-shell commands via `run_command(session=...)`; bounded TTL and output |
 | SSH agent/password/certificate authentication | Not implemented |
-| Sudo helper / signal-process tool | Not implemented; arbitrary-command privileges follow the SSH account |
+| Sudo helper | Not implemented; arbitrary-command privileges follow the SSH account |
+| Signal-process tool | `signal_process` with explicit INT/TERM/KILL, validated PID, and write-profile confirmation |
 | Binary streaming/local transferRoot | Not implemented |
 | Config hot reload | Not implemented; restart required |
 | Role/host-group matrix, denylist, quotas | Not implemented; profile-level read-only/deny + concurrency limits only |
