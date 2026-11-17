@@ -15,9 +15,7 @@ concurrency:
 
 jobs:
   test:
-    # Never execute untrusted fork PR code on the organization's private runner.
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: staging-monster-amd64-ci
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     container:
       image: rust:1.98.1-bookworm
