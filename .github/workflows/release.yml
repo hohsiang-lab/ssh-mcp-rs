@@ -1,0 +1,188 @@
+name: Release binaries
+
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    paths:
+      - '.github/workflows/release.yml'
+      - '.github/workflows/ci.yml'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'src/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-binaries-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  RUST_TOOLCHAIN: '1.98.1'
+  CARGO_TERM_COLOR: always
+
+jobs:
+  metadata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      commit: ${{ steps.version.outputs.commit }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate version and release source
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          import subprocess
+          import tomllib
+
+          with open('Cargo.toml', 'rb') as source:
+              package = tomllib.load(source)['package']
+          version = package['version']
+          assert package['name'] == 'ssh-mcp-rs', 'Unexpected package name'
+          assert re.fullmatch(r'\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?', version), 'Invalid release version'
+          tag = f'v{version}'
+          commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          if os.environ['REF_TYPE'] == 'tag':
+              assert os.environ['REF_NAME'] == tag, 'Tag must exactly match Cargo.toml version'
+              subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'origin/main'], check=True)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'version={version}\ntag={tag}\ncommit={commit}\n')
+          print(f'Building {tag} from {commit}')
+          PY
+
+  # Reuse the existing Linux SSH/MCP suite for the exact tagged commit.
+  # PRs already run ci.yml separately; a manual dispatch is a build-only rehearsal.
+  checks:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    needs: metadata
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+          - os: macos-15
+            target: aarch64-apple-darwin
+    env:
+      TARGET: ${{ matrix.target }}
+      VERSION: ${{ needs.metadata.outputs.version }}
+      TAG: ${{ needs.metadata.outputs.tag }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install the tested Rust toolchain
+        run: |
+          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --target "$TARGET"
+          rustc +"$RUST_TOOLCHAIN" --version
+          test "$(rustc +"$RUST_TOOLCHAIN" -vV | sed -n 's/^host: //p')" = "$TARGET"
+      - name: Build release binary
+        run: cargo +"$RUST_TOOLCHAIN" build --release --locked --target "$TARGET"
+      - name: Package, smoke-test and checksum
+        run: |
+          set -euo pipefail
+          package="ssh-mcp-rs-${TAG}-${TARGET}"
+          stage="$RUNNER_TEMP/package/$package"
+          mkdir -p "$stage" dist
+          install -m 755 "target/$TARGET/release/ssh-mcp-rs" "$stage/ssh-mcp-rs"
+          cp LICENSE NOTICE README.md config.example.toml "$stage/"
+          cp -R docs "$stage/docs"
+          COPYFILE_DISABLE=1 tar -czf "dist/$package.tar.gz" -C "$RUNNER_TEMP/package" "$package"
+          mkdir -p "$RUNNER_TEMP/smoke"
+          tar -xzf "dist/$package.tar.gz" -C "$RUNNER_TEMP/smoke"
+          binary="$RUNNER_TEMP/smoke/$package/ssh-mcp-rs"
+          test "$("$binary" --version)" = "ssh-mcp-rs $VERSION"
+          "$binary" --help
+          file "$binary"
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+
+          archives = list(Path('dist').glob('*.tar.gz'))
+          assert len(archives) == 1, 'Expected exactly one platform archive'
+          archive = archives[0]
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          archive.with_suffix(archive.suffix + '.sha256').write_text(f'{digest}  {archive.name}\n')
+          PY
+      - name: Upload platform archive
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: binary-${{ matrix.target }}
+          path: |
+            dist/*.tar.gz
+            dist/*.sha256
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+  publish:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [metadata, checks, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ needs.metadata.outputs.tag }}
+      BUILD_COMMIT: ${{ needs.metadata.outputs.commit }}
+    steps:
+      - name: Download this run's platform archives
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: binary-*
+          merge-multiple: true
+          path: dist
+      - name: Verify complete asset set and tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          for target in x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu x86_64-apple-darwin aarch64-apple-darwin; do
+            test -s "dist/ssh-mcp-rs-${TAG}-${target}.tar.gz"
+            test -s "dist/ssh-mcp-rs-${TAG}-${target}.tar.gz.sha256"
+          done
+          cat dist/*.sha256 | sort -k2 > dist/SHA256SUMS
+          test "$(wc -l < dist/SHA256SUMS | tr -d ' ')" = 4
+          (cd dist && sha256sum --check --strict SHA256SUMS)
+          test "$(gh api "repos/$GH_REPO/commits/$TAG" --jq '.sha')" = "$BUILD_COMMIT"
+      - name: Publish release with all assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "::error::Release $TAG already exists; no assets will be overwritten."
+            exit 1
+          fi
+          flags=(--verify-tag --generate-notes --title "ssh-mcp-rs $TAG")
+          if [[ "$TAG" == *-* ]]; then
+            flags+=(--prerelease)
+          fi
+          gh release create "$TAG" dist/*.tar.gz dist/SHA256SUMS --repo "$GH_REPO" "${flags[@]}"

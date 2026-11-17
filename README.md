@@ -6,6 +6,12 @@ Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The se
 
 **v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, role/host-group rules, quotas, and output-secret redaction remain outside this implementation. See [scope and migration](docs/migration.md).
 
+## Install without building
+
+Download a published Linux or macOS binary for x86_64 or ARM64 from [GitHub Releases](https://github.com/hohsiang-lab/ssh-mcp-rs/releases), verify it against `SHA256SUMS`, extract it, and install the `ssh-mcp-rs` executable. No repository clone, Rust toolchain, or local build is needed. See [download/install commands and release instructions](docs/releases.md).
+
+Release archives include the configuration example and documentation. SSH credentials, a verified host fingerprint, and an authenticated MCP transport still need configuration. Adding the workflow does not itself publish a release; maintainers must push a matching version tag.
+
 ## Approval model: what changes, and what does not
 
 Upstream can ask the MCP client to approve an action using `elicitation/create`. A client without that capability cannot answer, producing `APPROVAL_UNAVAILABLE`. This server **does not send an elicitation request**.
@@ -66,9 +72,9 @@ Examples of `run_command` arguments:
 
 `cwd` is a convenience, **not** a sandbox. Stateless calls connect separately; named interactive sessions keep a persistent POSIX `/bin/sh -s` channel (even when the login shell is fish), preserving cwd and exported variables. For a session use `open_session` with `type=interactive`, then `run_command` with `session=<name>` and no `cwd`. Use `type=background` with `command` for long jobs and `read_session_output` to poll. Sessions expire automatically (default 10 minutes, maximum 1 hour), with a cap of eight. `close_session` and `signal_process` are write-gated and cannot guarantee remote process termination; check the remote PID after sending a signal.
 
-## Build and configure
+## Build from source and configure
 
-The committed lockfile is used for repeatable dependency resolution. Development validation uses Rust 1.98.1 on Linux amd64. Rust 1.89 is the declared minimum but is not separately tested. macOS is a build target in principle, not an integration-tested platform in this release. Windows is explicitly unsupported.
+The committed lockfile is used for repeatable dependency resolution. Development validation uses Rust 1.98.1 on Linux amd64. Rust 1.89 is the declared minimum but is not separately tested. The release workflow builds and smoke-tests Linux and macOS x86_64/ARM64 archives; the full isolated SSH integration suite remains Linux-only. See [platform requirements](docs/releases.md) for prebuilt packages. Windows is explicitly unsupported.
 
 ```sh
 cargo build --release --locked
