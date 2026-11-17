@@ -31,6 +31,9 @@ pub struct Profile {
     pub read_only: bool,
     #[serde(default)]
     pub approval_policy: ApprovalPolicy,
+    /// Permit the separately advertised sudo tool; never granted implicitly by write access.
+    #[serde(default)]
+    pub allow_privileged: bool,
 }
 fn default_port() -> u16 {
     22
@@ -80,9 +83,17 @@ pub struct Config {
 }
 impl Config {
     pub fn load(path: &Path) -> Result<Self> {
+        Self::load_snapshot(path).map(|(config, _)| config)
+    }
+
+    /// Parse and validate exactly the bytes whose digest is reported by the server.
+    pub(crate) fn load_snapshot(path: &Path) -> Result<(Self, Vec<u8>)> {
         private_file(path)?;
-        let config: Self = toml::from_str(&fs::read_to_string(path)?)
-            .context("invalid configuration; this is not a drop-in upstream config")?;
+        let bytes = fs::read(path)?;
+        // TOML errors can include source excerpts. Never expose config contents to callers.
+        let config: Self = toml::from_str(std::str::from_utf8(&bytes)?).map_err(|_| {
+            anyhow::anyhow!("invalid configuration; this is not a drop-in upstream config")
+        })?;
         config.validate()?;
         if let Some(root) = &config.defaults.transfer_root {
             private_directory(root)?;
@@ -113,7 +124,7 @@ impl Config {
             private_file(&profile.key_ref)
                 .with_context(|| format!("private key permissions for profile {}", profile.name))?;
         }
-        Ok(config)
+        Ok((config, bytes))
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -173,6 +184,11 @@ impl Config {
                 "invalid profile name"
             );
             ensure!(names.insert(&p.name), "duplicate profile name");
+            ensure!(
+                !p.allow_privileged
+                    || (!p.read_only && p.approval_policy == ApprovalPolicy::ClientConfirmation),
+                "allowPrivileged requires readOnly=false and client-confirmation"
+            );
             ensure!(
                 !p.host.is_empty()
                     && p.host.len() <= 253
@@ -307,6 +323,17 @@ hostKeySha256 = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         c.validate().unwrap();
         assert!(c.profiles[0].read_only);
         assert_eq!(c.profiles[0].approval_policy, ApprovalPolicy::Deny);
+    }
+    #[test]
+    fn privileged_helper_is_opt_in_and_requires_write_policy() {
+        let mut c = sample();
+        assert!(!c.profiles[0].allow_privileged);
+        c.profiles[0].allow_privileged = true;
+        assert!(c.validate().is_err());
+        c.profiles[0].read_only = false;
+        assert!(c.validate().is_err());
+        c.profiles[0].approval_policy = ApprovalPolicy::ClientConfirmation;
+        c.validate().unwrap();
     }
     #[test]
     fn rejects_unknown_policy() {

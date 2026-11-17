@@ -24,6 +24,7 @@ keyRef = "/home/developer/.ssh/id_ed25519"
 hostKeySha256 = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 readOnly = true
 approvalPolicy = "deny"
+allowPrivileged = false
 # passphraseEnv = "SSH_MCP_KEY_PASSPHRASE"
 
 # Explicit opt-in example; UNCOMMENT ONLY after testing the authenticated
@@ -37,3 +38,4 @@ approvalPolicy = "deny"
 # hostKeySha256 = "SHA256:REPLACE_WITH_VERIFIED_HOST_KEY_FINGERPRINT"
 # readOnly = false
 # approvalPolicy = "client-confirmation"
+# allowPrivileged = false  # true explicitly enables the sudo helper; sudoers still applies
