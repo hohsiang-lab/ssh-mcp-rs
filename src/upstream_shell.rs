@@ -2,12 +2,12 @@
 //! Test-only until the complete Rust classifier replaces QuickJS.
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-struct Segment {
-    words: Vec<String>,
+pub(crate) struct Segment {
+    pub(crate) words: Vec<String>,
     sep: String,
 }
 
-fn tokenize_detailed(command: &str, honor_quotes: bool, windows: bool) -> Vec<Segment> {
+pub(crate) fn tokenize_detailed(command: &str, honor_quotes: bool, windows: bool) -> Vec<Segment> {
     let chars: Vec<char> = command.chars().collect();
     let mut segments: Vec<Segment> = Vec::new();
     let mut pending = String::new();
