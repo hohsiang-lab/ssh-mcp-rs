@@ -131,6 +131,66 @@ mod tests {
     use super::*;
 
     #[test]
+    fn differential_against_pinned_upstream_paths() {
+        use rquickjs::{Context, Runtime};
+
+        // Export the upstream IIFE's private path helpers in a test-only copy.
+        // Production continues using the original pinned source unchanged.
+        let source = include_str!("upstream_classifier.js").replace(
+            "return {classifyCommand, findForbiddenMatch};",
+            "return {classifyCommand, findForbiddenMatch, normalizeRemotePath, normalizeRemotePathForWindows, findNeverAllowedWriteTarget};",
+        );
+        let runtime = Runtime::new().unwrap();
+        let context = Context::full(&runtime).unwrap();
+        context.with(|ctx| {
+            ctx.eval::<(), _>(source).unwrap();
+            let upstream: rquickjs::Object = ctx.globals().get("UpstreamSSH").unwrap();
+            let normalize: rquickjs::Function = upstream.get("normalizeRemotePath").unwrap();
+            let windows: rquickjs::Function =
+                upstream.get("normalizeRemotePathForWindows").unwrap();
+            let protected: rquickjs::Function =
+                upstream.get("findNeverAllowedWriteTarget").unwrap();
+
+            let parts = [
+                "", ".", "..", "a", "a..", "a. ", "etc", "cron", "systemd",
+                ".ssh", "authorized_keys", "Authorized_Keys.", "file::$DATA",
+                "C:", "C:x", "/", "\\", "//", "\\\\", "a/b", "a\\b",
+            ];
+            let mut count = 0usize;
+            for prefix in [
+                "", "/", "//", "C:/", "C:", r"\\?\C:\", r"\\server\share\", "/home/",
+            ] {
+                for a in parts {
+                    for b in parts {
+                        let candidate = format!("{prefix}{a}/{b}");
+                        let reference: String = normalize.call((candidate.as_str(),)).unwrap();
+                        assert_eq!(
+                            normalize_remote_path(&candidate),
+                            reference,
+                            "POSIX reading: {candidate:?}"
+                        );
+                        let reference: String = windows.call((candidate.as_str(),)).unwrap();
+                        assert_eq!(
+                            normalize_remote_path_for_windows(&candidate),
+                            reference,
+                            "Windows reading: {candidate:?}"
+                        );
+                        let reference: Option<String> =
+                            protected.call((candidate.as_str(),)).unwrap();
+                        assert_eq!(
+                            find_never_allowed_write_target(&candidate),
+                            reference.as_deref(),
+                            "protected target: {candidate:?}"
+                        );
+                        count += 1;
+                    }
+                }
+            }
+            assert_eq!(count, 8 * parts.len() * parts.len());
+        });
+    }
+
+    #[test]
     fn lexical_paths_cannot_escape_the_root() {
         for (input, expected) in [
             ("/etc//cron/./jobs/../", "/etc/cron"),
