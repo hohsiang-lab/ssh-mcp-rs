@@ -12,9 +12,9 @@ pub mod ssh;
 pub mod transfers;
 #[cfg(test)]
 mod upstream_awk;
+pub mod upstream_compat;
 #[cfg(test)]
 mod upstream_heads;
-pub mod upstream_compat;
 mod upstream_paths;
 #[cfg(test)]
 mod upstream_readers;
