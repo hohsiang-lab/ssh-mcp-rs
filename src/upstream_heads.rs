@@ -18,19 +18,54 @@ struct Reading {
 }
 
 fn privilege_prefix(word: &str) -> bool {
-    matches!(word, "sudo" | "su" | "doas" | "pkexec" | "su-exec" | "gosu"
-        | "sudo-rs" | "run0" | "pfexec" | "runuser" | "setpriv")
+    matches!(
+        word,
+        "sudo"
+            | "su"
+            | "doas"
+            | "pkexec"
+            | "su-exec"
+            | "gosu"
+            | "sudo-rs"
+            | "run0"
+            | "pfexec"
+            | "runuser"
+            | "setpriv"
+    )
 }
 
 fn wrapper(word: &str) -> bool {
-    matches!(word, "env" | "nohup" | "nice" | "ionice" | "command" | "exec"
-        | "setsid" | "stdbuf" | "timeout" | "chrt" | "taskset" | "xargs" | "watch"
-        | "busybox" | "strace" | "ltrace" | "valgrind" | "flock" | "chroot"
-        | "perf" | "time")
+    matches!(
+        word,
+        "env"
+            | "nohup"
+            | "nice"
+            | "ionice"
+            | "command"
+            | "exec"
+            | "setsid"
+            | "stdbuf"
+            | "timeout"
+            | "chrt"
+            | "taskset"
+            | "xargs"
+            | "watch"
+            | "busybox"
+            | "strace"
+            | "ltrace"
+            | "valgrind"
+            | "flock"
+            | "chroot"
+            | "perf"
+            | "time"
+    )
 }
 
 fn wrapper_operands(word: &str) -> usize {
-    usize::from(matches!(word, "flock" | "chroot" | "taskset" | "perf" | "timeout"))
+    usize::from(matches!(
+        word,
+        "flock" | "chroot" | "taskset" | "perf" | "timeout"
+    ))
 }
 
 fn strip_path(word: &str) -> &str {
@@ -38,8 +73,9 @@ fn strip_path(word: &str) -> &str {
 }
 
 fn unquote(word: &str) -> &str {
-    if word.len() >= 2 && ((word.starts_with('"') && word.ends_with('"'))
-        || (word.starts_with('\'') && word.ends_with('\'')))
+    if word.len() >= 2
+        && ((word.starts_with('"') && word.ends_with('"'))
+            || (word.starts_with('\'') && word.ends_with('\'')))
     {
         &word[1..word.len() - 1]
     } else {
@@ -60,16 +96,22 @@ fn fold_command_word(word: &str) -> String {
 
 fn bare_numeric(word: &str) -> bool {
     let word = word.trim_end_matches(['s', 'm', 'h', 'd']);
-    let (main, fraction) = word.split_once('.').map_or((word, None), |(a, b)| (a, Some(b)));
+    let (main, fraction) = word
+        .split_once('.')
+        .map_or((word, None), |(a, b)| (a, Some(b)));
     !main.is_empty()
         && main.bytes().all(|c| c.is_ascii_digit())
         && fraction.is_none_or(|part| !part.is_empty() && part.bytes().all(|c| c.is_ascii_digit()))
 }
 
 fn assignment(word: &str) -> bool {
-    let Some((name, _value)) = word.split_once('=') else { return false; };
+    let Some((name, _value)) = word.split_once('=') else {
+        return false;
+    };
     let mut chars = name.chars();
-    chars.next().is_some_and(|c| c.is_ascii_alphabetic() || c == '_')
+    chars
+        .next()
+        .is_some_and(|c| c.is_ascii_alphabetic() || c == '_')
         && chars.all(|c| c.is_ascii_alphanumeric() || c == '_')
 }
 
@@ -80,9 +122,26 @@ fn command_lookup(word: &str) -> bool {
 }
 
 fn prefix_value_flag(word: &str) -> bool {
-    matches!(word, "-u" | "-g" | "-p" | "-C" | "-h" | "-r" | "-t" | "-U" | "-c"
-        | "--user" | "--group" | "--prompt" | "--close-from" | "--host"
-        | "--role" | "--type" | "--other-user" | "--command")
+    matches!(
+        word,
+        "-u" | "-g"
+            | "-p"
+            | "-C"
+            | "-h"
+            | "-r"
+            | "-t"
+            | "-U"
+            | "-c"
+            | "--user"
+            | "--group"
+            | "--prompt"
+            | "--close-from"
+            | "--host"
+            | "--role"
+            | "--type"
+            | "--other-user"
+            | "--command"
+    )
 }
 
 #[derive(Clone, Copy)]
@@ -94,12 +153,39 @@ struct Options {
 fn wrapper_options(owner: &str) -> Option<Options> {
     let (values, no_values): (&'static [&'static str], &'static [&'static str]) = match owner {
         "env" => (
-            &["-u", "--unset", "-C", "--chdir", "-S", "--split-string", "-P"],
-            &["-i", "--ignore-environment", "-0", "--null", "-v", "--debug", "-"],
+            &[
+                "-u",
+                "--unset",
+                "-C",
+                "--chdir",
+                "-S",
+                "--split-string",
+                "-P",
+            ],
+            &[
+                "-i",
+                "--ignore-environment",
+                "-0",
+                "--null",
+                "-v",
+                "--debug",
+                "-",
+            ],
         ),
         "nice" => (&["-n", "--adjustment"], &[]),
         "ionice" => (
-            &["-c", "--class", "-n", "--classdata", "-p", "--pid", "-P", "--pgid", "-u", "--uid"],
+            &[
+                "-c",
+                "--class",
+                "-n",
+                "--classdata",
+                "-p",
+                "--pid",
+                "-P",
+                "--pgid",
+                "-u",
+                "--uid",
+            ],
             &["-t", "--ignore"],
         ),
         "command" => (&[], &["-p"]),
@@ -108,52 +194,182 @@ fn wrapper_options(owner: &str) -> Option<Options> {
         "stdbuf" => (&["-i", "--input", "-o", "--output", "-e", "--error"], &[]),
         "timeout" => (
             &["-s", "--signal", "-k", "--kill-after"],
-            &["-v", "--verbose", "-f", "--foreground", "-p", "--preserve-status"],
+            &[
+                "-v",
+                "--verbose",
+                "-f",
+                "--foreground",
+                "-p",
+                "--preserve-status",
+            ],
         ),
         "chrt" => (
-            &["-T", "--sched-runtime", "-P", "--sched-period", "-D", "--sched-deadline"],
-            &["-a", "--all-tasks", "-b", "--batch", "-d", "--deadline", "-e", "--ext",
-                "-f", "--fifo", "-i", "--idle", "-o", "--other", "-r", "--rr",
-                "-R", "--reset-on-fork", "-m", "--max", "-p", "--pid", "-v", "--verbose"],
+            &[
+                "-T",
+                "--sched-runtime",
+                "-P",
+                "--sched-period",
+                "-D",
+                "--sched-deadline",
+            ],
+            &[
+                "-a",
+                "--all-tasks",
+                "-b",
+                "--batch",
+                "-d",
+                "--deadline",
+                "-e",
+                "--ext",
+                "-f",
+                "--fifo",
+                "-i",
+                "--idle",
+                "-o",
+                "--other",
+                "-r",
+                "--rr",
+                "-R",
+                "--reset-on-fork",
+                "-m",
+                "--max",
+                "-p",
+                "--pid",
+                "-v",
+                "--verbose",
+            ],
         ),
-        "taskset" => (&[], &["-a", "--all-tasks", "-p", "--pid", "-c", "--cpu-list"]),
+        "taskset" => (
+            &[],
+            &["-a", "--all-tasks", "-p", "--pid", "-c", "--cpu-list"],
+        ),
         "xargs" => (
-            &["-I", "-J", "-d", "-E", "-n", "-s", "-P", "-R", "-L", "-S",
-                "-a", "--arg-file", "--delimiter", "--max-args", "--max-procs",
-                "--max-chars", "--process-slot-var"],
-            &["-0", "--null", "-p", "--interactive", "-r", "--no-run-if-empty",
-                "-t", "--verbose", "-x", "--exit", "-o", "--open-tty",
-                "--show-limits", "-e", "-i", "-l"],
+            &[
+                "-I",
+                "-J",
+                "-d",
+                "-E",
+                "-n",
+                "-s",
+                "-P",
+                "-R",
+                "-L",
+                "-S",
+                "-a",
+                "--arg-file",
+                "--delimiter",
+                "--max-args",
+                "--max-procs",
+                "--max-chars",
+                "--process-slot-var",
+            ],
+            &[
+                "-0",
+                "--null",
+                "-p",
+                "--interactive",
+                "-r",
+                "--no-run-if-empty",
+                "-t",
+                "--verbose",
+                "-x",
+                "--exit",
+                "-o",
+                "--open-tty",
+                "--show-limits",
+                "-e",
+                "-i",
+                "-l",
+            ],
         ),
         "watch" => (
             &["-n", "--interval", "-q", "--equexit"],
-            &["-b", "--beep", "-c", "--color", "-C", "--no-color",
-                "-d", "--differences", "-e", "--errexit", "-g", "--chgexit",
-                "-p", "--precise", "-t", "--no-title", "-w", "--no-wrap",
-                "-x", "--exec", "-r", "--no-rerun"],
+            &[
+                "-b",
+                "--beep",
+                "-c",
+                "--color",
+                "-C",
+                "--no-color",
+                "-d",
+                "--differences",
+                "-e",
+                "--errexit",
+                "-g",
+                "--chgexit",
+                "-p",
+                "--precise",
+                "-t",
+                "--no-title",
+                "-w",
+                "--no-wrap",
+                "-x",
+                "--exec",
+                "-r",
+                "--no-rerun",
+            ],
         ),
         "strace" => (
-            &["-o", "-e", "-p", "-s", "-S", "-u", "-U", "-a", "-b",
-                "-I", "-X", "-P", "-E", "-O"],
-            &["-c", "-C", "-d", "-D", "-f", "-F", "-h", "-i", "-k",
-                "-n", "-q", "-r", "-t", "-T", "-v", "-V", "-w", "-x",
-                "-y", "-z", "-Z", "-ff", "-tt", "-ttt", "-qq", "-xx", "-yy"],
+            &[
+                "-o", "-e", "-p", "-s", "-S", "-u", "-U", "-a", "-b", "-I", "-X", "-P", "-E", "-O",
+            ],
+            &[
+                "-c", "-C", "-d", "-D", "-f", "-F", "-h", "-i", "-k", "-n", "-q", "-r", "-t", "-T",
+                "-v", "-V", "-w", "-x", "-y", "-z", "-Z", "-ff", "-tt", "-ttt", "-qq", "-xx",
+                "-yy",
+            ],
         ),
         "ltrace" => (
-            &["-a", "-A", "-D", "-e", "-F", "-l", "-n", "-o", "-p", "-s",
-                "-u", "-w", "-x"],
-            &["-b", "-c", "-C", "-d", "-f", "-h", "-i", "-L", "-r",
-                "-S", "-t", "-tt", "-ttt", "-T", "-V"],
+            &[
+                "-a", "-A", "-D", "-e", "-F", "-l", "-n", "-o", "-p", "-s", "-u", "-w", "-x",
+            ],
+            &[
+                "-b", "-c", "-C", "-d", "-f", "-h", "-i", "-L", "-r", "-S", "-t", "-tt", "-ttt",
+                "-T", "-V",
+            ],
         ),
         "valgrind" => (&[], &["-h", "-v", "-q", "-d", "--help", "--version"]),
         "flock" => (
             &["-w", "--wait", "--timeout", "-E", "--conflict-exit-code"],
-            &["-s", "--shared", "-x", "-e", "--exclusive", "-u", "--unlock",
-                "-n", "--nb", "--nonblock", "-o", "--close", "-F",
-                "--no-fork", "--verbose", "-h", "--help", "-V", "--version"],
+            &[
+                "-s",
+                "--shared",
+                "-x",
+                "-e",
+                "--exclusive",
+                "-u",
+                "--unlock",
+                "-n",
+                "--nb",
+                "--nonblock",
+                "-o",
+                "--close",
+                "-F",
+                "--no-fork",
+                "--verbose",
+                "-h",
+                "--help",
+                "-V",
+                "--version",
+            ],
         ),
-        "chroot" => (&["--userspec", "--groups", "-u", "-g", "-G"], &["--skip-chdir"]),
-        "time" => (&["-o", "--output", "-f", "--format"], &["-p", "--portability", "-a", "--append", "-v", "--verbose", "-q", "--quiet"]),
+        "chroot" => (
+            &["--userspec", "--groups", "-u", "-g", "-G"],
+            &["--skip-chdir"],
+        ),
+        "time" => (
+            &["-o", "--output", "-f", "--format"],
+            &[
+                "-p",
+                "--portability",
+                "-a",
+                "--append",
+                "-v",
+                "--verbose",
+                "-q",
+                "--quiet",
+            ],
+        ),
         _ => return None,
     };
     Some(Options { values, no_values })
@@ -163,12 +379,22 @@ fn option_takes_value(owner: &str, word: &str) -> Option<bool> {
     if word == "--" || (word.starts_with("--") && word.contains('=')) {
         return Some(false);
     }
-    if privilege_prefix(owner) { return Some(prefix_value_flag(word)); }
+    if privilege_prefix(owner) {
+        return Some(prefix_value_flag(word));
+    }
     let opts = wrapper_options(owner)?;
-    if opts.values.contains(&word) { return Some(true); }
-    if opts.no_values.contains(&word) { return Some(false); }
-    if word.starts_with("--") { return None; }
-    if word.starts_with('-') && word[1..].bytes().all(|c| c.is_ascii_digit()) { return Some(false); }
+    if opts.values.contains(&word) {
+        return Some(true);
+    }
+    if opts.no_values.contains(&word) {
+        return Some(false);
+    }
+    if word.starts_with("--") {
+        return None;
+    }
+    if word.starts_with('-') && word[1..].bytes().all(|c| c.is_ascii_digit()) {
+        return Some(false);
+    }
     for (index, ch) in word.char_indices().skip(1) {
         let flag = format!("-{ch}");
         if opts.values.contains(&flag.as_str()) {
@@ -208,7 +434,9 @@ fn read_word(
         next.i += 1;
         next.operands_left = 0;
         next.owner = Some(word.to_owned());
-        if next.prefix.is_none() { next.prefix = Some(spelled.to_owned()); }
+        if next.prefix.is_none() {
+            next.prefix = Some(spelled.to_owned());
+        }
         push(stack, seen, next);
     } else if wrapper(word) {
         let mut next = state.clone();
@@ -229,7 +457,16 @@ fn command_readings(words: &[String]) -> Vec<Reading> {
     let mut readings = Vec::new();
     let mut seen = HashSet::new();
     let mut stack = Vec::new();
-    push(&mut stack, &mut seen, State { i: 0, operands_left: 0, owner: None, prefix: None });
+    push(
+        &mut stack,
+        &mut seen,
+        State {
+            i: 0,
+            operands_left: 0,
+            owner: None,
+            prefix: None,
+        },
+    );
     while let Some(state) = stack.pop() {
         if state.i >= words.len() {
             finish(&mut readings, -1, state.prefix);
@@ -245,7 +482,10 @@ fn command_readings(words: &[String]) -> Vec<Reading> {
                 finish(&mut readings, -1, state.prefix);
                 continue;
             }
-            let takes = state.owner.as_deref().map_or(Some(false), |owner| option_takes_value(owner, raw));
+            let takes = state
+                .owner
+                .as_deref()
+                .map_or(Some(false), |owner| option_takes_value(owner, raw));
             let mut consumed = state.clone();
             consumed.i += 2;
             match takes {
@@ -264,11 +504,27 @@ fn command_readings(words: &[String]) -> Vec<Reading> {
             if !bare_numeric(raw) {
                 let mut non_operand = state.clone();
                 non_operand.operands_left = 0;
-                read_word(&non_operand, raw, spelled, &word, &mut stack, &mut seen, &mut readings);
+                read_word(
+                    &non_operand,
+                    raw,
+                    spelled,
+                    &word,
+                    &mut stack,
+                    &mut seen,
+                    &mut readings,
+                );
             }
             push(&mut stack, &mut seen, as_operand);
         } else {
-            read_word(&state, raw, spelled, &word, &mut stack, &mut seen, &mut readings);
+            read_word(
+                &state,
+                raw,
+                spelled,
+                &word,
+                &mut stack,
+                &mut seen,
+                &mut readings,
+            );
         }
     }
     readings
