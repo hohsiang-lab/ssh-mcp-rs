@@ -4,7 +4,7 @@
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct Segment {
     pub(crate) words: Vec<String>,
-    sep: String,
+    pub(crate) sep: String,
 }
 
 pub(crate) fn tokenize_detailed(command: &str, honor_quotes: bool, windows: bool) -> Vec<Segment> {
