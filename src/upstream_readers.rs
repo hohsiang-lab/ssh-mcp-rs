@@ -39,7 +39,12 @@ fn ambiguous(name: &str, g: &Grammar<'_>) -> bool {
         > 1
 }
 
-fn short_cluster(word: &str, words: &[&str], index: usize, g: &Grammar<'_>) -> Result<usize, String> {
+fn short_cluster(
+    word: &str,
+    words: &[&str],
+    index: usize,
+    g: &Grammar<'_>,
+) -> Result<usize, String> {
     for (byte_offset, ch) in word.char_indices().skip(1) {
         let name = format!("-{ch}");
         if ambiguous(&name, g) {
@@ -71,14 +76,19 @@ fn check_operands(operands: &[&str], rules: Option<Operands<'_>>) -> Result<(), 
         return Ok(());
     };
     let matcher = match rules.each {
-        Some(pattern) => Some(Regex::new(pattern).map_err(|_| operands.first().copied().unwrap_or("").to_owned())?),
+        Some(pattern) => Some(
+            Regex::new(pattern).map_err(|_| operands.first().copied().unwrap_or("").to_owned())?,
+        ),
         None => None,
     };
     for (index, operand) in operands.iter().enumerate() {
         if index == 0 && !rules.first.is_empty() && !rules.first.contains(operand) {
             return Err((*operand).to_owned());
         }
-        if matcher.as_ref().is_some_and(|regex| !regex.is_match(operand)) {
+        if matcher
+            .as_ref()
+            .is_some_and(|regex| !regex.is_match(operand))
+        {
             return Err((*operand).to_owned());
         }
     }
@@ -139,7 +149,8 @@ fn matches_grammar(words: &[&str], g: &Grammar<'_>) -> Result<(), String> {
             continue;
         }
         let (name, has_equal) = if matches!(g.mode, Mode::Getopt) {
-            word.split_once('=').map_or((word, false), |(name, _)| (name, true))
+            word.split_once('=')
+                .map_or((word, false), |(name, _)| (name, true))
         } else {
             (word, false)
         };
@@ -153,8 +164,7 @@ fn matches_grammar(words: &[&str], g: &Grammar<'_>) -> Result<(), String> {
                 }
                 i += 1;
             }
-        } else if contains(g.optional_value_flags, name)
-            || (contains(g.flags, name) && !has_equal)
+        } else if contains(g.optional_value_flags, name) || (contains(g.flags, name) && !has_equal)
         {
             // No extra value is consumed by an optional-value or no-value flag.
         } else {
