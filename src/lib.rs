@@ -10,17 +10,15 @@ pub mod server;
 pub mod session;
 pub mod ssh;
 pub mod transfers;
-#[cfg(test)]
 mod upstream_awk;
 pub mod upstream_compat;
-#[cfg(test)]
+mod upstream_elevation;
 mod upstream_forbidden;
-#[cfg(test)]
 mod upstream_heads;
+mod upstream_interpreters;
+mod upstream_native;
+mod upstream_nested;
 mod upstream_paths;
-#[cfg(test)]
 mod upstream_readers;
-#[cfg(test)]
 mod upstream_shell;
-#[cfg(test)]
 mod upstream_write_targets;

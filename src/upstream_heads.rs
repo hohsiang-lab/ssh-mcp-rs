@@ -545,37 +545,3 @@ pub(crate) fn command_heads(words: &[String]) -> Vec<(usize, String)> {
     }
     heads
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use rquickjs::{Context, Runtime};
-
-    #[test]
-    fn readings_match_upstream_for_corpus() {
-        let source = include_str!("upstream_classifier.js").replace(
-            "return {classifyCommand, findForbiddenMatch};",
-            "return {classifyCommand, findForbiddenMatch, commandReadings, tokenizeSegments};",
-        );
-        let runtime = Runtime::new().unwrap();
-        let context = Context::full(&runtime).unwrap();
-        let oracle: serde_json::Map<String, serde_json::Value> =
-            serde_json::from_str(include_str!("../tests/upstream_classifier_oracle.json")).unwrap();
-        context.with(|ctx| {
-            ctx.eval::<(), _>(source).unwrap();
-            ctx.eval::<(), _>("globalThis.__readings = (s, d) => JSON.stringify(UpstreamSSH.tokenizeSegments(s, d).map(w => UpstreamSSH.commandReadings(w)));").unwrap();
-            let js: rquickjs::Function = ctx.globals().get("__readings").unwrap();
-            for command in oracle.keys() {
-                for dialect in ["posix", "windows"] {
-                    let json: String = js.call((command.as_str(), dialect)).unwrap();
-                    let expected: Vec<Vec<Reading>> = serde_json::from_str(&json).unwrap();
-                    let words = crate::upstream_shell::tokenize_detailed(command, true, dialect == "windows");
-                    let actual: Vec<Vec<Reading>> = words.iter()
-                        .map(|segment| command_readings(&segment.words))
-                        .collect();
-                    assert_eq!(actual, expected, "{dialect} {command:?}");
-                }
-            }
-        });
-    }
-}

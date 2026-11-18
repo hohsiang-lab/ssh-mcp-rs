@@ -190,7 +190,7 @@ fn protected_write_path(path: &str) -> bool {
         || p.contains("/.ssh/authorized_keys:")
 }
 
-/// Classify with the unmodified upstream implementation, bundled in QuickJS.
+/// Classify with the native Rust port of the pinned upstream policy.
 /// Never infer safe/destructive/privileged using an unrelated Rust heuristic.
 pub fn classify(command: &str) -> Result<CommandClass> {
     crate::policy::validate_command(command)?;

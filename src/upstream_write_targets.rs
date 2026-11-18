@@ -238,54 +238,9 @@ fn write_verb_targets(command: &str, windows: bool) -> Vec<String> {
     targets
 }
 
-fn never_allowed_family(command: &str, windows: bool) -> Option<&'static str> {
+pub(crate) fn never_allowed_family(command: &str, windows: bool) -> Option<&'static str> {
     redirect_targets(command, windows)
         .into_iter()
         .chain(write_verb_targets(command, windows))
         .find_map(|target| find_never_allowed_write_target(&target))
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use rquickjs::{Context, Runtime};
-
-    #[test]
-    fn write_targets_match_pinned_upstream_corpus() {
-        let source = include_str!("upstream_classifier.js").replace(
-            "return {classifyCommand, findForbiddenMatch};",
-            "return {classifyCommand, findForbiddenMatch, redirectTargets, writeVerbTargets, findNeverAllowedWriteFamily};",
-        );
-        let runtime = Runtime::new().unwrap();
-        let context = Context::full(&runtime).unwrap();
-        let oracle: serde_json::Map<String, serde_json::Value> =
-            serde_json::from_str(include_str!("../tests/upstream_classifier_oracle.json")).unwrap();
-        context.with(|ctx| {
-            ctx.eval::<(), _>(source).unwrap();
-            ctx.eval::<(), _>(
-                r#"
-                globalThis.__writes = (s, d) => JSON.stringify([
-                    UpstreamSSH.redirectTargets(s,d),
-                    UpstreamSSH.writeVerbTargets(s,d),
-                    UpstreamSSH.findNeverAllowedWriteFamily(s,d)
-                ]);
-            "#,
-            )
-            .unwrap();
-            let js: rquickjs::Function = ctx.globals().get("__writes").unwrap();
-            for command in oracle.keys() {
-                for dialect in ["posix", "windows"] {
-                    let expected_json: String = js.call((command.as_str(), dialect)).unwrap();
-                    let expected: serde_json::Value = serde_json::from_str(&expected_json).unwrap();
-                    let windows = dialect == "windows";
-                    let actual = serde_json::json!([
-                        redirect_targets(command, windows),
-                        write_verb_targets(command, windows),
-                        never_allowed_family(command, windows)
-                    ]);
-                    assert_eq!(actual, expected, "{dialect} {command:?}");
-                }
-            }
-        });
-    }
 }

@@ -107,7 +107,7 @@ fn root_target(target: &str) -> bool {
 fn world_writable_mode(mode: &str) -> bool {
     for clause in mode.split(',') {
         let digits = clause.trim_start_matches('0');
-        if clause.bytes().all(|b| b >= b'0' && b <= b'7')
+        if clause.bytes().all(|b| (b'0'..=b'7').contains(&b))
             && !digits.is_empty()
             && (3..=4).contains(&digits.len())
         {
@@ -187,7 +187,7 @@ fn deletes_absolute_path(command: &str, windows: bool) -> bool {
     })
 }
 
-fn checks(command: &str, windows: bool) -> Vec<bool> {
+pub(crate) fn checks(command: &str, windows: bool) -> Vec<bool> {
     vec![
         invoked_words(command, windows).iter().any(|word| {
             matches!(
@@ -204,47 +204,4 @@ fn checks(command: &str, windows: bool) -> Vec<bool> {
         world_writable_root(command, windows),
         deletes_absolute_path(command, windows),
     ]
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use rquickjs::{Context, Runtime};
-
-    #[test]
-    fn hard_denials_match_pinned_upstream_corpus() {
-        let source = include_str!("upstream_classifier.js").replace(
-            "return {classifyCommand, findForbiddenMatch};",
-            "return {classifyCommand, findForbiddenMatch, invokedWords, pipesDownloadIntoShell, writesToDevice, chownsRoot, deletesRoot, formatsDevice, flushesFirewall, worldWritableRoot, deletesAbsolutePath};",
-        );
-        let runtime = Runtime::new().unwrap();
-        let context = Context::full(&runtime).unwrap();
-        let oracle: serde_json::Map<String, serde_json::Value> =
-            serde_json::from_str(include_str!("../tests/upstream_classifier_oracle.json")).unwrap();
-        context.with(|ctx| {
-            ctx.eval::<(), _>(source).unwrap();
-            ctx.eval::<(), _>(r#"
-                globalThis.__rules = (s, d) => JSON.stringify([
-                    UpstreamSSH.invokedWords(s,d).some(w=>["shutdown","reboot","halt","poweroff","eval"].includes(w)),
-                    UpstreamSSH.pipesDownloadIntoShell(s,d),
-                    UpstreamSSH.writesToDevice(s,d),
-                    UpstreamSSH.chownsRoot(s,d),
-                    UpstreamSSH.deletesRoot(s,d),
-                    UpstreamSSH.formatsDevice(s,d),
-                    UpstreamSSH.flushesFirewall(s,d),
-                    UpstreamSSH.worldWritableRoot(s,d),
-                    UpstreamSSH.deletesAbsolutePath(s,d)
-                ]);
-            "#).unwrap();
-            let js: rquickjs::Function = ctx.globals().get("__rules").unwrap();
-            for command in oracle.keys() {
-                for dialect in ["posix", "windows"] {
-                    let expected_json: String = js.call((command.as_str(), dialect)).unwrap();
-                    let expected: Vec<bool> = serde_json::from_str(&expected_json).unwrap();
-                    let actual = checks(command, dialect == "windows");
-                    assert_eq!(actual, expected, "{dialect} {command:?}");
-                }
-            }
-        });
-    }
 }

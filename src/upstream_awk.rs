@@ -3,11 +3,11 @@
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-struct AwkFindings {
-    commands: Vec<String>,
-    piped_into: Vec<String>,
-    writes_file: bool,
-    unreadable: bool,
+pub(crate) struct AwkFindings {
+    pub(crate) commands: Vec<String>,
+    pub(crate) piped_into: Vec<String>,
+    pub(crate) writes_file: bool,
+    pub(crate) unreadable: bool,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -332,7 +332,7 @@ fn walk(tokens: &[Token]) -> AwkFindings {
     result
 }
 
-fn read_awk_invocation(args: &[&str]) -> Option<AwkFindings> {
+pub(crate) fn read_awk_invocation(args: &[&str]) -> Option<AwkFindings> {
     let mut i = 0usize;
     while i < args.len() {
         let word = args[i];
@@ -378,60 +378,4 @@ fn read_awk_invocation(args: &[&str]) -> Option<AwkFindings> {
             ..Default::default()
         },
     })
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn upstream_awk_invocations_are_identical() {
-        let source = include_str!("upstream_classifier.js").replace(
-            "return {classifyCommand, findForbiddenMatch};",
-            "return {classifyCommand, findForbiddenMatch, readAwkInvocation};",
-        );
-        let runtime = rquickjs::Runtime::new().unwrap();
-        let context = rquickjs::Context::full(&runtime).unwrap();
-        context.with(|ctx| {
-            ctx.eval::<(), _>(source).unwrap();
-            ctx.eval::<(), _>(
-                "globalThis.__awk = (json) => JSON.stringify(UpstreamSSH.readAwkInvocation(JSON.parse(json)));",
-            ).unwrap();
-            let reference: rquickjs::Function = ctx.globals().get("__awk").unwrap();
-            let programs = [
-                "", "BEGIN { print 1 }", "NR>1", "{print $1 > $2}", "{print $1 > \"/dev/stderr\"}",
-                "BEGIN {system(\"sudo id\")}", "BEGIN {system(\"rm \" x)}", "BEGIN {system(\"\\\\163udo id\")}",
-                "BEGIN {system(\"\\\\x73udo id\")}", "BEGIN {print \"ok\" | \"sudo id\"}",
-                "BEGIN {print \"ok\" | \"id\" \"; sudo sh\"}", "BEGIN {\"sudo id\" | getline}",
-                "BEGIN {\"sudo\" \" id\" | getline}", "BEGIN {print (a>b)}",
-                "BEGIN {print a/b}", "BEGIN {/a>b/{print}}",
-                "BEGIN {print \"a\" > \"output\"}", "BEGIN {print \"a\" >> \"output\"}",
-                "BEGIN {print \"a\" |& \"cat\"}", "BEGIN {print 2; system(\"id\")}",
-                "BEGIN {print \"oops}", "BEGIN {/unterminated}", "BEGIN { @load \"x\" }",
-                "BEGIN { @f(\"sudo id\") }", "BEGIN{not=2; x = not / system(\"sudo id\") / 3}",
-                "BEGIN {print \"x\" > destination}", "BEGIN {print \"x\" | (cmd)}",
-                "# ignored \nBEGIN {system(\"id\")}", "BEGIN {print \"escaped \\\\n text\"}",
-                "BEGIN {print 1e+5}", "BEGIN {print 0xFF}", "BEGIN {print /a[b/c]/}",
-            ];
-            for program in programs {
-                for prefix in [
-                    vec![],
-                    vec!["--"],
-                    vec!["-F:"],
-                    vec!["-F", ":"],
-                    vec!["-v", "x=1"],
-                    vec!["-vfoo"],
-                    vec!["--help"],
-                    vec!["-W"],
-                    vec!["-f", "file.awk"],
-                ] {
-                    let mut words = prefix.clone();
-                    words.push(program);
-                    let output: String = reference.call((serde_json::to_string(&words).unwrap(),)).unwrap();
-                    let expected: Option<AwkFindings> = serde_json::from_str(&output).unwrap();
-                    assert_eq!(read_awk_invocation(&words), expected, "{words:?}");
-                }
-            }
-        });
-    }
 }

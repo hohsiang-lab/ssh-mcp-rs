@@ -187,112 +187,79 @@ fn matches_grammar(words: &[&str], g: &Grammar<'_>) -> Result<(), String> {
     check_operands(&operands, g.operands)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
+#[derive(Clone, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct ReaderSpec {
+    args: String,
+    #[serde(default)]
+    flags: Vec<String>,
+    #[serde(default)]
+    value_flags: Vec<String>,
+    #[serde(default)]
+    optional_value_flags: Vec<String>,
+    #[serde(default)]
+    options_before_operands: bool,
+    #[serde(default)]
+    numeric_short: bool,
+    operands: Option<OwnedOperands>,
+}
 
-    #[test]
-    fn reader_argument_cases_match_upstream() {
-        let source = include_str!("upstream_classifier.js").replace(
-            "return {classifyCommand, findForbiddenMatch};",
-            "return {classifyCommand, findForbiddenMatch, matchesGrammar};",
-        );
-        let runtime = rquickjs::Runtime::new().unwrap();
-        let context = rquickjs::Context::full(&runtime).unwrap();
-        context.with(|ctx| {
-            ctx.eval::<(), _>(source).unwrap();
-            let upstream: rquickjs::Object = ctx.globals().get("UpstreamSSH").unwrap();
-            let _: rquickjs::Function = upstream.get("matchesGrammar").unwrap();
-            ctx.eval::<(), _>("globalThis.__matchGrammar = (w, g) => { let grammar = JSON.parse(g); if (grammar.operands?.each) grammar.operands.each = new RegExp(grammar.operands.each); return JSON.stringify(UpstreamSSH.matchesGrammar(JSON.parse(w), grammar)); };").unwrap();
-            let reference: rquickjs::Function = ctx.globals().get("__matchGrammar").unwrap();
-            let cases = [
-                (vec![], Mode::Getopt),
-                (vec!["file"], Mode::Getopt),
-                (vec!["-r", "-n", "42", "file"], Mode::Getopt),
-                (vec!["-rn42", "file"], Mode::Getopt),
-                (vec!["--color=always", "file"], Mode::Getopt),
-                (vec!["--color", "file"], Mode::Getopt),
-                (vec!["--", "-x"], Mode::Getopt),
-                (vec!["-20", "file"], Mode::Getopt),
-                (vec!["-2x", "file"], Mode::Getopt),
-                (vec!["file", "-r"], Mode::Getopt),
-                (vec!["--", "-x"], Mode::Exact),
-                (vec!["-r", "file"], Mode::Exact),
-                (vec!["--color=always"], Mode::Exact),
-                (vec!["anything", "-bad"], Mode::Any),
-            ];
-            for (words, mode) in cases {
-                for before_operands in [false, true] {
-                    for numeric_short in [false, true] {
-                        let grammar = Grammar {
-                            mode,
-                            flags: &["-r", "-2", "--short"],
-                            value_flags: &["-n", "--output"],
-                            optional_value_flags: &["--color"],
-                            operands: Some(Operands {
-                                first: &[],
-                                each: None,
-                                max: Some(3),
-                            }),
-                            options_before_operands: before_operands,
-                            numeric_short,
-                        };
-                        let js_grammar = json!({
-                            "args": match mode { Mode::Any => "any", Mode::Getopt => "getopt", Mode::Exact => "exact" },
-                            "flags": grammar.flags,
-                            "valueFlags": grammar.value_flags,
-                            "optionalValueFlags": grammar.optional_value_flags,
-                            "optionsBeforeOperands": before_operands,
-                            "numericShort": numeric_short,
-                            "operands": {"max": 3}
-                        });
-                        let expected_json: String = reference.call((
-                            serde_json::to_string(&words).unwrap(),
-                            js_grammar.to_string(),
-                        )).unwrap();
-                        let expected: serde_json::Value = serde_json::from_str(&expected_json).unwrap();
-                        let got = matches_grammar(&words, &grammar);
-                        assert_eq!(got.is_ok(), expected["ok"].as_bool().unwrap(), "{words:?}");
-                        if let Err(word) = got {
-                            assert_eq!(word, expected["word"].as_str().unwrap(), "{words:?}");
-                        }
-                    }
-                }
+#[derive(Clone, serde::Deserialize)]
+struct OwnedOperands {
+    #[serde(default)]
+    first: Vec<String>,
+    each: Option<String>,
+    max: Option<i64>,
+}
 
-            // Pinned production operand patterns: negative-lookahead root paths and +formats.
-            for pattern in [r"^(?!\/[^/]*\/?$)", r"^\+"] {
-                for operand in [
-                    "", "/", "/tmp", "/tmp/", "/tmp//", "/tmp/file", "tmp", "tmp/",
-                    "+%F", "++", "x+", "/root/file", "a\n", "42",
-                ] {
-                    let words = vec![operand];
-                    let grammar = Grammar {
-                        mode: Mode::Getopt,
-                        flags: &[],
-                        value_flags: &[],
-                        optional_value_flags: &[],
-                        operands: Some(Operands { first: &[], each: Some(pattern), max: None }),
-                        options_before_operands: false,
-                        numeric_short: false,
-                    };
-                    let js_grammar = json!({
-                        "args": "getopt",
-                        "operands": {"each": pattern}
-                    });
-                    let output: String = reference.call((
-                        serde_json::to_string(&words).unwrap(),
-                        js_grammar.to_string(),
-                    )).unwrap();
-                    let expected: serde_json::Value = serde_json::from_str(&output).unwrap();
-                    let actual = matches_grammar(&words, &grammar);
-                    assert_eq!(actual.is_ok(), expected["ok"].as_bool().unwrap(), "{pattern:?} {words:?}");
-                    if let Err(word) = actual {
-                        assert_eq!(word, expected["word"].as_str().unwrap(), "{pattern:?} {words:?}");
-                    }
-                }
-            }
-            }
-        });
-    }
+fn readers() -> &'static std::collections::BTreeMap<String, ReaderSpec> {
+    static READERS: std::sync::OnceLock<std::collections::BTreeMap<String, ReaderSpec>> =
+        std::sync::OnceLock::new();
+    READERS.get_or_init(|| {
+        serde_json::from_str(include_str!("upstream_reader_data.json"))
+            .expect("pinned reader grammar must be valid")
+    })
+}
+
+pub(crate) fn is_any_reader(name: &str) -> bool {
+    readers().get(name).is_some_and(|r| r.args == "any")
+}
+
+pub(crate) fn is_reader(name: &str) -> bool {
+    readers().contains_key(name)
+}
+
+/// Native reading of a bundled, declarative upstream reader grammar.
+pub(crate) fn classify_reader_args(name: &str, words: &[String]) -> Result<(), String> {
+    let spec = readers().get(name).ok_or_else(|| name.to_owned())?;
+    let flags: Vec<&str> = spec.flags.iter().map(String::as_str).collect();
+    let value_flags: Vec<&str> = spec.value_flags.iter().map(String::as_str).collect();
+    let optional_value_flags: Vec<&str> = spec
+        .optional_value_flags
+        .iter()
+        .map(String::as_str)
+        .collect();
+    let first: Vec<&str> = spec.operands.as_ref().map_or(Vec::new(), |ops| {
+        ops.first.iter().map(String::as_str).collect()
+    });
+    let operand_rules = spec.operands.as_ref().map(|ops| Operands {
+        first: &first,
+        each: ops.each.as_deref(),
+        max: ops.max,
+    });
+    let grammar = Grammar {
+        mode: match spec.args.as_str() {
+            "getopt" => Mode::Getopt,
+            "exact" => Mode::Exact,
+            _ => Mode::Any,
+        },
+        flags: &flags,
+        value_flags: &value_flags,
+        optional_value_flags: &optional_value_flags,
+        operands: operand_rules,
+        options_before_operands: spec.options_before_operands,
+        numeric_short: spec.numeric_short,
+    };
+    let refs: Vec<&str> = words.iter().map(String::as_str).collect();
+    matches_grammar(&refs, &grammar)
 }
