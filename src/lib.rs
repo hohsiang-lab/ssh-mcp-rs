@@ -10,9 +10,9 @@ pub mod server;
 pub mod session;
 pub mod ssh;
 pub mod transfers;
+#[cfg(test)]
+mod upstream_awk;
 pub mod upstream_compat;
 mod upstream_paths;
 #[cfg(test)]
 mod upstream_readers;
-#[cfg(test)]
-mod upstream_awk;
