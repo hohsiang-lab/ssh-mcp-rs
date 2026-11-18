@@ -42,6 +42,172 @@ pub fn quote(arg: &str) -> String {
     format!("'{}'", arg.replace('\'', "'\\''"))
 }
 
+/// Restrict arguments as well as the command name. Never allow command-executing
+/// flags such as find -exec, grep --exclude-from command substitutions, etc.
+/// All accepted arguments are re-quoted before going to a shell.
+fn read_args(args: &[String], flags: &[&str], values: &[&str], max_operands: usize) -> bool {
+    let mut operands = 0usize;
+    let mut options = true;
+    let mut iter = args.iter();
+    while let Some(arg) = iter.next() {
+        if arg == "--" && options {
+            options = false;
+            continue;
+        }
+        if options && flags.contains(&arg.as_str()) {
+            continue;
+        }
+        if options && values.contains(&arg.as_str()) {
+            if iter.next().is_none() {
+                return false;
+            }
+            continue;
+        }
+        if options && arg.starts_with('-') {
+            return false;
+        }
+        operands += 1;
+        if operands > max_operands {
+            return false;
+        }
+    }
+    true
+}
+
+fn extended_read(program: &str, args: &[String]) -> bool {
+    match program {
+        // Pure display utilities, no command/alternate-output flags.
+        "basename" | "dirname" | "wc" | "cut" | "comm" | "whereis" | "which" | "who" | "free"
+        | "file" | "stat" | "du" => read_args(
+            args,
+            &[
+                "-a",
+                "-h",
+                "-b",
+                "-k",
+                "-m",
+                "-s",
+                "-l",
+                "-c",
+                "-w",
+                "-L",
+                "-n",
+                "-H",
+                "-0",
+                "--",
+                "--bytes",
+                "--human-readable",
+                "--summarize",
+                "--total",
+            ],
+            &["-f", "--format", "-t", "--printf", "-d", "--delimiter"],
+            16,
+        ),
+        "head" | "tail" => read_args(
+            args,
+            &["-q", "-v", "-f", "-F", "--follow", "--quiet", "--verbose"],
+            &["-n", "-c", "--lines", "--bytes"],
+            32,
+        ),
+        "grep" | "egrep" | "fgrep" => read_args(
+            args,
+            &[
+                "-n",
+                "-i",
+                "-v",
+                "-r",
+                "-R",
+                "-F",
+                "-E",
+                "-w",
+                "-x",
+                "-l",
+                "-L",
+                "-c",
+                "-s",
+                "-h",
+                "-H",
+                "-q",
+                "-A",
+                "-B",
+                "-C",
+                "--line-number",
+                "--ignore-case",
+                "--invert-match",
+                "--recursive",
+                "--fixed-strings",
+                "--extended-regexp",
+            ],
+            &[
+                "-e",
+                "-f",
+                "--regexp",
+                "--file",
+                "--include",
+                "--exclude",
+                "--exclude-dir",
+            ],
+            128,
+        ),
+        "sort" => read_args(
+            args,
+            &[
+                "-n",
+                "-r",
+                "-u",
+                "-b",
+                "-f",
+                "-h",
+                "-V",
+                "--reverse",
+                "--unique",
+            ],
+            &[],
+            16,
+        ),
+        // Two operands mean 'outfile' in GNU/BSD uniq, so enforce one.
+        "uniq" => read_args(
+            args,
+            &["-c", "-d", "-u", "-i", "-D"],
+            &["-f", "-s", "-w"],
+            1,
+        ),
+        "date" => args.iter().all(|a| {
+            matches!(a.as_str(), "-u" | "--utc" | "-R" | "--rfc-2822")
+                || (a.starts_with('+') && a.len() < 256)
+        }),
+        "ps" => {
+            args.is_empty()
+                || matches!(args,
+            [a] if matches!(a.as_str(), "aux" | "-ef" | "-e" | "-A" | "ax"))
+                || matches!(args, [a, _] if matches!(a.as_str(), "-p" | "-o" | "-eo"))
+        }
+        // Explicitly only find's read predicates; -exec/-delete/-fprint rejected.
+        "find" => {
+            if args.is_empty() {
+                return true;
+            }
+            let mut i = 0usize;
+            while i < args.len() {
+                let a = &args[i];
+                match a.as_str() {
+                    "-print" | "-print0" | "-L" | "-H" | "-P" => i += 1,
+                    "-maxdepth" | "-mindepth" | "-type" | "-name" | "-iname" | "-size" => {
+                        if i + 1 >= args.len() {
+                            return false;
+                        }
+                        i += 2;
+                    }
+                    _ if !a.starts_with('-') && !matches!(a.as_str(), "(" | ")") => i += 1,
+                    _ => return false,
+                }
+            }
+            true
+        }
+        _ => false,
+    }
+}
+
 /// This is intentionally a small grammar, not a shell classifier. No pipes,
 /// substitutions, interpreters, mutable git subcommands or gh api are allowed.
 /// Parsing followed by re-quoting prevents shell expansion even inside arguments.
@@ -77,7 +243,7 @@ pub fn read_command(command: &str) -> Result<String> {
         "df" => args
             .iter()
             .all(|arg| arg.starts_with('/') || matches!(arg.as_str(), "-h" | "-k" | "-i" | "-P")),
-        _ => false,
+        _ => extended_read(program, args),
     };
     if !safe {
         bail!(

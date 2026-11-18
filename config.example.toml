@@ -22,6 +22,9 @@ user = "developer"
 keyRef = "/home/developer/.ssh/id_ed25519"
 # REPLACE with a verified SHA256 host public-key fingerprint, not a network TOFU scan.
 hostKeySha256 = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+# Explicitly set the environment; names containing local/dev/test infer dev, others prod.
+role = "operator"   # viewer | operator | admin, or custom bindings
+group = "prod"     # prod | staging | dev, or custom bindings
 readOnly = true
 approvalPolicy = "deny"
 allowPrivileged = false
@@ -38,4 +41,13 @@ allowPrivileged = false
 # hostKeySha256 = "SHA256:REPLACE_WITH_VERIFIED_HOST_KEY_FINGERPRINT"
 # readOnly = false
 # approvalPolicy = "client-confirmation"
+# role = "operator"
+# group = "dev"
 # allowPrivileged = false  # true explicitly enables the sudo helper; sudoers still applies
+
+# Optional additional policy restrictions. Regex patterns also inspect SFTP remote paths.
+# [policy]
+# denylist = ['^terraform\\s+destroy', 'authorized_keys$']
+#
+# [policy.roleBindings.operator]
+# prod = ["read-only", "safe"]

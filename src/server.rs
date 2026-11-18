@@ -2,6 +2,7 @@ use crate::{
     audit::{Audit, digest},
     config::Config,
     policy,
+    policy_engine::{self, CommandClass},
     session::Sessions,
     ssh::Connection,
     transfers,
@@ -156,6 +157,14 @@ impl SshMcp {
         // The *previous* configuration authorizes the reload. A new file cannot approve itself.
         let profile = old.profile(args.profile.as_deref())?;
         policy::authorize_write(profile)?;
+        policy_engine::authorize(
+            &old,
+            profile,
+            "reload-config",
+            CommandClass::Destructive,
+            None,
+            false,
+        )?;
         let id = uuid::Uuid::new_v4().to_string();
         let hash = digest(&serde_json::to_vec(&arguments)?);
         self.audit
@@ -201,7 +210,7 @@ impl SshMcp {
             );
             return Ok(json!({"profiles": config.profiles.iter().map(|p| json!({
                 "name": p.name, "host": p.host, "port": p.port, "user": p.user,
-                "readOnly": p.read_only, "allowPrivileged": p.allow_privileged, "approvalPolicy": match p.approval_policy {
+                "readOnly": p.read_only, "role": p.role, "group": policy_engine::tier(p), "allowPrivileged": p.allow_privileged, "approvalPolicy": match p.approval_policy {
                     crate::config::ApprovalPolicy::Deny => "deny",
                     crate::config::ApprovalPolicy::ClientConfirmation => "client-confirmation",
                 },
@@ -257,6 +266,19 @@ impl SshMcp {
                 "open_session" => {
                     let args: OpenSessionArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
+                    let class = if args.kind == "background" {
+                        policy_engine::classify(args.command.as_deref().unwrap_or(""))?
+                    } else {
+                        CommandClass::Destructive
+                    };
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        args.command.as_deref().unwrap_or("session:interactive"),
+                        class,
+                        None,
+                        false,
+                    )?;
                     self.sessions
                         .open(
                             &args.name,
@@ -272,11 +294,27 @@ impl SshMcp {
                     let args: SessionArgs = serde_json::from_value(arguments)?;
                     ensure!(args.lines.is_none(), "close_session does not accept lines");
                     let _ = args.profile;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        "session:close",
+                        CommandClass::Destructive,
+                        None,
+                        false,
+                    )?;
                     self.sessions.close(&args.name, profile).await
                 }
                 "read_session_output" => {
                     let args: SessionArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        "session:read-output",
+                        CommandClass::ReadOnly,
+                        None,
+                        false,
+                    )?;
                     self.sessions.output(&args.name, profile, args.lines).await
                 }
                 "privileged_command" => {
@@ -290,6 +328,15 @@ impl SshMcp {
                         args.session.is_none(),
                         "privileged_command cannot attach to an existing session"
                     );
+                    policy_engine::classify(&args.command)?; // deny unconditional forbidden invocations
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        &args.command,
+                        CommandClass::Privileged,
+                        None,
+                        false,
+                    )?;
                     let shell = policy::shell_command(&args.command, args.cwd.as_deref())?;
                     // sudo -n never prompts for a password; OS sudoers is a second, independent gate.
                     self.with_connection(profile, Operation::Command(format!("sudo -n -- {shell}")))
@@ -304,6 +351,20 @@ impl SshMcp {
                             "read_command does not attach to sessions"
                         );
                     }
+                    let classification = if name == "read_command" {
+                        policy::read_command(&args.command)?;
+                        CommandClass::ReadOnly
+                    } else {
+                        policy_engine::classify(&args.command)?
+                    };
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        &args.command,
+                        classification,
+                        None,
+                        false,
+                    )?;
                     if let Some(session) = args.session {
                         ensure!(args.cwd.is_none(), "session controls its own cwd");
                         let output = self
@@ -332,6 +393,14 @@ impl SshMcp {
                         matches!(args.signal.as_str(), "INT" | "TERM" | "KILL"),
                         "signal must be INT, TERM or KILL"
                     );
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        &format!("signal:{} {}", args.signal, args.pid),
+                        CommandClass::Destructive,
+                        None,
+                        false,
+                    )?;
                     let command = policy::shell_command(
                         &format!("kill -{} {}", args.signal, args.pid),
                         None,
@@ -343,6 +412,14 @@ impl SshMcp {
                     let args: ListArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
                     policy::path(&args.remote_path)?;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        "sftp:list",
+                        CommandClass::ReadOnly,
+                        Some(&args.remote_path),
+                        false,
+                    )?;
                     let max = args.max_entries.unwrap_or(100);
                     ensure!(
                         (1..=1000).contains(&max),
@@ -356,6 +433,18 @@ impl SshMcp {
                     let _ = args.profile;
                     policy::path(&args.remote_path)?;
                     transfers::local_destination(&config.defaults, &args.local_name)?;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        if name == "sftp_upload_file" {
+                            "sftp:upload-file"
+                        } else {
+                            "sftp:download-file"
+                        },
+                        CommandClass::Destructive,
+                        Some(&args.remote_path),
+                        name == "sftp_upload_file",
+                    )?;
                     if name == "sftp_upload_file" {
                         self.with_connection(
                             profile,
@@ -382,6 +471,14 @@ impl SshMcp {
                     let args: DownloadArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
                     policy::path(&args.remote_path)?;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        "sftp:download",
+                        CommandClass::ReadOnly,
+                        Some(&args.remote_path),
+                        false,
+                    )?;
                     self.with_connection(profile, Operation::Download(args.remote_path))
                         .await
                 }
@@ -389,6 +486,14 @@ impl SshMcp {
                     let args: UploadArgs = serde_json::from_value(arguments)?;
                     let _ = args.profile;
                     policy::path(&args.remote_path)?;
+                    policy_engine::authorize(
+                        &config,
+                        profile,
+                        "sftp:upload",
+                        CommandClass::Destructive,
+                        Some(&args.remote_path),
+                        true,
+                    )?;
                     ensure!(
                         args.content.len() <= config.defaults.transfer_max_bytes,
                         "TRANSFER_TOO_LARGE"

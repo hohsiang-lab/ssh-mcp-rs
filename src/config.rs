@@ -20,6 +20,10 @@ pub enum ApprovalPolicy {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Profile {
     pub name: String,
+    #[serde(default = "default_role")]
+    pub role: String,
+    #[serde(default)]
+    pub group: Option<String>,
     pub host: String,
     #[serde(default = "default_port")]
     pub port: u16,
@@ -34,6 +38,9 @@ pub struct Profile {
     /// Permit the separately advertised sudo tool; never granted implicitly by write access.
     #[serde(default)]
     pub allow_privileged: bool,
+}
+fn default_role() -> String {
+    "operator".into()
 }
 fn default_port() -> u16 {
     22
@@ -80,6 +87,8 @@ pub struct Config {
     #[serde(default)]
     pub defaults: Defaults,
     pub profiles: Vec<Profile>,
+    #[serde(default)]
+    pub policy: crate::policy_engine::PolicyRules,
 }
 impl Config {
     pub fn load(path: &Path) -> Result<Self> {
@@ -223,6 +232,7 @@ impl Config {
                 );
             }
         }
+        crate::policy_engine::validate_config(self)?;
         if let Some(name) = &self.defaults.default_profile {
             ensure!(names.contains(name), "defaultProfile does not exist");
         }
@@ -333,6 +343,7 @@ hostKeySha256 = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         c.profiles[0].read_only = false;
         assert!(c.validate().is_err());
         c.profiles[0].approval_policy = ApprovalPolicy::ClientConfirmation;
+        c.profiles[0].role = "admin".into();
         c.validate().unwrap();
     }
     #[test]

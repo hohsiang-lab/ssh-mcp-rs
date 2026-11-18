@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, role/host-group rules, quotas, and output-secret redaction remain outside this implementation. See [scope and migration](docs/migration.md).
+**v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The newer native role/tier matrix, denylist, and command classifier are conservative and are not a verbatim port of upstream's 3,000+ line classifier. See [scope and migration](docs/migration.md).
 
 ## Install without building
 
@@ -33,6 +33,60 @@ Official references, checked 2026-11-17:
 - [ChatGPT custom MCP servers](https://help.openai.com/en/articles/12584461-connecting-custom-mcp-servers-in-chatgpt)
 - [Define tools and safety annotations](https://developers.openai.com/plugins/plan/tools)
 - [Build an MCP server](https://developers.openai.com/plugins/build/mcp-server)
+
+## Command authorization: upstream-style policy, conservative parser
+
+The native policy layer mirrors upstream's **default role × host group matrix**. A profile has
+`role = "operator"` by default; set `group` explicitly for production. If absent, names
+containing `prod`, `staging` or delimited `dev/local/test/sandbox` select that tier;
+unrecognised names are treated as **prod** rather than dev.
+
+| Role | prod | staging | dev |
+| --- | --- | --- | --- |
+| viewer | read-only | read-only | read-only, safe |
+| operator | read-only, safe | + destructive | + destructive |
+| admin | read-only, safe, destructive | + privileged | + privileged |
+
+The classifier evaluates every command and background/interactive session input **before
+SSH execution**. `read_command` uses an argument-checked list of readers (e.g. `grep`,
+`head`, `tail`, `find` without execution/write predicates), never only a matching
+binary name. A small set of Git/GH commands is `safe`; unknown, compound and script
+commands are conservatively `destructive`; sudo/elevation carriers are `privileged`.
+Recognized high-risk spellings (reboot, recursive deletion of filesystem root,
+device formatting, direct writes to cron/systemd/authorized_keys) are hard-denied
+regardless of role. This is **not** an exhaustive remote command sandbox:
+indirect code execution can evade lexical inspection; OS-level permissions matter.
+**This is not an exact port of upstream's full shell classifier**; complex wrappers,
+indirection, and platform-specific constructs may be classified more restrictively.
+It is not a replacement for a non-root SSH account, OS sudoers or sandboxing.
+
+Custom role bindings replace **one role/tier cell**, not the entire role. Denylist
+patterns add regex restrictions to raw/normalized command forms and SFTP remote
+paths; rules are validated at startup and on `reload_config`. Never-allowed
+families cannot be turned off.
+
+```toml
+[[profiles]]
+name = "prod-deploy"
+# ... host, SSH key, verified hostKeySha256 and user are required
+role = "operator"
+group = "prod"
+readOnly = false
+approvalPolicy = "client-confirmation"
+
+[policy]
+denylist = ['^terraform\\s+destroy', 'authorized_keys$']
+
+[policy.roleBindings.operator]
+prod = ["read-only", "safe"]
+```
+
+**Both gates apply:** the role/tier rules do not override `readOnly=true` or
+`approvalPolicy="deny"`. `run_command`, even for a command classified
+`read-only` or `safe`, still requires a write-enabled profile and the
+**client-managed confirmation workflow** because the MCP tool has static
+write annotations. No server-verified human approval is implied. Custom
+classes cannot elevate the remote SSH account's real OS privileges.
 
 ## Tools
 

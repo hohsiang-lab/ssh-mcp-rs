@@ -167,6 +167,8 @@ auditPath = "{root}/audit.jsonl"
             ("privileged", False, "client-confirmation", pin)):
             text += f'''\n[[profiles]]
 name = "{name}"
+role = "{'admin' if name == 'privileged' else 'operator'}"
+group = "{'dev' if name in ('dev', 'privileged') else 'prod'}"
 host = "127.0.0.1"
 port = {port}
 user = "{pwd.getpwuid(os.getuid()).pw_name}"
@@ -302,6 +304,50 @@ allowPrivileged = {str(name == "privileged").lower()}
                 nonzero = client.call("privileged_command", {"profile":"privileged", "command":"exit 7"})
                 assert nonzero["isError"] and nonzero["structuredContent"]["exitStatus"] == 7
                 checks.append("noninteractive sudo opt-in, read-only/deny enforcement, cwd and nonzero exit")
+
+                # Policy engine tests run only harmless commands against isolated sshd.
+                # Dangerous commands and system paths are checked in pure Rust unit tests.
+                data(client.call("read_command", {"command":"grep -n NAME /etc/os-release"}))
+                data(client.call("read_command", {"command":"head -n 2 /etc/os-release"}))
+                rejected(client.call("read_command", {"command":"find /tmp -exec sh -c touch {} ;"}), "READ_ONLY_DENIED")
+                rejected(client.call("read_command", {"command":"uniq /etc/os-release /tmp/overwrite"}), "READ_ONLY_DENIED")
+                checks.append("expanded read-only reader grammar and executable reader flags")
+
+                # Production operator cannot mutate arbitrary files even with a writable profile.
+                prod = text.replace('name = "dev"\nrole = "operator"\ngroup = "dev"',
+                                    'name = "dev"\nrole = "operator"\ngroup = "prod"')
+                assert prod != text
+                config.write_text(prod)
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+                checkfile = root / "policy-prod-blocked.txt"
+                rejected(client.call("run_command", {"profile":"dev", "command":"touch " + str(checkfile)}), "POLICY_DENIED")
+                assert not checkfile.exists()
+                assert data(client.call("run_command", {"profile":"dev", "command":"printf ready"}))["ok"]
+                config.write_text(text)
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+
+                # Operator override changes dev only; admin stays usable to restore settings.
+                limited = text + '\n[policy.roleBindings.operator]\ndev = ["read-only", "safe"]\n'
+                config.write_text(limited)
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+                rejected(client.call("run_command", {"profile":"dev", "command":"touch " + str(checkfile)}), "POLICY_DENIED")
+                assert not checkfile.exists()
+                assert data(client.call("run_command", {"profile":"dev", "command":"echo safe"}))["ok"]
+                config.write_text(text)
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+
+                # Same denylist gates run_command and SFTP, including normalized paths.
+                denied_policy = text + '\n[policy]\ndenylist = ["^touch", "blocked[.]txt$"]\n'
+                config.write_text(denied_policy)
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+                rejected(client.call("run_command", {"profile":"dev", "command":"touch " + str(checkfile)}), "policy.denylist")
+                assert not checkfile.exists()
+                blocked = root / "blocked.txt"
+                rejected(client.call("sftp_upload", {"profile":"dev", "remotePath":str(blocked), "content":"denied"}), "policy.denylist")
+                assert not blocked.exists()
+                config.write_text(text)
+                data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
+                checks.append("upstream role/tier matrix, custom binding, command and SFTP denylist, live reload")
 
                 # All config changes in this test are confined to the temporary fixture.
                 original_digest = hashlib.sha256(text.encode()).hexdigest()
