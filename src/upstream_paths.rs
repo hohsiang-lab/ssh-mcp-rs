@@ -31,33 +31,35 @@ fn normalize_remote_path_for_windows(path: &str) -> String {
         .or_else(|| slashed.strip_prefix("//./"))
         .unwrap_or(&slashed);
     let parts: Vec<&str> = slashed.split('/').collect();
-    let (root, remaining): (Option<String>, Vec<&str>) = if parts.first() == Some(&"")
-        && parts.get(1) == Some(&"")
-    {
-        (
-            Some(format!(
-                "//{}/{}",
-                parts.get(2).copied().unwrap_or(""),
-                parts.get(3).copied().unwrap_or("")
-            )),
-            parts.iter().skip(4).copied().collect(),
-        )
-    } else if parts.first() == Some(&"") {
-        (Some("/".to_owned()), parts.iter().skip(1).copied().collect())
-    } else if let Some(head) = parts.first().copied().filter(|head| {
-        head.as_bytes().len() >= 2
-            && head.as_bytes()[0].is_ascii_alphabetic()
-            && head.as_bytes()[1] == b':'
-    }) {
-        let mut rest: Vec<&str> = Vec::new();
-        if !head[2..].is_empty() {
-            rest.push(&head[2..]);
-        }
-        rest.extend(parts.iter().skip(1).copied());
-        (Some(head[..2].to_owned()), rest)
-    } else {
-        (None, parts)
-    };
+    let (root, remaining): (Option<String>, Vec<&str>) =
+        if parts.first() == Some(&"") && parts.get(1) == Some(&"") {
+            (
+                Some(format!(
+                    "//{}/{}",
+                    parts.get(2).copied().unwrap_or(""),
+                    parts.get(3).copied().unwrap_or("")
+                )),
+                parts.iter().skip(4).copied().collect(),
+            )
+        } else if parts.first() == Some(&"") {
+            (
+                Some("/".to_owned()),
+                parts.iter().skip(1).copied().collect(),
+            )
+        } else if let Some(head) = parts.first().copied().filter(|head| {
+            head.as_bytes().len() >= 2
+                && head.as_bytes()[0].is_ascii_alphabetic()
+                && head.as_bytes()[1] == b':'
+        }) {
+            let mut rest: Vec<&str> = Vec::new();
+            if !head[2..].is_empty() {
+                rest.push(&head[2..]);
+            }
+            rest.extend(parts.iter().skip(1).copied());
+            (Some(head[..2].to_owned()), rest)
+        } else {
+            (None, parts)
+        };
     let mut kept = Vec::new();
     for part in remaining {
         if part.is_empty() || part == "." {
@@ -148,15 +150,25 @@ mod tests {
     #[test]
     fn windows_aliases_are_normalized_conservatively() {
         for (input, expected) in [
-            (r"\\server\share\a\..\authorized_keys", "//server/share/authorized_keys"),
-            (r"\\?\C:\Users\a\.ssh\authorized_keys. ", "C:/Users/a/.ssh/authorized_keys"),
+            (
+                r"\\server\share\a\..\authorized_keys",
+                "//server/share/authorized_keys",
+            ),
+            (
+                r"\\?\C:\Users\a\.ssh\authorized_keys. ",
+                "C:/Users/a/.ssh/authorized_keys",
+            ),
             ("C:folder/file", "C:/folder/file"),
             ("a.../b", "a/b"),
             ("authorized_keys::$DATA", "authorized_keys"),
             ("/foo/../../bar", "/bar"),
             (".", "."),
         ] {
-            assert_eq!(normalize_remote_path_for_windows(input), expected, "{input:?}");
+            assert_eq!(
+                normalize_remote_path_for_windows(input),
+                expected,
+                "{input:?}"
+            );
         }
     }
 
@@ -171,9 +183,18 @@ mod tests {
             (r"C:\Users\a\.ssh\Authorized_Keys. ", "authorized_keys"),
             (".ssh/authorized_keys::$DATA", "authorized_keys"),
         ] {
-            assert_eq!(find_never_allowed_write_target(path), Some(family), "{path:?}");
+            assert_eq!(
+                find_never_allowed_write_target(path),
+                Some(family),
+                "{path:?}"
+            );
         }
-        for path in ["/etc/other", "/home/user/.ssh/config", "a/b", "authorized_keys"] {
+        for path in [
+            "/etc/other",
+            "/home/user/.ssh/config",
+            "a/b",
+            "authorized_keys",
+        ] {
             assert_eq!(find_never_allowed_write_target(path), None, "{path:?}");
         }
     }
