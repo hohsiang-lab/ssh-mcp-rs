@@ -12,3 +12,5 @@ pub mod ssh;
 pub mod transfers;
 pub mod upstream_compat;
 mod upstream_paths;
+#[cfg(test)]
+mod upstream_readers;
