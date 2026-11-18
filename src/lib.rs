@@ -22,3 +22,5 @@ mod upstream_paths;
 mod upstream_readers;
 #[cfg(test)]
 mod upstream_shell;
+#[cfg(test)]
+mod upstream_write_targets;
