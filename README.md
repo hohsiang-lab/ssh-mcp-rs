@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The newer native role/tier matrix, denylist, and command classifier are conservative and are not a verbatim port of upstream's 3,000+ line classifier. See [scope and migration](docs/migration.md).
+**v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The role/tier matrix and denylist remain Rust-native; the original upstream classifier is bundled in the standalone Rust binary using embedded QuickJS (no Node.js required). The pinned upstream classification and unconditional-denial behavior are verified against 5,991 test probes. See [scope and migration](docs/migration.md) and [upstream classifier provenance](docs/upstream-classifier.md).
 
 ## Install without building
 
@@ -34,7 +34,7 @@ Official references, checked 2026-11-17:
 - [Define tools and safety annotations](https://developers.openai.com/plugins/plan/tools)
 - [Build an MCP server](https://developers.openai.com/plugins/build/mcp-server)
 
-## Command authorization: upstream-style policy, conservative parser
+## Command authorization: upstream policy and original classifier
 
 The native policy layer mirrors upstream's **default role × host group matrix**. A profile has
 `role = "operator"` by default; set `group` explicitly for production. If absent, names
@@ -47,18 +47,19 @@ unrecognised names are treated as **prod** rather than dev.
 | operator | read-only, safe | + destructive | + destructive |
 | admin | read-only, safe, destructive | + privileged | + privileged |
 
-The classifier evaluates every command and background/interactive session input **before
-SSH execution**. `read_command` uses an argument-checked list of readers (e.g. `grep`,
-`head`, `tail`, `find` without execution/write predicates), never only a matching
-binary name. A small set of Git/GH commands is `safe`; unknown, compound and script
-commands are conservatively `destructive`; sudo/elevation carriers are `privileged`.
-Recognized high-risk spellings (reboot, recursive deletion of filesystem root,
-device formatting, direct writes to cron/systemd/authorized_keys) are hard-denied
-regardless of role. This is **not** an exhaustive remote command sandbox:
-indirect code execution can evade lexical inspection; OS-level permissions matter.
-**This is not an exact port of upstream's full shell classifier**; complex wrappers,
-indirection, and platform-specific constructs may be classified more restrictively.
-It is not a replacement for a non-root SSH account, OS sudoers or sandboxing.
+The command classifier is the **upstream v2.26.0 implementation** (commit
+`e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`), vendored and embedded in
+QuickJS without requiring Node.js at runtime. All **5,991 upstream differential
+probes** match exactly, including the `read-only`, `safe`, `destructive`,
+`privileged`, and forbidden verdicts. `read_command` admits commands only when
+that classifier returns `read-only`; `run_command` retains its static
+write/confirmation contract, even when a command is classified `safe`.
+
+Upstream's `safe` classification **does not mean no side effects**: upstream
+classifies operations including `git push`, `cargo build` and some `kubectl`
+commands as `safe`. This classification does not override SSH privileges,
+server-level read-only settings, or client confirmation. Never treat shell
+classification alone as a sandbox or an authentication boundary.
 
 Custom role bindings replace **one role/tier cell**, not the entire role. Denylist
 patterns add regex restrictions to raw/normalized command forms and SFTP remote
@@ -93,7 +94,7 @@ classes cannot elevate the remote SSH account's real OS privileges.
 | Tool | Behavior | Read-only | Potentially destructive |
 | --- | --- | :---: | :---: |
 | `list_connections` | List configured hosts/policies; no SSH connection or key material | Yes | No |
-| `read_command` | Narrow command grammar; never a general shell classifier | Yes | No |
+| `read_command` | Commands upstream v2.26.0 classifies `read-only`; parsed arguments are quoted before SSH execution | Yes | No |
 | `run_command` | Exact arbitrary shell command, optional absolute `cwd` | No | Yes |
 | `sftp_download` | Read bounded UTF-8 content; does not create a local file | Yes | No |
 | `sftp_upload` | Write UTF-8 content; existing destination refused unless `overwrite=true` | No | Yes |
@@ -108,7 +109,11 @@ classes cannot elevate the remote SSH account's real OS privileges.
 | `privileged_command` | Explicitly enabled sudo -n helper; remote sudoers still applies | No | Yes |
 | `reload_config` | Report loaded-file status or validate and reload settings while idle | No | Yes |
 
-The read grammar accepts basic `uname`, `id`, `pwd`, `whoami`, `uptime`, `ls`, `cat`, and `df` forms, plus `git --version` and `gh --version`. Shell operators, substitutions, interpreters, mutable Git subcommands, and arbitrary `gh` operations are rejected. Unsupported reads can use `run_command` on an explicitly write-enabled profile, with the same client confirmation as other arbitrary commands. This conservatism avoids falsely labelling complex shell commands read-only.
+The read-only grammar follows the pinned upstream version. `git status`,
+`git log`, `docker ps`, `grep -n`, etc. are permitted with upstream-approved
+arguments. `git --version` and `gh --version` are `safe` in upstream and
+therefore are not permitted by `read_command`; use `run_command` instead.
+All `run_command` calls retain write-profile checks and client confirmation.
 
 Examples of `run_command` arguments:
 
@@ -249,4 +254,4 @@ Covered: MCP discovery without elicitation capabilities, tool annotations, SSH a
 
 ## License and upstream attribution
 
-MIT. The architecture and feature inventory were informed by upstream commit `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`. The Rust implementation is deliberately smaller; it does not claim upstream security/feature parity. Upstream attribution and license are retained in `NOTICE` and `docs/LICENSE.upstream`.
+MIT. The architecture and feature inventory were informed by upstream commit `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`. The classifier sources are vendored from upstream v2.26.0 (commit above) and include matching forbidden-rule behavior; the rest of the Rust server remains smaller and does not claim full upstream security/feature parity. Upstream attribution and license are retained in `NOTICE` and `docs/LICENSE.upstream`.

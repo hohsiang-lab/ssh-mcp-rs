@@ -196,11 +196,15 @@ allowPrivileged = {str(name == "privileged").lower()}
                     assert tool["annotations"]["destructiveHint"] is write
                 checks.append("MCP initialize/tools and truthful write annotations")
                 assert len(data(client.call("list_connections", {}))["profiles"]) == 5
-                for command in ("uname -a", "id", "git --version", "gh --version"):
+                for command in ("uname -a", "id", "ls /tmp"):
                     output = data(client.call("read_command", {"command": command}))
                     assert output["exitStatus"] == 0, output
-                checks.append("real SSH: uname/id/git/gh version queries")
-                for command in ("id; touch /tmp/no", "git status", "gh api --method POST /test"):
+                for command in ("git --version", "gh --version"):
+                    rejected(client.call("read_command", {"command": command}), "READ_ONLY_DENIED")
+                    output = data(client.call("run_command", {"profile": "dev", "command": command}))
+                    assert output["exitStatus"] == 0, output
+                checks.append("real SSH: strict upstream reader versus safe version queries")
+                for command in ("id; touch /tmp/no", "git push", "gh api --method POST /test"):
                     rejected(client.call("read_command", {"command": command}), "READ_ONLY_DENIED")
                 checks.append("read grammar denies shell injection and mutable git/gh")
                 destination = root / "payload.txt"
@@ -313,15 +317,23 @@ allowPrivileged = {str(name == "privileged").lower()}
                 rejected(client.call("read_command", {"command":"uniq /etc/os-release /tmp/overwrite"}), "READ_ONLY_DENIED")
                 checks.append("expanded read-only reader grammar and executable reader flags")
 
-                # Production operator cannot mutate arbitrary files even with a writable profile.
+                # Upstream defines "safe" as a policy category, not no side effects.
+                # Production operator must deny upstream destructive, but allows "safe" touch.
                 prod = text.replace('name = "dev"\nrole = "operator"\ngroup = "dev"',
                                     'name = "dev"\nrole = "operator"\ngroup = "prod"')
                 assert prod != text
                 config.write_text(prod)
                 data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
-                checkfile = root / "policy-prod-blocked.txt"
-                rejected(client.call("run_command", {"profile":"dev", "command":"touch " + str(checkfile)}), "POLICY_DENIED")
-                assert not checkfile.exists()
+                checkfile = root / "policy-denylist-blocked.txt"
+                guarddir = root / "policy-destructive-guard"
+                guarddir.mkdir()
+                (guarddir / "sentinel").write_text("keep")
+                destructive = "rm -rf " + str(guarddir)
+                rejected(client.call("run_command", {"profile":"dev", "command":destructive}), "POLICY_DENIED")
+                assert (guarddir / "sentinel").exists()
+                safe_touch = root / "policy-safe-touch.txt"
+                assert data(client.call("run_command", {"profile":"dev", "command":"touch " + str(safe_touch)}))["ok"]
+                assert safe_touch.exists()
                 assert data(client.call("run_command", {"profile":"dev", "command":"printf ready"}))["ok"]
                 config.write_text(text)
                 data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
@@ -330,8 +342,8 @@ allowPrivileged = {str(name == "privileged").lower()}
                 limited = text + '\n[policy.roleBindings.operator]\ndev = ["read-only", "safe"]\n'
                 config.write_text(limited)
                 data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
-                rejected(client.call("run_command", {"profile":"dev", "command":"touch " + str(checkfile)}), "POLICY_DENIED")
-                assert not checkfile.exists()
+                rejected(client.call("run_command", {"profile":"dev", "command":destructive}), "POLICY_DENIED")
+                assert (guarddir / "sentinel").exists()
                 assert data(client.call("run_command", {"profile":"dev", "command":"echo safe"}))["ok"]
                 config.write_text(text)
                 data(client.call("reload_config", {"profile":"privileged", "action":"reload"}))
