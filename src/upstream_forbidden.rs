@@ -3,12 +3,18 @@
 
 use crate::{upstream_heads::command_heads, upstream_shell::tokenize_detailed};
 
-fn any_segment_runs(command: &str, windows: bool, predicate: impl Fn(&str, &[String]) -> bool) -> bool {
-    tokenize_detailed(command, true, windows).iter().any(|segment| {
-        command_heads(&segment.words).iter().any(|(index, head)| {
-            predicate(head, &segment.words[(index + 1)..])
+fn any_segment_runs(
+    command: &str,
+    windows: bool,
+    predicate: impl Fn(&str, &[String]) -> bool,
+) -> bool {
+    tokenize_detailed(command, true, windows)
+        .iter()
+        .any(|segment| {
+            command_heads(&segment.words)
+                .iter()
+                .any(|(index, head)| predicate(head, &segment.words[(index + 1)..]))
         })
-    })
 }
 
 fn invoked_words(command: &str, windows: bool) -> Vec<String> {
@@ -17,9 +23,12 @@ fn invoked_words(command: &str, windows: bool) -> Vec<String> {
         for (index, head) in command_heads(&segment.words) {
             names.push(head.clone());
             if matches!(head.as_str(), "systemctl" | "init" | "telinit") {
-                names.extend(segment.words[(index + 1)..].iter()
-                    .filter(|word| !word.starts_with('-'))
-                    .map(|word| fold_command_word(word)));
+                names.extend(
+                    segment.words[(index + 1)..]
+                        .iter()
+                        .filter(|word| !word.starts_with('-'))
+                        .map(|word| fold_command_word(word)),
+                );
             }
         }
     }
@@ -39,38 +48,55 @@ fn fold_command_word(word: &str) -> String {
 
 fn pipes_download_into_shell(command: &str, windows: bool) -> bool {
     let segments = tokenize_detailed(command, true, windows);
-    let stages: Vec<Vec<String>> = segments.iter().enumerate()
+    let stages: Vec<Vec<String>> = segments
+        .iter()
+        .enumerate()
         .filter(|(i, segment)| *i == 0 || segment.sep == "|")
         .map(|(_, segment)| {
-            command_heads(&segment.words).into_iter().map(|(_, head)| head).collect()
+            command_heads(&segment.words)
+                .into_iter()
+                .map(|(_, head)| head)
+                .collect()
         })
         .collect();
-    let first = stages.iter().position(|heads| heads.iter().any(|head| matches!(head.as_str(), "curl" | "wget")));
-    first.is_some_and(|i| stages[(i + 1)..].iter().any(|heads| {
-        heads.iter().any(|head| matches!(head.as_str(), "sh" | "bash" | "zsh"))
-    }))
+    let first = stages.iter().position(|heads| {
+        heads
+            .iter()
+            .any(|head| matches!(head.as_str(), "curl" | "wget"))
+    });
+    first.is_some_and(|i| {
+        stages[(i + 1)..].iter().any(|heads| {
+            heads
+                .iter()
+                .any(|head| matches!(head.as_str(), "sh" | "bash" | "zsh"))
+        })
+    })
 }
 
 fn writes_to_device(command: &str, windows: bool) -> bool {
-    any_segment_runs(command, windows, |head, args| head == "dd"
-        && args.iter().any(|arg| arg.starts_with("of=/dev/")))
+    any_segment_runs(command, windows, |head, args| {
+        head == "dd" && args.iter().any(|arg| arg.starts_with("of=/dev/"))
+    })
 }
 
 fn recursive_flag(args: &[String], recursive_letters: &str) -> bool {
     args.iter().any(|arg| {
         arg.starts_with("--rec")
-            || (arg.starts_with('-') && arg.len() > 1
+            || (arg.starts_with('-')
+                && arg.len() > 1
                 && arg[1..].bytes().all(|b| b.is_ascii_alphabetic())
                 && arg[1..].chars().any(|c| recursive_letters.contains(c)))
     })
 }
 
 fn root_target(target: &str) -> bool {
-    if !target.starts_with('/') { return false; }
+    if !target.starts_with('/') {
+        return false;
+    }
     let mut depth = 0usize;
     for part in target.split('/').skip(1) {
         match part {
-            "" | "." => {},
+            "" | "." => {}
             ".." => depth = depth.saturating_sub(1),
             _ => depth += 1,
         }
@@ -90,10 +116,14 @@ fn world_writable_mode(mode: &str) -> bool {
             }
             continue;
         }
-        let Some(op) = clause.find(['+', '=']) else { continue; };
+        let Some(op) = clause.find(['+', '=']) else {
+            continue;
+        };
         let classes = &clause[..op];
         let operations = &clause[(op + 1)..];
-        if classes.bytes().all(|c| matches!(c, b'a' | b'u' | b'g' | b'o'))
+        if classes
+            .bytes()
+            .all(|c| matches!(c, b'a' | b'u' | b'g' | b'o'))
             && operations.bytes().all(|c| matches!(c, b'r' | b'w' | b'x'))
             && (classes.is_empty() || classes == "a" || classes.contains('o'))
             && operations.contains('w')
@@ -105,21 +135,29 @@ fn world_writable_mode(mode: &str) -> bool {
 }
 
 fn deletes_root(command: &str, windows: bool) -> bool {
-    any_segment_runs(command, windows, |head, args| head == "rm"
-        && recursive_flag(args, "rR") && args.iter().any(|arg| root_target(arg)))
+    any_segment_runs(command, windows, |head, args| {
+        head == "rm" && recursive_flag(args, "rR") && args.iter().any(|arg| root_target(arg))
+    })
 }
 
 fn formats_device(command: &str, windows: bool) -> bool {
     any_segment_runs(command, windows, |head, _| {
-        head.starts_with("mkfs") || head.starts_with("mkswap")
-            || head.starts_with("wipefs") || head == "mke2fs"
+        head.starts_with("mkfs")
+            || head.starts_with("mkswap")
+            || head.starts_with("wipefs")
+            || head == "mke2fs"
     })
 }
 
 fn flushes_firewall(command: &str, windows: bool) -> bool {
     any_segment_runs(command, windows, |head, args| {
         if matches!(head, "iptables" | "ip6tables") {
-            if args.iter().any(|arg| matches!(arg.as_str(), "-F" | "--flush")) { return true; }
+            if args
+                .iter()
+                .any(|arg| matches!(arg.as_str(), "-F" | "--flush"))
+            {
+                return true;
+            }
             if let Some(policy) = args.iter().position(|arg| arg == "-P") {
                 return args[(policy + 1)..].iter().any(|arg| arg == "ACCEPT");
             }
@@ -129,26 +167,34 @@ fn flushes_firewall(command: &str, windows: bool) -> bool {
 }
 
 fn world_writable_root(command: &str, windows: bool) -> bool {
-    any_segment_runs(command, windows, |head, args| head == "chmod"
-        && recursive_flag(args, "R")
-        && args.iter().any(|arg| arg.starts_with('/'))
-        && args.iter().any(|arg| world_writable_mode(arg)))
+    any_segment_runs(command, windows, |head, args| {
+        head == "chmod"
+            && recursive_flag(args, "R")
+            && args.iter().any(|arg| arg.starts_with('/'))
+            && args.iter().any(|arg| world_writable_mode(arg))
+    })
 }
 
 fn chowns_root(command: &str, windows: bool) -> bool {
-    any_segment_runs(command, windows, |head, args| head == "chown"
-        && recursive_flag(args, "R") && args.iter().any(|arg| root_target(arg)))
+    any_segment_runs(command, windows, |head, args| {
+        head == "chown" && recursive_flag(args, "R") && args.iter().any(|arg| root_target(arg))
+    })
 }
 
 fn deletes_absolute_path(command: &str, windows: bool) -> bool {
-    any_segment_runs(command, windows, |head, args| head == "rm"
-        && recursive_flag(args, "rR") && args.iter().any(|arg| arg.starts_with('/')))
+    any_segment_runs(command, windows, |head, args| {
+        head == "rm" && recursive_flag(args, "rR") && args.iter().any(|arg| arg.starts_with('/'))
+    })
 }
 
 fn checks(command: &str, windows: bool) -> Vec<bool> {
     vec![
-        invoked_words(command, windows).iter().any(|word| matches!(word.as_str(),
-            "shutdown" | "reboot" | "halt" | "poweroff" | "eval")),
+        invoked_words(command, windows).iter().any(|word| {
+            matches!(
+                word.as_str(),
+                "shutdown" | "reboot" | "halt" | "poweroff" | "eval"
+            )
+        }),
         pipes_download_into_shell(command, windows),
         writes_to_device(command, windows),
         chowns_root(command, windows),
