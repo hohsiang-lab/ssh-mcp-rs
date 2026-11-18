@@ -11,7 +11,7 @@ The upstream code is MIT licensed; see
   `classifier` modules).
 - Runtime: `rquickjs` is compiled into the Rust binary; neither Node.js
   nor network access is needed at runtime. QuickJS has a 32 MiB memory
-  limit, 512 KiB stack, and a 750 ms per-command deadline.
+  limit, 512 KiB stack, and a 2 second per-command deadline.
 - Differential oracle: `tests/upstream_classifier_oracle.json`, generated
   by the original upstream implementation against its differential corpus.
   CI asserts **5,991** classification **and forbidden-result** matches.
