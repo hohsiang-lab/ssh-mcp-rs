@@ -12,9 +12,9 @@ struct State {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-struct Reading {
-    index: i32,
-    prefix: Option<String>,
+pub(crate) struct Reading {
+    pub(crate) index: i32,
+    pub(crate) prefix: Option<String>,
 }
 
 fn privilege_prefix(word: &str) -> bool {
@@ -453,7 +453,7 @@ fn read_word(
     }
 }
 
-fn command_readings(words: &[String]) -> Vec<Reading> {
+pub(crate) fn command_readings(words: &[String]) -> Vec<Reading> {
     let mut readings = Vec::new();
     let mut seen = HashSet::new();
     let mut stack = Vec::new();
@@ -528,6 +528,22 @@ fn command_readings(words: &[String]) -> Vec<Reading> {
         }
     }
     readings
+}
+
+pub(crate) fn command_heads(words: &[String]) -> Vec<(usize, String)> {
+    let mut heads = Vec::new();
+    for reading in command_readings(words) {
+        if reading.index < 0 {
+            continue;
+        }
+        let index = reading.index as usize;
+        if heads.iter().any(|(seen, _)| *seen == index) {
+            continue;
+        }
+        let head = fold_command_word(strip_path(unquote(&words[index])));
+        heads.push((index, head));
+    }
+    heads
 }
 
 #[cfg(test)]
