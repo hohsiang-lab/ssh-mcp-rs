@@ -35,7 +35,9 @@ fn tokenize_detailed(command: &str, honor_quotes: bool, windows: bool) -> Vec<Se
         if let Some(marker) = quote {
             if !windows && ch == '\\' && marker == '"' {
                 let next = chars.get(i + 1).copied();
-                if next.is_none() || next.is_some_and(|c| matches!(c, '$' | '"' | '\\' | '\n' | '\u{60}')) {
+                if next.is_none()
+                    || next.is_some_and(|c| matches!(c, '$' | '"' | '\\' | '\n' | '\u{60}'))
+                {
                     escaped = true;
                     i += 1;
                     continue;
@@ -44,8 +46,11 @@ fn tokenize_detailed(command: &str, honor_quotes: bool, windows: bool) -> Vec<Se
                 i += 1;
                 continue;
             }
-            if ch == marker { quote = None; }
-            else { current.push(ch); }
+            if ch == marker {
+                quote = None;
+            } else {
+                current.push(ch);
+            }
             i += 1;
             continue;
         }
@@ -80,24 +85,41 @@ fn tokenize_detailed(command: &str, honor_quotes: bool, windows: bool) -> Vec<Se
         i += 1;
     }
     end_word(&mut words, &mut current, &mut quoted);
-    if !words.is_empty() { segments.push(Segment { words, sep: pending }); }
-    if quote.is_some() && honor_quotes { tokenize_detailed(command, false, windows) }
-    else { segments }
+    if !words.is_empty() {
+        segments.push(Segment {
+            words,
+            sep: pending,
+        });
+    }
+    if quote.is_some() && honor_quotes {
+        tokenize_detailed(command, false, windows)
+    } else {
+        segments
+    }
 }
 
 fn normalize_command(command: &str, windows: bool) -> String {
-    tokenize_detailed(command, true, windows).iter()
+    tokenize_detailed(command, true, windows)
+        .iter()
         .map(|segment| {
-            segment.words.iter()
+            segment
+                .words
+                .iter()
                 .map(|word| {
-                    if word.chars().any(|c| c.is_whitespace() || matches!(c, ';' | '&' | '|')) {
+                    if word
+                        .chars()
+                        .any(|c| c.is_whitespace() || matches!(c, ';' | '&' | '|'))
+                    {
                         "\0"
                     } else {
                         word.as_str()
                     }
                 })
-                .collect::<Vec<_>>().join(" ")
-        }).collect::<Vec<_>>().join("; ")
+                .collect::<Vec<_>>()
+                .join(" ")
+        })
+        .collect::<Vec<_>>()
+        .join("; ")
 }
 
 fn first_glob(command: &str, honor_quotes: bool, windows: bool) -> Option<String> {
@@ -116,8 +138,11 @@ fn first_glob(command: &str, honor_quotes: bool, windows: bool) -> Option<String
                 escaped = true;
                 continue;
             }
-            if ch == marker { quote = None; }
-            else { word.push(ch); }
+            if ch == marker {
+                quote = None;
+            } else {
+                word.push(ch);
+            }
             continue;
         }
         if !windows && ch == '\\' {
@@ -129,15 +154,21 @@ fn first_glob(command: &str, honor_quotes: bool, windows: bool) -> Option<String
             continue;
         }
         if ch.is_whitespace() {
-            if glob { return Some(word); }
+            if glob {
+                return Some(word);
+            }
             word.clear();
             glob = false;
             continue;
         }
-        if matches!(ch, '*' | '?' | '[') { glob = true; }
+        if matches!(ch, '*' | '?' | '[') {
+            glob = true;
+        }
         word.push(ch);
     }
-    if honor_quotes && quote.is_some() { return first_glob(command, false, windows); }
+    if honor_quotes && quote.is_some() {
+        return first_glob(command, false, windows);
+    }
     glob.then_some(word)
 }
 
