@@ -48,7 +48,8 @@ impl Engine {
     }
     fn run(&self, command: &str) -> Result<(String, bool)> {
         *self.deadline.lock().expect("classifier deadline lock") =
-            Instant::now() + Duration::from_millis(750);
+            // Monster can be CPU-contended; keep evaluation bounded without spuriously denying a valid reader.
+            Instant::now() + Duration::from_secs(2);
         let output: String = self
             .context
             .with(|ctx| -> rquickjs::Result<String> {

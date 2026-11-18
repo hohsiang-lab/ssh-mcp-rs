@@ -62,7 +62,8 @@ class Client:
             "clientInfo": {"name": "integration-no-elicitation", "version": "1"}})
         assert "tools" in result["capabilities"]
         assert result["serverInfo"]["name"] == "ssh-mcp-rs"
-        assert result["serverInfo"]["version"] == "0.2.0"
+        actual_version = subprocess.check_output([str(binary), "--version"], text=True).strip()
+        assert actual_version == f'ssh-mcp-rs {result["serverInfo"]["version"]}'
         self.process.stdin.write(json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}) + "\n")
         self.process.stdin.flush()
 
