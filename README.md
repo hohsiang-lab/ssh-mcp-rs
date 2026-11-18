@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**v0.2 implements all 15 tool names, not full upstream security/configuration parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The role/tier matrix and denylist remain Rust-native; the original upstream classifier is bundled in the standalone Rust binary using embedded QuickJS (no Node.js required). The pinned upstream classification and unconditional-denial behavior are verified against 5,991 test probes. See [scope and migration](docs/migration.md) and [upstream classifier provenance](docs/upstream-classifier.md).
+**The Rust implementation supports all 15 upstream tool names, but does not claim full upstream configuration/feature parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The role/tier matrix and denylist remain Rust-native; the classifier and hard-denial rules have been ported to native Rust with declarative, embedded policy tables. No JavaScript engine or Node.js is needed. Classification and unconditional-denial behavior match 5,991 pinned upstream probes plus 1,273 general and 363 encoded PowerShell security regressions. See [scope and migration](docs/migration.md) and [upstream classifier provenance](docs/upstream-classifier.md).
 
 ## Install without building
 
@@ -34,7 +34,7 @@ Official references, checked 2026-11-17:
 - [Define tools and safety annotations](https://developers.openai.com/plugins/plan/tools)
 - [Build an MCP server](https://developers.openai.com/plugins/build/mcp-server)
 
-## Command authorization: upstream policy and original classifier
+## Command authorization: upstream policy and native Rust classifier
 
 The native policy layer mirrors upstream's **default role × host group matrix**. A profile has
 `role = "operator"` by default; set `group` explicitly for production. If absent, names
@@ -47,11 +47,10 @@ unrecognised names are treated as **prod** rather than dev.
 | operator | read-only, safe | + destructive | + destructive |
 | admin | read-only, safe, destructive | + privileged | + privileged |
 
-The command classifier is the **upstream v2.26.0 implementation** (commit
-`e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`), vendored and embedded in
-QuickJS without requiring Node.js at runtime. All **5,991 upstream differential
-probes** match exactly, including the `read-only`, `safe`, `destructive`,
-`privileged`, and forbidden verdicts. `read_command` admits commands only when
+The command classifier is a **native Rust port of upstream v2.26.0** (commit
+`e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`). All **5,991 upstream oracle cases, 1,273 general security regressions, and
+363 encoded PowerShell regressions** match,
+including `read-only`, `safe`, `destructive`, `privileged`, and hard denials. `read_command` admits commands only when
 that classifier returns `read-only`; `run_command` retains its static
 write/confirmation contract, even when a command is classified `safe`.
 
@@ -254,4 +253,4 @@ Covered: MCP discovery without elicitation capabilities, tool annotations, SSH a
 
 ## License and upstream attribution
 
-MIT. The architecture and feature inventory were informed by upstream commit `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`. The classifier sources are vendored from upstream v2.26.0 (commit above) and include matching forbidden-rule behavior; the rest of the Rust server remains smaller and does not claim full upstream security/feature parity. Upstream attribution and license are retained in `NOTICE` and `docs/LICENSE.upstream`.
+MIT. The architecture and feature inventory were informed by upstream commit `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`. The classifier logic is ported from upstream v2.26.0 (commit above) and include matching forbidden-rule behavior; the rest of the Rust server remains smaller and does not claim full upstream security/feature parity. Upstream attribution and license are retained in `NOTICE` and `docs/LICENSE.upstream`.

@@ -1,0 +1,193 @@
+{
+  "sh": {
+    "flags": [
+      "-c"
+    ],
+    "readable": true
+  },
+  "bash": {
+    "flags": [
+      "-c"
+    ],
+    "readable": true
+  },
+  "dash": {
+    "flags": [
+      "-c"
+    ],
+    "readable": true
+  },
+  "zsh": {
+    "flags": [
+      "-c"
+    ],
+    "readable": true
+  },
+  "ksh": {
+    "flags": [
+      "-c"
+    ],
+    "readable": true
+  },
+  "ash": {
+    "flags": [
+      "-c"
+    ],
+    "readable": true
+  },
+  "python": {
+    "flags": [
+      "-c"
+    ],
+    "readable": false
+  },
+  "python2": {
+    "flags": [
+      "-c"
+    ],
+    "readable": false
+  },
+  "python3": {
+    "flags": [
+      "-c"
+    ],
+    "readable": false
+  },
+  "perl": {
+    "flags": [
+      "-e",
+      "-E"
+    ],
+    "readable": false
+  },
+  "ruby": {
+    "flags": [
+      "-e"
+    ],
+    "readable": false
+  },
+  "node": {
+    "flags": [
+      "-e",
+      "--eval",
+      "-p",
+      "--print"
+    ],
+    "readable": false
+  },
+  "php": {
+    "flags": [
+      "-r"
+    ],
+    "readable": false
+  },
+  "osascript": {
+    "flags": [
+      "-e"
+    ],
+    "readable": false
+  },
+  "lua": {
+    "flags": [
+      "-e"
+    ],
+    "readable": false
+  },
+  "Rscript": {
+    "flags": [
+      "-e"
+    ],
+    "readable": false
+  },
+  "bun": {
+    "flags": [
+      "-e"
+    ],
+    "readable": false
+  },
+  "tclsh": {
+    "flags": [],
+    "readable": false
+  },
+  "deno": {
+    "flags": [
+      "eval"
+    ],
+    "readable": false
+  },
+  "pwsh": {
+    "flags": [
+      "-c",
+      "-Command",
+      "-e",
+      "-EncodedCommand"
+    ],
+    "readable": false
+  },
+  "powershell": {
+    "flags": [
+      "-c",
+      "-Command",
+      "-e",
+      "-EncodedCommand"
+    ],
+    "readable": false
+  },
+  "gdb": {
+    "flags": [
+      "-ex",
+      "--eval-command",
+      "-iex",
+      "--init-eval-command"
+    ],
+    "readable": false
+  },
+  "expect": {
+    "flags": [
+      "-c"
+    ],
+    "readable": false
+  },
+  "vi": {
+    "flags": [
+      "-c",
+      "--cmd"
+    ],
+    "readable": false
+  },
+  "vim": {
+    "flags": [
+      "-c",
+      "--cmd"
+    ],
+    "readable": false
+  },
+  "ex": {
+    "flags": [
+      "-c",
+      "--cmd"
+    ],
+    "readable": false
+  },
+  "view": {
+    "flags": [
+      "-c",
+      "--cmd"
+    ],
+    "readable": false
+  },
+  "gvim": {
+    "flags": [
+      "-c",
+      "--cmd"
+    ],
+    "readable": false
+  },
+  "vimdiff": {
+    "flags": [
+      "-c",
+      "--cmd"
+    ],
+    "readable": false
+  }
+}

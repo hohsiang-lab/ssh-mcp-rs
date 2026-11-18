@@ -1,29 +1,28 @@
-# Bundled upstream command classifier
+# Native Rust upstream command classifier
 
-The binary runs the original classifier and unconditional-denial checks from
-[tufantunc/ssh-mcp](https://github.com/tufantunc/ssh-mcp), **v2.26.0**,
-commit `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`.
-The upstream code is MIT licensed; see
-[its license](../licenses/ssh-mcp-upstream-LICENSE).
+The SSH MCP binary runs a native Rust port of the command classification and hard-denial logic
+from [tufantunc/ssh-mcp](https://github.com/tufantunc/ssh-mcp) v2.26.0,
+pinned at `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`.
 
-- Vendored code: `src/upstream_classifier.js` (compiled from the upstream
-  `remote-path`, `never-allowed-writes`, `awk`, `reader-grammar`, and
-  `classifier` modules).
-- Runtime: `rquickjs` is compiled into the Rust binary; neither Node.js
-  nor network access is needed at runtime. QuickJS has a 32 MiB memory
-  limit, 512 KiB stack, and a 750 ms per-command deadline.
-- Differential oracle: `tests/upstream_classifier_oracle.json`, generated
-  by the original upstream implementation against its differential corpus.
-  CI asserts **5,991** classification **and forbidden-result** matches.
+- Runtime: **Pure Rust**. No JavaScript, Node.js, QuickJS or embedded script evaluator.
+- The 68 reader grammars and 29 interpreter descriptions are compiled in as declarative JSON
+  (`src/upstream_reader_data.json`, `src/upstream_interpreter_data.json`).
+- Native source: `src/upstream_native.rs` and the `src/upstream_*.rs` helpers.
+- Parity: `tests/upstream_classifier_oracle.json` records 5,991 original upstream
+  classification + hard-denial outcomes. `tests/native_security_regressions.json`
+  adds 1,273 additional upstream outcomes covering shell carriers, privilege wrappers,
+  AWK, interpreters, remote writes, Windows names, and dangerous commands.
+  A further 363 encoded PowerShell cases in `tests/native_powershell_regressions.json`
+  protect Base64 decoder compatibility (URL-safe characters, ignored invalid bytes,
+  omitted padding).
+- Both datasets are asserted directly against the native Rust implementation in
+  `cargo test --all-targets --locked`.
 
-## Updating the pinned classifier
+The source material is MIT licensed. Preserve `licenses/ssh-mcp-upstream-LICENSE`,
+`NOTICE` and the attribution in README when updating rules. Upstream updates require
+reviewing changes to the TypeScript originals, updating the Rust implementation and
+pinned data, regenerating characterization fixtures independently and passing all tests.
 
-Checkout the pinned upstream commit and run `npm ci && npm run build` in
-that clone. Then run `python3 scripts/vendor_classifier.py /path/to/ssh-mcp`
-from this repository. For a newer upstream revision, explicitly update the
-script's pinned commit and regenerate the corresponding differential oracle.
-Include a passing corpus comparison in the same PR.
-
-The upstream `safe` class may include commands that change remote state.
-Classification does **not** bypass the Rust profile write restriction,
-the client-managed confirmation, or OS-level account permissions.
+The `safe` class is not a guarantee of no side effects: write operations still
+require profile write permission and client-managed confirmation. Hard denials cannot
+be overridden by approvals.

@@ -4,10 +4,10 @@ Reference: `tufantunc/ssh-mcp` commit `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`
 
 All 15 tool names are implemented in native Rust; this is not a line-by-line port or full behavior/security parity. Do not replace the existing service without checking its required features.
 
-| Upstream capability | v0.2 Rust behavior |
+| Upstream capability | Rust implementation |
 | --- | --- |
 | Host discovery | `list_connections`; policies shown, connections are per-call |
-| Read-only commands | Upstream-pinned original classifier and argument grammar bundled in QuickJS; `git --version` and `gh --version` are `safe` rather than `read-only` |
+| Read-only commands | Native Rust port of the pinned upstream classifier and declarative reader grammar; `git --version` and `gh --version` are `safe` rather than `read-only` |
 | Arbitrary commands | `run_command`, optional per-call cwd or named persistent POSIX-shell session |
 | Form-elicitation approval | Replaced by explicit trusted-client confirmation mode + write annotations; not server-verifiable approval |
 | Text SFTP upload/download | Implemented with byte limits; upload defaults to no overwrite |
@@ -21,7 +21,7 @@ All 15 tool names are implemented in native Rust; this is not a line-by-line por
 | Signal-process tool | `signal_process` with explicit INT/TERM/KILL, validated PID, and write-profile confirmation |
 | Binary streaming/local transferRoot | `sftp_upload_file` and `sftp_download_file` (private 0700 transferRoot, basename-only, 256 MiB default limit, local atomic publish) |
 | Config hot reload | `reload_config`: validates then applies while idle; sessions must be closed, audit/concurrency changes require restart |
-| Role/host-group matrix, denylist, quotas | Built-in viewer/operator/admin × prod/staging/dev matrix, custom per-tier roleBindings and Regex denylist implemented; daily command quotas not implemented. Classification and unconditional denials are from original upstream JavaScript running inside Rust; role/tier policy remains Rust-native |
+| Role/host-group matrix, denylist, quotas | Built-in viewer/operator/admin × prod/staging/dev matrix, custom per-tier roleBindings and Regex denylist implemented; daily command quotas not implemented. Classification and unconditional denials are native Rust based on the pinned upstream implementation; role/tier policy remains Rust-native |
 | Output redaction | Not implemented; audit avoids raw arguments, tool output can contain secrets |
 | Windows support | Not implemented; Unix process and POSIX remote shell required |
 | OAuth/DCR and independent approval service | Not implemented; reuse an authenticated stdio tunnel or trusted gateway |
