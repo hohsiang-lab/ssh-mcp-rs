@@ -10,7 +10,6 @@ repository = "https://github.com/hohsiang-lab/ssh-mcp-rs"
 [dependencies]
 anyhow = "1"
 axum = "0.8"
-base64 = "0.22"
 clap = { version = "4", features = ["derive", "env"] }
 libc = "0.2"
 regex = "1"

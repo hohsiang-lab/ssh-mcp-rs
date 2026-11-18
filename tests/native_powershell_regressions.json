@@ -1,0 +1,1454 @@
+{
+  "PWSH.EXE -C aQBkAA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -C cwB \t1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -Command   aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -EC   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PWSH.EXE -EC cwB1A$GQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PWSH.EXE -EC cwB1A$GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "PWSH.EXE -EC cwB1A-GQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -EC cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PWSH.EXE -EC cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PWSH.EXE -EC cwB1AGQAbwAgAGkAZAA=  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PWSH.EXE -Enc cgBtACAALQByAGYAIAAvAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "PWSH.EXE -ec ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PWSH.EXE -ec cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "PWSH.EXE -enc ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -enc ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -enc cwB \toACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -enc cwB5A-HMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -encodedcommand YwBhA-HQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PWSH.EXE -encodedcommand cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PowerShell -Command   ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -Command YwB\n1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -Command YwB \thAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -Command YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -Command YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -Command cgBtACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -EC YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -EC cgBtA-CAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -EC cwB \toACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -Enc   YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -EncodedCommand   cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PowerShell -e   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "PowerShell -e cwB1A-GQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -ec   aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "PowerShell -ec cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "PowerShell -enc aQB\nkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PWSH.EXE -C YwB \thAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PWSH.EXE -C ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PWSH.EXE -EC ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env PWSH.EXE -Enc cwB\n1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PWSH.EXE -Enc cwBoA$CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env PWSH.EXE -e   ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PWSH.EXE -e YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env PWSH.EXE -e ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PWSH.EXE -ec   YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env PWSH.EXE -ec cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env PowerShell -C aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -Enc ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -Enc cwB1A-GQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -Enc cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env PowerShell -EncodedCommand YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env PowerShell -EncodedCommand cwB\n5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -e YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -e cwB \t5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -enc ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -enc cwB \t5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env PowerShell -enc cwB5A$HMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env PowerShell -enc cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env powershell -Command YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -Command ZQBjA-GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -Command aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -EC   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env powershell -EC YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -Enc aQBkA$A==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -Enc cwB\noACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -EncodedCommand   YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env powershell -e ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -ec YwB \t1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env powershell -ec cwB1A$GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "env pwsh -EC   cgBlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh -Enc YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh -EncodedCommand YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh -EncodedCommand ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -EncodedCommand cgBtACAALQByAGYAIAAvAA==  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh -e YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh -e YwBhA$HQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -enc ZQB\njAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -enc ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -enc cgBtA-CAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -encodedcommand   ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh -encodedcommand YwB \thAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -Command YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -Command cgB \ttACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -EC YwB \thAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -EC cgB\ntACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -EC cgBlAGIAbwBvAHQA  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh.exe -Enc YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "env pwsh.exe -EncodedCommand ZwB \tpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -e cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "env pwsh.exe -encodedcommand YwB\nhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -encodedcommand ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "env pwsh.exe -encodedcommand cwB \t5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -C cgBlAGIAbwBvAHQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -Command ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -EC YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup PWSH.EXE -EC cwB \t1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -Enc cgBtA-CAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -EncodedCommand cgB\nlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -EncodedCommand cwBoA$CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -EncodedCommand cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -e ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup PWSH.EXE -enc cgBlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup PowerShell -Command aQBkA$A==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PowerShell -EC ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup PowerShell -Enc YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PowerShell -Enc cgB\nlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PowerShell -e YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PowerShell -ec ZQBjAGgAbwAgAGgAZQBsAGwAbwA=  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup PowerShell -ec cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup PowerShell -enc cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup PowerShell -encodedcommand YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup PowerShell -encodedcommand cwB1A-GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -C ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -Command cwBoA$CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -EC   cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup powershell -EC cgB \ttACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -EC cgBlA$GIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup powershell -Enc ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup powershell -Enc cwB \t1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -EncodedCommand ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup powershell -EncodedCommand ZwBpA$HQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -EncodedCommand aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -e ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup powershell -e ZQBjAGgAbwAgAGgAZQBsAGwAbwA=  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -ec ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -ec aQB \tkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -ec cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup powershell -encodedcommand ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -encodedcommand ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup powershell -encodedcommand aQB \tkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup powershell -encodedcommand cwB1A$GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "nohup pwsh -C YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -Command ZwBpA-HQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -Command ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -Command cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -EC aQBkAA==  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -Enc cwB\noACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -EncodedCommand YwB \thAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh -ec cgBtA$CAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup pwsh -ec cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "nohup pwsh -encodedcommand cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -C cwB1A-GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -C cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -Command YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -Command ZwB\npAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -Command cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -EC YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup pwsh.exe -EC cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup pwsh.exe -Enc cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -Enc cwB1AGQAbwAgAGkAZAA=  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -EncodedCommand ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -EncodedCommand cwB\n1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -e   YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -ec ZwB\npAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -enc cwB1A$GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "nohup pwsh.exe -encodedcommand YwB\nhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -encodedcommand ZwB \tpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "nohup pwsh.exe -encodedcommand cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "nohup pwsh.exe -encodedcommand cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -C ZQB\njAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -Command YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -Command cgBtACAALQByAGYAIAAvAA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -EC cgBtACAALQByAGYAIAAvAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "powershell -EC cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "powershell -EC cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA  ": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "powershell -Enc   cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "powershell -Enc ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -Enc aQBkAA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -Enc cgBtA$CAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "powershell -EncodedCommand aQBkAA==  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -EncodedCommand cgBtA-CAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -e   cgBtACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "powershell -e cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "powershell -e cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -ec cgBlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "powershell -enc ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -enc aQBkA-A==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "powershell -encodedcommand   ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -C YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -C cwB1A$GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -C cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -Command ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -EC cwB\n1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -Enc   cgBlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh -Enc cwB\n5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -EncodedCommand YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh -EncodedCommand YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -EncodedCommand ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -EncodedCommand aQBkA-A==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -EncodedCommand cgBtACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh -e ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -e cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "pwsh -enc cgBlA$GIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh -enc cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh -encodedcommand   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "pwsh -encodedcommand ZQBjAGgAbwAgAGgAZQBsAGwAbwA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -C   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -Command cwB \t1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -Command cwB1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -EC YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -EC cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh.exe -Enc ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -Enc cwB1A-GQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -EncodedCommand aQBkA$A==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "pwsh.exe -EncodedCommand cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh.exe -ec YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh.exe -enc   cgBtACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "pwsh.exe -encodedcommand   cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "pwsh.exe -encodedcommand aQB \tkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -C   cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -Command cgB\nlAGIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -Command cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -Command cwB1AGQAbwAgAGkAZAA=  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -Command cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -EC cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PWSH.EXE -Enc ZwB \tpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -Enc cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PWSH.EXE -e   ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -ec aQBkAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -ec cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -ec cwBoA$CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -enc   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PWSH.EXE -enc cgBtA$CAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -C ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -Command   cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -EC ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -EC aQBkA$A==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -EC cgBtA-CAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -Enc cgBlA$GIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -Enc cgBtACAALQByAGYAIAAvAA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -EncodedCommand cgB\nlAGIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -EncodedCommand cgBtACAALQByAGYAIAAvAA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -e   cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -e YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -e ZQBjAGgAbwAgAGgAZQBsAGwAbwA=  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -e cgBlA-GIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -e cgBtA$CAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -ec cgBtA-CAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -ec cgBtACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo PowerShell -ec cwB1AGQAbwAgAGkAZAA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -encodedcommand cwB\n1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo PowerShell -encodedcommand cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo powershell -Command aQB \tkAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -Command aQBkAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -Command cgBtACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -Command cwBoA$CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -EC   cgBlAGIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo powershell -EC ZQBjA-GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -EC aQB \tkAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -EC cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -Enc   cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo powershell -EncodedCommand   cgBlAGIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo powershell -EncodedCommand YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo powershell -EncodedCommand ZwBpA-HQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -e   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -e YwB \thAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -e cwB \t1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -ec   cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo powershell -ec YwBhA$HQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -ec aQB \tkAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -ec cgB \ttACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -enc ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -enc cwB1A-GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -encodedcommand   ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo powershell -encodedcommand cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh -C cwB \toACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -EC ZQBjAGgAbwAgAGgAZQBsAGwAbwA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -Enc   cgBlAGIAbwBvAHQA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh -Enc cgB\ntACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -Enc cgB \ttACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -EncodedCommand YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -encodedcommand   ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -encodedcommand YwB\nhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh -encodedcommand YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh.exe -C   cgBtACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh.exe -C ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh.exe -EC   cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh.exe -EC aQBkAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh.exe -EncodedCommand YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh.exe -EncodedCommand cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=  ": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh.exe -e   cgBtACAALQByAGYAIAAvAA==": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh.exe -ec   aQBkAA==": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh.exe -ec cwB5A$HMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "sudo pwsh.exe -encodedcommand   ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh.exe -encodedcommand YwB\n1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "sudo pwsh.exe -encodedcommand ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -C   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -C ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -C ZwB\npAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -C ZwBpA$HQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -EC   YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 PWSH.EXE -EC cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -Enc   YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -Enc ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -Enc aQB \tkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -EncodedCommand ZQB\njAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -EncodedCommand ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -e YwB\n1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -e ZQBjA$GgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -e aQB\nkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -ec   ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -ec cwB\noACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -enc ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -enc cgBtACAALQByAGYAIAAvAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 PWSH.EXE -enc cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 PWSH.EXE -encodedcommand   aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PWSH.EXE -encodedcommand YwBhA-HQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -Command ZQB\njAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -EC YwB\nhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -EC cgB\ntACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -EC cwB \t5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -EC cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -Enc YwB\n1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -Enc YwB1A-HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -e   YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 PowerShell -e ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -e cgB \tlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -ec YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -ec ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -enc YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 PowerShell -enc YwB1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 PowerShell -enc ZQB\njAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -enc ZQBjA$GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -enc cwBoACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA  ": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 PowerShell -encodedcommand cwBoA-CAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -C   cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -Command YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -Command cwB1AGQAbwAgAGkAZAA=  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -Command cwB5A-HMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -EC   cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 powershell -EC YwB \t1AHIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -EC ZQBjA-GgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -EC cwB\n1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -EC cwB \t1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -Enc   cwB1AGQAbwAgAGkAZAA=": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 powershell -Enc cwB\n1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -e ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 powershell -enc cgB\ntACAALQByAGYAIAAvAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -C   ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -C cwB\n1AGQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -Command   ZQBjAGgAbwAgAGgAZQBsAGwAbwA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -Enc ZQBjAGgAbwAgAGgAZQBsAGwAbwA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -EncodedCommand   YwBhAHQAIAAvAGUAdABjAC8AcABhAHMAcwB3AGQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -EncodedCommand ZwBpA$HQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -EncodedCommand aQB \tkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -e ZQBjAGgAbwAgAGgAZQBsAGwAbwA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -e ZQBjAGgAbwAgAGgAZQBsAGwAbwA=  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -ec ZQBjAGgAbwAgAGgAZQBsAGwAbwA=  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -ec aQBkA-A==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -ec cgBlA$GIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 pwsh -enc YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 pwsh -enc cwB1A-GQAbwAgAGkAZAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -encodedcommand aQB \tkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh -encodedcommand cwB1A$GQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "timeout 5 pwsh.exe -C YwB1A$HIAbAAgAGgAdAB0AHAAcwA6AC8ALwB4ACAAfAAgAHMAaAA=": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh.exe -EC   cwB1AGQAbwAgAHMAaAAgAC0AYwAgACcAcgBtACAALQByAGYAIAAvACcA": {
+    "class": "privileged",
+    "forbidden": true
+  },
+  "timeout 5 pwsh.exe -EC ZwBpAHQAIABzAHQAYQB0AHUAcwAgAC0ALQBzAGgAbwByAHQA  ": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh.exe -EC cwB5AHMAdABlAG0AYwB0AGwAIAByAGUAYgBvAG8AdAA=  ": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 pwsh.exe -Enc ZQBjAGgAbwAgAGgAZQBsAGwAbwA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh.exe -EncodedCommand   aQBkAA==": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh.exe -e   cgBlAGIAbwBvAHQA": {
+    "class": "destructive",
+    "forbidden": true
+  },
+  "timeout 5 pwsh.exe -e cwB\noACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  },
+  "timeout 5 pwsh.exe -enc   ZQBjAGgAbwAgACQAKABzAHUAZABvACAAaQBkACkA": {
+    "class": "privileged",
+    "forbidden": false
+  },
+  "timeout 5 pwsh.exe -encodedcommand cwB \toACAALQBjACAAJwBzAHUAZABvACAAaQBkACcA": {
+    "class": "destructive",
+    "forbidden": false
+  }
+}

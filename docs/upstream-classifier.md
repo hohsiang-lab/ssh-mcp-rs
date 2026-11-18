@@ -10,8 +10,11 @@ pinned at `e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`.
 - Native source: `src/upstream_native.rs` and the `src/upstream_*.rs` helpers.
 - Parity: `tests/upstream_classifier_oracle.json` records 5,991 original upstream
   classification + hard-denial outcomes. `tests/native_security_regressions.json`
-  adds 1,273 additional original upstream outcomes covering shell carriers, privilege
-  wrappers, AWK, interpreters, remote writes, Windows names, and dangerous commands.
+  adds 1,273 additional upstream outcomes covering shell carriers, privilege wrappers,
+  AWK, interpreters, remote writes, Windows names, and dangerous commands.
+  A further 363 encoded PowerShell cases in `tests/native_powershell_regressions.json`
+  protect Base64 decoder compatibility (URL-safe characters, ignored invalid bytes,
+  omitted padding).
 - Both datasets are asserted directly against the native Rust implementation in
   `cargo test --all-targets --locked`.
 

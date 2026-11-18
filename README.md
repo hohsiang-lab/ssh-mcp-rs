@@ -4,7 +4,7 @@ A native Rust SSH MCP server inspired by [tufantunc/ssh-mcp](https://github.com/
 
 Built with the official Rust MCP SDK (`rmcp`), `russh`, and `russh-sftp`. The server does not invoke a local `ssh` binary or require Node.js. Git, `gh`, and other commands execute on the configured SSH host and must be installed/authenticated there.
 
-**The Rust implementation supports all 15 upstream tool names, but does not claim full upstream configuration/feature parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The role/tier matrix and denylist remain Rust-native; the classifier and hard-denial rules have been ported to native Rust with declarative, embedded policy tables. No JavaScript engine or Node.js is needed. Classification and unconditional-denial behavior match 5,991 pinned upstream probes plus 1,273 additional security regression inputs. See [scope and migration](docs/migration.md) and [upstream classifier provenance](docs/upstream-classifier.md).
+**The Rust implementation supports all 15 upstream tool names, but does not claim full upstream configuration/feature parity.** It supports stateless commands, persistent POSIX-shell sessions, background jobs and signals, text and streaming binary SFTP, explicit noninteractive sudo, and validated configuration reload. SSH agent/password authentication, quotas, and output-secret redaction remain outside this implementation. The role/tier matrix and denylist remain Rust-native; the classifier and hard-denial rules have been ported to native Rust with declarative, embedded policy tables. No JavaScript engine or Node.js is needed. Classification and unconditional-denial behavior match 5,991 pinned upstream probes plus 1,273 general and 363 encoded PowerShell security regressions. See [scope and migration](docs/migration.md) and [upstream classifier provenance](docs/upstream-classifier.md).
 
 ## Install without building
 
@@ -48,8 +48,8 @@ unrecognised names are treated as **prod** rather than dev.
 | admin | read-only, safe, destructive | + privileged | + privileged |
 
 The command classifier is a **native Rust port of upstream v2.26.0** (commit
-`e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`). All **5,991 original
-upstream oracle cases plus 1,273 additional security regression cases** match,
+`e04ebf21dd44f18f00ea2e0794b49d57dfaf3c7f`). All **5,991 upstream oracle cases, 1,273 general security regressions, and
+363 encoded PowerShell regressions** match,
 including `read-only`, `safe`, `destructive`, `privileged`, and hard denials. `read_command` admits commands only when
 that classifier returns `read-only`; `run_command` retains its static
 write/confirmation contract, even when a command is classified `safe`.

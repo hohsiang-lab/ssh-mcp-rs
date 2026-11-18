@@ -373,4 +373,24 @@ mod tests {
                 .join("\n")
         );
     }
+    #[test]
+    fn native_matches_encoded_powershell_regressions() {
+        let cases: std::collections::BTreeMap<String, serde_json::Value> =
+            serde_json::from_str(include_str!("../tests/native_powershell_regressions.json"))
+                .unwrap();
+        assert_eq!(cases.len(), 363);
+        for (command, expected) in &cases {
+            let (class, forbidden) = evaluate(command);
+            assert_eq!(
+                class.name(),
+                expected["class"].as_str().unwrap(),
+                "{command:?}"
+            );
+            assert_eq!(
+                forbidden,
+                expected["forbidden"].as_bool().unwrap(),
+                "{command:?}"
+            );
+        }
+    }
 }

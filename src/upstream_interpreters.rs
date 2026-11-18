@@ -204,28 +204,45 @@ fn stdin_path(word: &str) -> bool {
 }
 
 pub(crate) fn decoded_powershell(operand: &str) -> Option<String> {
-    use base64::{Engine as _, engine::general_purpose::STANDARD};
-    let sample = if operand.len() > 65536 {
-        {
-            let mut end = 65536;
-            while !operand.is_char_boundary(end) {
-                end -= 1;
-            }
-            &operand[..end]
+    // The upstream Buffer.from(input, "base64") decoder is intentionally permissive:
+    // missing padding, URL-safe alphabet, and ignored non-alphabet characters.
+    // A strict base64 decoder can miss embedded privileged commands.
+    let mut utf16_len = 0usize;
+    let mut sample_end = 0usize;
+    for (index, ch) in operand.char_indices() {
+        if utf16_len + ch.len_utf16() > 65536 {
+            break;
         }
-    } else {
-        operand
-    };
-    let filtered: String = sample
-        .chars()
-        .filter(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '+' | '/' | '='))
-        .collect();
-    let decoded = STANDARD.decode(filtered).ok()?;
-    let mut shorts = Vec::new();
-    for pair in decoded.as_chunks::<2>().0 {
-        shorts.push(u16::from_le_bytes([pair[0], pair[1]]));
+        utf16_len += ch.len_utf16();
+        sample_end = index + ch.len_utf8();
     }
-    let result = String::from_utf16_lossy(&shorts);
+    let sample = &operand[..sample_end];
+    let mut decoded = Vec::new();
+    let mut bits = 0u32;
+    let mut count = 0u8;
+    for byte in sample.bytes() {
+        let sextet = match byte {
+            b'A'..=b'Z' => byte - b'A',
+            b'a'..=b'z' => byte - b'a' + 26,
+            b'0'..=b'9' => byte - b'0' + 52,
+            b'+' | b'-' => 62,
+            b'/' | b'_' => 63,
+            b'=' => break,
+            _ => continue,
+        };
+        bits = (bits << 6) | u32::from(sextet);
+        count += 6;
+        if count >= 8 {
+            count -= 8;
+            decoded.push((bits >> count) as u8);
+            bits &= (1u32 << count) - 1;
+        }
+    }
+    let mut utf16 = Vec::with_capacity(decoded.len() / 2);
+    for pair in decoded.as_chunks::<2>().0 {
+        utf16.push(u16::from_le_bytes([pair[0], pair[1]]));
+    }
+    let result = String::from_utf16_lossy(&utf16);
     if result.contains('\u{fffd}') || result.trim().is_empty() {
         None
     } else {
