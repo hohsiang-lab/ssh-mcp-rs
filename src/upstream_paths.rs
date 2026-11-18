@@ -31,35 +31,34 @@ fn normalize_remote_path_for_windows(path: &str) -> String {
         .or_else(|| slashed.strip_prefix("//./"))
         .unwrap_or(&slashed);
     let parts: Vec<&str> = slashed.split('/').collect();
-    let (root, remaining): (Option<String>, Vec<&str>) =
-        if parts.first() == Some(&"") && parts.get(1) == Some(&"") {
-            (
-                Some(format!(
-                    "//{}/{}",
-                    parts.get(2).copied().unwrap_or(""),
-                    parts.get(3).copied().unwrap_or("")
-                )),
-                parts.iter().skip(4).copied().collect(),
-            )
-        } else if parts.first() == Some(&"") {
-            (
-                Some("/".to_owned()),
-                parts.iter().skip(1).copied().collect(),
-            )
-        } else if let Some(head) = parts.first().copied().filter(|head| {
-            head.len() >= 2
-                && head.as_bytes()[0].is_ascii_alphabetic()
-                && head.as_bytes()[1] == b':'
-        }) {
-            let mut rest: Vec<&str> = Vec::new();
-            if !head[2..].is_empty() {
-                rest.push(&head[2..]);
-            }
-            rest.extend(parts.iter().skip(1).copied());
-            (Some(head[..2].to_owned()), rest)
-        } else {
-            (None, parts)
-        };
+    let (root, remaining): (Option<String>, Vec<&str>) = if parts.first() == Some(&"")
+        && parts.get(1) == Some(&"")
+    {
+        (
+            Some(format!(
+                "//{}/{}",
+                parts.get(2).copied().unwrap_or(""),
+                parts.get(3).copied().unwrap_or("")
+            )),
+            parts.iter().skip(4).copied().collect(),
+        )
+    } else if parts.first() == Some(&"") {
+        (
+            Some("/".to_owned()),
+            parts.iter().skip(1).copied().collect(),
+        )
+    } else if let Some(head) = parts.first().copied().filter(|head| {
+        head.len() >= 2 && head.as_bytes()[0].is_ascii_alphabetic() && head.as_bytes()[1] == b':'
+    }) {
+        let mut rest: Vec<&str> = Vec::new();
+        if !head[2..].is_empty() {
+            rest.push(&head[2..]);
+        }
+        rest.extend(parts.iter().skip(1).copied());
+        (Some(head[..2].to_owned()), rest)
+    } else {
+        (None, parts)
+    };
     let mut kept = Vec::new();
     for part in remaining {
         if part.is_empty() || part == "." {
@@ -152,13 +151,38 @@ mod tests {
                 upstream.get("findNeverAllowedWriteTarget").unwrap();
 
             let parts = [
-                "", ".", "..", "a", "a..", "a. ", "etc", "cron", "systemd",
-                ".ssh", "authorized_keys", "Authorized_Keys.", "file::$DATA",
-                "C:", "C:x", "/", "\\", "//", "\\\\", "a/b", "a\\b",
+                "",
+                ".",
+                "..",
+                "a",
+                "a..",
+                "a. ",
+                "etc",
+                "cron",
+                "systemd",
+                ".ssh",
+                "authorized_keys",
+                "Authorized_Keys.",
+                "file::$DATA",
+                "C:",
+                "C:x",
+                "/",
+                "\\",
+                "//",
+                "\\\\",
+                "a/b",
+                "a\\b",
             ];
             let mut count = 0usize;
             for prefix in [
-                "", "/", "//", "C:/", "C:", r"\\?\C:\", r"\\server\share\", "/home/",
+                "",
+                "/",
+                "//",
+                "C:/",
+                "C:",
+                r"\\?\C:\",
+                r"\\server\share\",
+                "/home/",
             ] {
                 for a in parts {
                     for b in parts {
