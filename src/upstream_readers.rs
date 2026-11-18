@@ -71,32 +71,35 @@ fn short_cluster(
     Ok(index)
 }
 
+fn matches_operand_pattern(pattern: &str, operand: &str) -> bool {
+    match pattern {
+        // Actual pinned upstream grammars use these two expressions.
+        // The negative lookahead is not supported by Rust's regex crate.
+        r"^(?!\/[^/]*\/?$)" => {
+            let matches_root_level = operand.strip_prefix('/').is_some_and(|rest| {
+                !rest.contains('/')
+                    || rest.strip_suffix('/').is_some_and(|trimmed| !trimmed.contains('/'))
+            });
+            !matches_root_level
+        }
+        r"^\+" => operand.starts_with('+'),
+        _ => Regex::new(pattern).is_ok_and(|regex| regex.is_match(operand)),
+    }
+}
+
 fn check_operands(operands: &[&str], rules: Option<Operands<'_>>) -> Result<(), String> {
-    let Some(rules) = rules else {
-        return Ok(());
-    };
-    let matcher = match rules.each {
-        Some(pattern) => Some(
-            Regex::new(pattern).map_err(|_| operands.first().copied().unwrap_or("").to_owned())?,
-        ),
-        None => None,
-    };
+    let Some(rules) = rules else { return Ok(()); };
     for (index, operand) in operands.iter().enumerate() {
         if index == 0 && !rules.first.is_empty() && !rules.first.contains(operand) {
             return Err((*operand).to_owned());
         }
-        if matcher
-            .as_ref()
-            .is_some_and(|regex| !regex.is_match(operand))
-        {
+        if rules.each.is_some_and(|pattern| !matches_operand_pattern(pattern, operand)) {
             return Err((*operand).to_owned());
         }
     }
     if let Some(max) = rules.max {
         let limit = usize::try_from(max).unwrap_or(0);
-        if operands.len() > limit {
-            return Err(operands[limit].to_owned());
-        }
+        if operands.len() > limit { return Err(operands[limit].to_owned()); }
     }
     Ok(())
 }
@@ -192,7 +195,7 @@ mod tests {
             ctx.eval::<(), _>(source).unwrap();
             let upstream: rquickjs::Object = ctx.globals().get("UpstreamSSH").unwrap();
             let _: rquickjs::Function = upstream.get("matchesGrammar").unwrap();
-            ctx.eval::<(), _>("globalThis.__matchGrammar = (w, g) => JSON.stringify(UpstreamSSH.matchesGrammar(JSON.parse(w), JSON.parse(g)));").unwrap();
+            ctx.eval::<(), _>("globalThis.__matchGrammar = (w, g) => { let grammar = JSON.parse(g); if (grammar.operands?.each) grammar.operands.each = new RegExp(grammar.operands.each); return JSON.stringify(UpstreamSSH.matchesGrammar(JSON.parse(w), grammar)); };").unwrap();
             let reference: rquickjs::Function = ctx.globals().get("__matchGrammar").unwrap();
             let cases = [
                 (vec![], Mode::Getopt),
@@ -247,6 +250,39 @@ mod tests {
                         }
                     }
                 }
+
+            // Pinned production operand patterns: negative-lookahead root paths and +formats.
+            for pattern in [r"^(?!\/[^/]*\/?$)", r"^\+"] {
+                for operand in [
+                    "", "/", "/tmp", "/tmp/", "/tmp//", "/tmp/file", "tmp", "tmp/",
+                    "+%F", "++", "x+", "/root/file", "a\n", "42",
+                ] {
+                    let words = vec![operand];
+                    let grammar = Grammar {
+                        mode: Mode::Getopt,
+                        flags: &[],
+                        value_flags: &[],
+                        optional_value_flags: &[],
+                        operands: Some(Operands { first: &[], each: Some(pattern), max: None }),
+                        options_before_operands: false,
+                        numeric_short: false,
+                    };
+                    let js_grammar = json!({
+                        "args": "getopt",
+                        "operands": {"each": pattern}
+                    });
+                    let output: String = reference.call((
+                        serde_json::to_string(&words).unwrap(),
+                        js_grammar.to_string(),
+                    )).unwrap();
+                    let expected: serde_json::Value = serde_json::from_str(&output).unwrap();
+                    let actual = matches_grammar(&words, &grammar);
+                    assert_eq!(actual.is_ok(), expected["ok"].as_bool().unwrap(), "{pattern:?} {words:?}");
+                    if let Err(word) = actual {
+                        assert_eq!(word, expected["word"].as_str().unwrap(), "{pattern:?} {words:?}");
+                    }
+                }
+            }
             }
         });
     }
