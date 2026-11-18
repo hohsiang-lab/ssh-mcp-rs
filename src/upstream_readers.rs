@@ -181,7 +181,9 @@ mod tests {
         context.with(|ctx| {
             ctx.eval::<(), _>(source).unwrap();
             let upstream: rquickjs::Object = ctx.globals().get("UpstreamSSH").unwrap();
-            let reference: rquickjs::Function = upstream.get("matchesGrammar").unwrap();
+            let _: rquickjs::Function = upstream.get("matchesGrammar").unwrap();
+            ctx.eval::<(), _>("globalThis.__matchGrammar = (w, g) => JSON.stringify(UpstreamSSH.matchesGrammar(JSON.parse(w), JSON.parse(g)));").unwrap();
+            let reference: rquickjs::Function = ctx.globals().get("__matchGrammar").unwrap();
             let cases = [
                 (vec![], Mode::Getopt),
                 (vec!["file"], Mode::Getopt),
@@ -223,14 +225,16 @@ mod tests {
                             "numericShort": numeric_short,
                             "operands": {"max": 3}
                         });
-                        let result: String = reference.call((
-                            words.clone(),
-                            ctx.json_stringify(js_grammar).unwrap().unwrap(),
-                        )).unwrap_or_default();
-                        let _ = result;
-                        // rquickjs serializes JS object results through JSON.stringify below.
+                        let expected_json: String = reference.call((
+                            serde_json::to_string(&words).unwrap(),
+                            js_grammar.to_string(),
+                        )).unwrap();
+                        let expected: serde_json::Value = serde_json::from_str(&expected_json).unwrap();
                         let got = matches_grammar(&words, &grammar);
-                        assert!(got.is_ok() || !got.unwrap_err().is_empty());
+                        assert_eq!(got.is_ok(), expected["ok"].as_bool().unwrap(), "{words:?}");
+                        if let Err(word) = got {
+                            assert_eq!(word, expected["word"].as_str().unwrap(), "{words:?}");
+                        }
                     }
                 }
             }
