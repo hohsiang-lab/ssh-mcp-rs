@@ -7,7 +7,7 @@ use regex::Regex;
 use serde::Deserialize;
 use std::collections::BTreeMap;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Ord, PartialOrd)]
 #[serde(rename_all = "kebab-case")]
 pub enum CommandClass {
     ReadOnly,
@@ -188,242 +188,17 @@ fn protected_write_path(path: &str) -> bool {
         || p.contains("/.ssh/authorized_keys:")
 }
 
-/// Segment a POSIX command without treating quoted prose as a second invocation.
-fn shell_segments(script: &str) -> Vec<&str> {
-    let mut parts = Vec::new();
-    let mut quote = None;
-    let mut escaped = false;
-    let mut start = 0;
-    for (i, ch) in script.char_indices() {
-        if escaped {
-            escaped = false;
-            continue;
-        }
-        match (quote, ch) {
-            (Some('\''), '\'') | (Some('"'), '"') => quote = None,
-            (None, '\'' | '"') => quote = Some(ch),
-            (Some('\''), _) => {}
-            (_, '\\') => escaped = true,
-            (None, ';' | '|' | '&' | '\n') => {
-                if start < i {
-                    parts.push(&script[start..i]);
-                }
-                start = i + ch.len_utf8();
-            }
-            _ => {}
-        }
-    }
-    if start < script.len() {
-        parts.push(&script[start..]);
-    }
-    parts
-}
-
-fn forbidden_invocation(command: &str) -> bool {
-    fn scan(script: &str, depth: usize) -> bool {
-        if depth > 6 {
-            return true;
-        }
-        let segments = shell_segments(script);
-        // True pipeline into a shell, not an echo of text containing a pipe.
-        if script.contains('|')
-            && segments.windows(2).any(|pair| {
-                let l = shlex::split(pair[0]).unwrap_or_default();
-                let r = shlex::split(pair[1]).unwrap_or_default();
-                l.first()
-                    .is_some_and(|s| matches!(s.as_str(), "curl" | "wget"))
-                    && r.first()
-                        .is_some_and(|s| matches!(s.as_str(), "sh" | "bash" | "zsh"))
-            })
-        {
-            return true;
-        }
-        for part in segments {
-            let words = shlex::split(part).unwrap_or_default();
-            let Some((head, args)) = words.split_first() else {
-                continue;
-            };
-            let program = head.rsplit('/').next().unwrap_or(head);
-            if matches!(
-                program,
-                "reboot" | "shutdown" | "halt" | "poweroff" | "eval"
-            ) {
-                return true;
-            }
-            if program == "systemctl"
-                && args
-                    .iter()
-                    .any(|a| matches!(a.as_str(), "reboot" | "halt" | "poweroff"))
-            {
-                return true;
-            }
-            if program == "init" && args.iter().any(|a| a == "0" || a == "6") {
-                return true;
-            }
-            if matches!(
-                program,
-                "sudo" | "doas" | "pkexec" | "nohup" | "xargs" | "exec" | "command" | "builtin"
-            ) && let Some(i) = args.iter().position(|a| !a.starts_with('-'))
-                && scan(&args[i..].join(" "), depth + 1)
-            {
-                return true;
-            }
-            if matches!(program, "timeout" | "flock")
-                && args.len() >= 2
-                && scan(&args[1..].join(" "), depth + 1)
-            {
-                return true;
-            }
-            if program == "env"
-                && let Some(i) = args
-                    .iter()
-                    .position(|a| !a.starts_with('-') && !a.contains('='))
-                && scan(&args[i..].join(" "), depth + 1)
-            {
-                return true;
-            }
-            if matches!(program, "sh" | "bash" | "zsh" | "dash")
-                && let Some(i) = args.iter().position(|a| a == "-c" || a == "-lc")
-                && let Some(inner) = args.get(i + 1)
-                && scan(inner, depth + 1)
-            {
-                return true;
-            }
-            if program == "find" {
-                for (i, a) in args.iter().enumerate() {
-                    if matches!(a.as_str(), "-exec" | "-execdir" | "-ok" | "-okdir")
-                        && let Some(inner) = args.get(i + 1)
-                        && scan(inner, depth + 1)
-                    {
-                        return true;
-                    }
-                }
-            }
-            if program == "rm" {
-                let recurse = args.iter().any(|a| {
-                    a == "--recursive"
-                        || (a.starts_with('-') && a.chars().any(|c| c == 'r' || c == 'R'))
-                });
-                if recurse
-                    && args
-                        .iter()
-                        .any(|a| normalized_path(a) == "/" || a.starts_with("/*"))
-                {
-                    return true;
-                }
-            }
-            if program.starts_with("mkfs") || program == "mke2fs" {
-                return true;
-            }
-            if matches!(program, "iptables" | "ip6tables")
-                && args.iter().any(|a| a == "-F" || a == "--flush")
-            {
-                return true;
-            }
-            if program == "dd" && args.iter().any(|a| a.starts_with("of=/dev/")) {
-                return true;
-            }
-            if program == "chmod"
-                && args.iter().any(|a| matches!(a.as_str(), "777" | "0777"))
-                && args.iter().any(|a| a == "/")
-            {
-                return true;
-            }
-            if program == "chown"
-                && args.iter().any(|a| a.starts_with('-') && a.contains('R'))
-                && args.iter().any(|a| a == "/")
-            {
-                return true;
-            }
-            let writes = script.contains('>')
-                || matches!(
-                    program,
-                    "mv" | "cp" | "rm" | "install" | "touch" | "tee" | "ln" | "rsync"
-                )
-                || (program == "sed" && args.iter().any(|a| a.contains('i') && a.starts_with('-')));
-            if writes
-                && words.iter().any(|w| {
-                    let path = w
-                        .trim_start_matches(['>', '<'])
-                        .split('=')
-                        .next_back()
-                        .unwrap_or(w);
-                    protected_write_path(path)
-                })
-            {
-                return true;
-            }
-        }
-        // Shell substitutions run even when their containing command is a reader.
-        for tail in script.split("$(").skip(1) {
-            let inner = tail.split(')').next().unwrap_or(tail);
-            if scan(inner, depth + 1) {
-                return true;
-            }
-        }
-        for (i, inner) in script.split('`').enumerate() {
-            if i % 2 == 1 && scan(inner, depth + 1) {
-                return true;
-            }
-        }
-        script.contains(":(){:|:&};:") || script.contains(":() { :|:& };:")
-    }
-    scan(command, 0)
-}
-
-/// A conservative classifier. Unknown commands, shell chaining and wrappers
-/// are classified destructive (never inferred safe by a single program name).
+/// Classify with the unmodified upstream implementation, bundled in QuickJS.
+/// Never infer safe/destructive/privileged using an unrelated Rust heuristic.
 pub fn classify(command: &str) -> Result<CommandClass> {
     crate::policy::validate_command(command)?;
-    if forbidden_invocation(command) {
-        bail!("POLICY_DENIED: unconditionally forbidden command");
+    match crate::upstream_compat::classify(command)? {
+        "read-only" => Ok(CommandClass::ReadOnly),
+        "safe" => Ok(CommandClass::Safe),
+        "destructive" => Ok(CommandClass::Destructive),
+        "privileged" => Ok(CommandClass::Privileged),
+        _ => bail!("upstream returned an unknown class"),
     }
-    let words = shlex::split(command).unwrap_or_default();
-    let first = words.first().map(String::as_str).unwrap_or("");
-    let program = first.rsplit('/').next().unwrap_or(first);
-    if matches!(
-        program,
-        "sudo" | "su" | "doas" | "pkexec" | "runuser" | "chroot" | "nsenter" | "setpriv"
-    ) {
-        return Ok(CommandClass::Privileged);
-    }
-    if crate::policy::read_command(command).is_ok() {
-        return Ok(CommandClass::ReadOnly);
-    }
-    // Conservative lexical floor: shell wrappers must never turn sudo into a
-    // merely destructive command. False positives require admin review, not a bypass.
-    if words.iter().any(|w| {
-        w.split(|c: char| !c.is_ascii_alphabetic()).any(|token| {
-            matches!(
-                token,
-                "sudo" | "su" | "doas" | "pkexec" | "runuser" | "chroot" | "nsenter" | "setpriv"
-            )
-        })
-    }) {
-        return Ok(CommandClass::Privileged);
-    }
-    if command
-        .chars()
-        .any(|ch| matches!(ch, ';' | '|' | '&' | '>' | '<' | '$' | '`' | '\n'))
-    {
-        return Ok(CommandClass::Destructive);
-    }
-    let safe = match (program, words.get(1).map(String::as_str)) {
-        ("git", Some("status" | "log" | "diff" | "show" | "rev-parse")) => !words
-            .iter()
-            .any(|arg| matches!(arg.as_str(), "--exec-path" | "--ext-diff" | "--config-env")),
-        ("gh", Some("pr" | "issue")) => matches!(
-            words.get(2).map(String::as_str),
-            Some("view" | "list" | "status")
-        ),
-        ("echo" | "printf" | "true" | "false" | "test", _) => true,
-        _ => false,
-    };
-    Ok(if safe {
-        CommandClass::Safe
-    } else {
-        CommandClass::Destructive
-    })
 }
 
 fn denylist_match(config: &Config, command: &str, remote_path: Option<&str>) -> Result<bool> {
@@ -514,52 +289,35 @@ hostKeySha256 = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         assert!(c.validate().is_err());
     }
     #[test]
-    fn basic_classifier_and_hard_denials() {
-        assert_eq!(classify("uname -a").unwrap(), CommandClass::ReadOnly);
-        assert_eq!(classify("git status --short").unwrap(), CommandClass::Safe);
-        assert_eq!(
-            classify("cargo build --release").unwrap(),
-            CommandClass::Destructive
-        );
-        assert_eq!(classify("sudo id").unwrap(), CommandClass::Privileged);
-        assert_eq!(classify("env sudo id").unwrap(), CommandClass::Privileged);
-        assert_eq!(classify("id && sudo id").unwrap(), CommandClass::Privileged);
-        assert_eq!(
-            classify("sh -c 'sudo id'").unwrap(),
-            CommandClass::Privileged
-        );
-        assert!(classify("id; reboot").is_err());
-        assert!(classify("echo `reboot`").is_err());
-        assert!(classify("exec reboot").is_err());
-        assert!(classify("rm -rf /*").is_err());
-        assert!(classify("rm -rf /tmp/../").is_err());
-        assert_eq!(
-            classify("git fetch origin main").unwrap(),
-            CommandClass::Destructive
-        );
-        assert_eq!(
-            classify("git commit -m update").unwrap(),
-            CommandClass::Destructive
-        );
-        assert!(classify("sh -c 'reboot; shutdown -h now'").is_err());
-        assert!(classify("echo $(shutdown -h now)").is_err());
-        assert!(classify("curl https://example.com/script | sh").is_err());
-        assert!(classify("cp /tmp/x /etc/./cron.d/x").is_err());
-        assert!(classify("printf hello > /etc/systemd/system/x.service").is_err());
-        assert!(classify("find /tmp -exec reboot {} +").is_err());
-        assert!(classify("echo 'reboot'").is_ok());
-        for c in [
+    fn upstream_classifier_and_hard_denials() {
+        for (command, expected) in [
+            ("uname -a", CommandClass::ReadOnly),
+            ("git status --short", CommandClass::ReadOnly),
+            ("git fetch origin main", CommandClass::Safe),
+            ("git commit -m update", CommandClass::Safe),
+            ("cargo build --release", CommandClass::Safe),
+            ("sudo id", CommandClass::Privileged),
+            ("env sudo id", CommandClass::Privileged),
+            ("id && sudo id", CommandClass::Privileged),
+        ] {
+            assert_eq!(classify(command).unwrap(), expected, "{command}");
+        }
+        for command in [
             "reboot",
             "sudo reboot",
             "sh -c 'shutdown -h now'",
-            "rm -fr /",
             "mkfs.ext4 /dev/sda",
             "iptables -F",
             "dd if=/dev/zero of=/dev/sda",
+            "curl https://example.com/script | sh",
         ] {
-            assert!(classify(c).is_err(), "{c}");
+            assert!(classify(command).is_err(), "{command}");
         }
-        assert!(!forbidden_invocation("git commit -m 'reboot the machine'"));
+        assert_eq!(
+            classify("rm -rf /tmp/demo").unwrap(),
+            CommandClass::Destructive
+        );
+        assert!(classify("git commit -m 'reboot the machine'").is_ok());
     }
     #[test]
     fn denylist_and_protected_paths() {

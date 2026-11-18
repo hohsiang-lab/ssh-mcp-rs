@@ -114,6 +114,7 @@ jobs:
           install -m 755 "target/$TARGET/release/ssh-mcp-rs" "$stage/ssh-mcp-rs"
           cp LICENSE NOTICE README.md config.example.toml "$stage/"
           cp -R docs "$stage/docs"
+          cp -R licenses "$stage/licenses"
           COPYFILE_DISABLE=1 tar -czf "dist/$package.tar.gz" -C "$RUNNER_TEMP/package" "$package"
           mkdir -p "$RUNNER_TEMP/smoke"
           tar -xzf "dist/$package.tar.gz" -C "$RUNNER_TEMP/smoke"
