@@ -181,7 +181,9 @@ fn normalized_path(path: &str) -> String {
 
 fn protected_write_path(path: &str) -> bool {
     let p = normalized_path(path).to_ascii_lowercase();
-    p.starts_with("/etc/cron")
+    // Add the native upstream aliases without weakening existing denials.
+    crate::upstream_paths::find_never_allowed_write_target(path).is_some()
+        || p.starts_with("/etc/cron")
         || p.starts_with("/etc/systemd")
         || p.ends_with("/.ssh/authorized_keys")
         || p.ends_with("/.ssh/authorized_keys.")
@@ -346,5 +348,7 @@ hostKeySha256 = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
             .is_err()
         );
         assert!(protected_write_path("/etc/./systemd/system/t.service"));
+        assert!(protected_write_path(r"C:\Users\a\.ssh\Authorized_Keys. "));
+        assert!(protected_write_path(r"\ETC\SYSTEMD\system\foo"));
     }
 }
