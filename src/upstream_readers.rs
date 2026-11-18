@@ -78,7 +78,9 @@ fn matches_operand_pattern(pattern: &str, operand: &str) -> bool {
         r"^(?!\/[^/]*\/?$)" => {
             let matches_root_level = operand.strip_prefix('/').is_some_and(|rest| {
                 !rest.contains('/')
-                    || rest.strip_suffix('/').is_some_and(|trimmed| !trimmed.contains('/'))
+                    || rest
+                        .strip_suffix('/')
+                        .is_some_and(|trimmed| !trimmed.contains('/'))
             });
             !matches_root_level
         }
@@ -88,18 +90,25 @@ fn matches_operand_pattern(pattern: &str, operand: &str) -> bool {
 }
 
 fn check_operands(operands: &[&str], rules: Option<Operands<'_>>) -> Result<(), String> {
-    let Some(rules) = rules else { return Ok(()); };
+    let Some(rules) = rules else {
+        return Ok(());
+    };
     for (index, operand) in operands.iter().enumerate() {
         if index == 0 && !rules.first.is_empty() && !rules.first.contains(operand) {
             return Err((*operand).to_owned());
         }
-        if rules.each.is_some_and(|pattern| !matches_operand_pattern(pattern, operand)) {
+        if rules
+            .each
+            .is_some_and(|pattern| !matches_operand_pattern(pattern, operand))
+        {
             return Err((*operand).to_owned());
         }
     }
     if let Some(max) = rules.max {
         let limit = usize::try_from(max).unwrap_or(0);
-        if operands.len() > limit { return Err(operands[limit].to_owned()); }
+        if operands.len() > limit {
+            return Err(operands[limit].to_owned());
+        }
     }
     Ok(())
 }
