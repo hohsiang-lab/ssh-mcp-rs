@@ -181,9 +181,7 @@ fn shell_substitutions(command: &str) -> Vec<String> {
         let c = chars[i];
         let substitution = c == '$' && chars[i + 1] == '(';
         let process = matches!(c, '<' | '>') && chars[i + 1] == '(';
-        if (!substitution && !process)
-            || (substitution && chars.get(i + 2) == Some(&'('))
-        {
+        if (!substitution && !process) || (substitution && chars.get(i + 2) == Some(&'(')) {
             i += 1;
             continue;
         }
@@ -218,7 +216,10 @@ fn shell_substitutions(command: &str) -> Vec<String> {
             opening = Some(index);
         }
     }
-    found.into_iter().filter(|text| !text.trim().is_empty()).collect()
+    found
+        .into_iter()
+        .filter(|text| !text.trim().is_empty())
+        .collect()
 }
 
 #[cfg(test)]
