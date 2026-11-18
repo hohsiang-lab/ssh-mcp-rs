@@ -14,9 +14,9 @@ pub mod transfers;
 mod upstream_awk;
 pub mod upstream_compat;
 #[cfg(test)]
-mod upstream_heads;
-#[cfg(test)]
 mod upstream_forbidden;
+#[cfg(test)]
+mod upstream_heads;
 mod upstream_paths;
 #[cfg(test)]
 mod upstream_readers;
