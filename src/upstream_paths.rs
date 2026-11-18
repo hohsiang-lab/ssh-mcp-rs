@@ -47,7 +47,7 @@ fn normalize_remote_path_for_windows(path: &str) -> String {
                 parts.iter().skip(1).copied().collect(),
             )
         } else if let Some(head) = parts.first().copied().filter(|head| {
-            head.as_bytes().len() >= 2
+            head.len() >= 2
                 && head.as_bytes()[0].is_ascii_alphabetic()
                 && head.as_bytes()[1] == b':'
         }) {
